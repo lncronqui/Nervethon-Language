@@ -2,150 +2,120 @@
 # CONSTANTS
 #######################################
 
-LOWERCASE = 'abcdefghijklmnopqrstuvwxyz' 
-DIGITS = '0123456789'
-
-#######################################
-# ERRORS
-#######################################
-
-class Error:
-    def __init__(self, pos_start, pos_end, error_name, details):
-        self.pos_start = pos_start
-        self.pos_end = pos_end
-        self.error_name = error_name
-        self.details = details
-    
-    def as_string(self):
-        result  = f'{self.error_name}: {self.details}\n'
-        result += f'File {self.pos_start.fn}, line {self.pos_start.ln + 1}'
-        return result
-
-class IllegalCharError(Error):
-    def __init__(self, pos_start, pos_end, details):
-        super().__init__(pos_start, pos_end, 'Illegal Character', details)
-
-#######################################
-# POSITION
-#######################################
-
-class Position:
-    def __init__(self, idx, ln, col, fn, ftxt):
-        self.idx = idx
-        self.ln = ln
-        self.col = col
-        self.fn = fn
-        self.ftxt = ftxt
-
-    def advance(self, current_char):
-        self.idx += 1
-        self.col += 1
-
-        if current_char == '\n':
-            self.ln += 1
-            self.col = 0
-
-        return self
-
-    def copy(self):
-        return Position(self.idx, self.ln, self.col, self.fn, self.ftxt)
+LOWERCASE   = 'abcdefghijklmnopqrstuvwxyz' 
+UPPERCASE   = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+LETTERS     = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+NONZERO     = '123456789'
+NUMBERS     = '0123456789'
+ASCII       = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
 
 #######################################
 # TOKENS
 #######################################
 
-TT_INT		= 'INT'
-TT_FLOAT    = 'FLOAT'
-TT_PLUS     = 'PLUS'
-TT_MINUS    = 'MINUS'
-TT_MUL      = 'MUL'
-TT_DIV      = 'DIV'
-TT_LPAREN   = 'LPAREN'
-TT_RPAREN   = 'RPAREN'
+#RESERVED WORDS#
+TT_START        = 'Link.Start'
+TT_END          = 'Link.End'
+TT_GENERATE     = 'Generate'
+TT_SYS          = 'Sys'
+TT_SYSCALL      = 'Sys.Call'
+TT_DISCHARGE    = 'Discharge'
+TT_ABSORB		= 'Absorb'
+TT_BOOLEAN		= 'Boolean'
+TT_INTEGER		= 'Integer'
+TT_DECIMAL		= 'Decimal'
+TT_STRING		= 'String'
+TT_IF		    = 'If'
+TT_ELIF		    = 'Elif'
+TT_ELSE		    = 'Else'
+TT_SWITCH		= 'Switch'
+TT_EXECUTE		= 'Execute'
+TT_DEFAULT		= 'Default'
+TT_FOR		    = 'For'
+TT_DO		    = 'Do'
+TT_WHILE		= 'While'
+TT_EXIT		    = 'Exit'
+TT_CONTINUE		= 'Continue'
+TT_AVOID		= 'Avoid'
+TT_FIXED		= 'Fixed'
+TT_STRUCT		= 'Struct'
+TT_VOID		    = 'Void'
+TT_RETURN		= 'Return'
+TT_TRUE		    = 'True'
+TT_FALSE		= 'False'
 
-class Token:
-    def __init__(self, type_, value=None):
-        self.type = type_
-        self.value = value
-    
-    def __repr__(self):
-        if self.value: return f'{self.type}:{self.value}'
-        return f'{self.type}'
+#UNARY OPERATORS#
+TT_UNARY1		= '+'
+TT_UNARY2       = '-'
 
-#######################################
-# LEXER
-#######################################
+#ARITHMETIC OPERATORS#
+TT_ARITHOP1     = '*'
+TT_ARITHOP2     = '/'
+TT_ARITHOP3     = '%'
+TT_AIRTHOP4     = '**'
+TT_ARITHOP5     = '//'
 
-class Lexer:
-    def __init__(self, fn, text):
-        self.fn = fn
-        self.text = text
-        self.pos = Position(-1, 0, -1, fn, text)
-        self.current_char = None
-        self.advance()
-    
-    def advance(self):
-        self.pos.advance(self.current_char)
-        self.current_char = self.text[self.pos.idx] if self.pos.idx < len(self.text) else None
+#RELATIONAL OPERATORS#
+TT_RELATEOP1    = '<'
+TT_RELATEOP2    = '>'
+TT_RELATEOP3    = '=='
+TT_RELATEOP4    = '!'
+TT_RELATEOP5    = '!='
+TT_RELATEOP6    = '>='
+TT_RELATEOP7    = '<='
 
-    def make_tokens(self):
-        tokens = []
+#ASSIGNMENT OPERATORS#
+TT_ASSIGNOP1    = '='
+TT_ASSIGNOP2    = '+='
+TT_ASSIGNOP3    = '-='
+TT_ASSIGNOP4    = '*='
+TT_ASSIGNOP5    = '/='
+TT_ASSIGNOP6    = '//='
+TT_ASSIGNOP7    = '%='
+TT_ASSIGNOP8    = '**='
 
-        while self.current_char != None:
-            if self.current_char in ' \t':
-                self.advance()
-            elif self.current_char in DIGITS:
-                tokens.append(self.make_number())
-            elif self.current_char == '+':
-                tokens.append(Token(TT_PLUS))
-                self.advance()
-            elif self.current_char == '-':
-                tokens.append(Token(TT_MINUS))
-                self.advance()
-            elif self.current_char == '*':
-                tokens.append(Token(TT_MUL))
-                self.advance()
-            elif self.current_char == '/':
-                tokens.append(Token(TT_DIV))
-                self.advance()
-            elif self.current_char == '(':
-                tokens.append(Token(TT_LPAREN))
-                self.advance()
-            elif self.current_char == ')':
-                tokens.append(Token(TT_RPAREN))
-                self.advance()
-            else:
-                pos_start = self.pos.copy()
-                char = self.current_char
-                self.advance()
-                return [], IllegalCharError(pos_start, self.pos, "'" + char + "'")
+#LOGICAL OPERATORS#
+TT_LOGICALOP1   = 'And'
+TT_LOGICALOP2   = 'Or'
+TT_LOGICALOP3    = 'Not'
 
-        return tokens, None
+#OPEN SYMBOLS#
+TT_OPENSYM1   = '('
+TT_OPENSYM2   = '{'
+TT_OPENSYM3   = '['
+TT_OPENSYM4   = '"'
 
-    def make_number(self):
-        num_str = ''
-        dot_count = 0
+#CLOSE SYMBOLS#
+TT_CLOSESYM1   = ')'
+TT_CLOSESYM2   = '}'
+TT_CLOSESYM3   = ']'
+TT_CLOSESYM4   = '"'
 
-        while self.current_char != None and self.current_char in DIGITS + '.':
-            if self.current_char == '.':
-                if dot_count == 1: break
-                dot_count += 1
-                num_str += '.'
-            else:
-                num_str += self.current_char
-            self.advance()
+#COMMENT SYMBOLS#
+TT_COMMENT1    = '/*'
+TT_COMMENT2    = '*/'
 
-        if dot_count == 0:
-            return Token(TT_INT, int(num_str))
-        else:
-            return Token(TT_FLOAT, float(num_str))
+#ESCAPE SEQUENCES SYMBOLS#
+TT_ESCAPESEQ1   = '\n'
+TT_ESCAPESEQ2   = '\t'
+TT_ESCAPESEQ3   = '\"'
+TT_ESCAPESEQ4   = '\''
+TT_ESCAPESEQ5   = '\\'
 
-#######################################
-# RUN
-#######################################
+#OTHER SYMBOLS#
+TT_COLON       = ':'
+TT_PERIOD      = '.'
+TT_SEMICOLON   = ';'
+TT_COMMA       = ','
+TT_SPACE       = 'Space'
 
-def run(fn, text):
-    lexer = Lexer(fn, text)
-    tokens, error = lexer.make_tokens()
+#IDENTIFIERS#
+TT_IDENTIFIER  = 'id'
 
-    return tokens, error
+#LITERALS#
+TT_INTPOSI     = 'lit_intposi'
+TT_INTNEGA     = 'lit_intnega'   
+TT_DECPOSI     = 'lit_decposi'
+TT_DECNEGA     = 'lit_decnega'
+TT_STRING      = 'lit_str'
+TT_BOOLEAN     = 'lit_bool'
