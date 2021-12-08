@@ -1,0 +1,6 @@
+Link.Start
+	Generate Integer x = 5
+	Generate Integer y = 10
+	x = x + y
+	Discharge x
+Link.End
