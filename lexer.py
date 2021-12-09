@@ -14,7 +14,8 @@ def run(lexeme):
     keywords= {'Link.Start', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 'Absorb', 'If', 'Elif', 'Else', 'Switch', 'Execute', 'Default', 'For', 'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Void', 'Return'}
     datatype = {'Integer','Boolean','String','Decimal'} 
     token_specification = [
-        
+        ('POS_NUMBER', r'\d+(\.\d{1,6})?'),
+        ('NEG_NUMBER', r'\-\d+(\.\d{1,6})?'),
         ('RELATIONAL', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
         ('ASSIGNMENT', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
         ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
@@ -24,7 +25,6 @@ def run(lexeme):
         ('ESCAPESEQ', r'[\n] | [\t] | [\"] | [\'] | [\\]'),
         ('ID', r'[a-z]\w{0,19}'),
         ('RESERVED_WORD', r'[A-Z][\w\.]*'),
-        ('NUMBER', r'\d+(\.\d{1,6})?'),
         #('LIT_INTPOS', r'[\d]{1,9}'),
         #('LIT_INTNEG', r'^\-[1-9][\d]{0,8}$'),
         #('LIT_DECPOS', r'^[\d]{1,9}\.[0-9]{1,6}$'),
@@ -36,7 +36,7 @@ def run(lexeme):
         ('SKIP', r'[\t]+'),
         ('SPACE', r'[ ]+'),
         ('NEWLINE', r'[\n]+'),
-        ('MISMATCH', r'.*'),
+        ('MISMATCH', r'.'),
     ]
 
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
@@ -53,8 +53,22 @@ def run(lexeme):
             kind = value
         elif kind == 'RESERVED_WORD' and value in keywords:
             kind = value
-        elif kind == 'NUMBER':
+        elif kind == 'RESERVED_WORD' and value in datatype:
+            kind = value
+        elif kind == 'RESERVED_WORD':
+            hasError = True
+        elif kind == 'POS_NUMBER':
             value = float(value) if '.' in value else int(value)
+            if (isinstance(value, int) == True):
+                kind = "LIT_INTPOS"
+            else:
+                kind = "LIT_DECPOS"
+        elif kind == 'NEG_NUMBER':
+            value = float(value) if '.' in value else int(value)
+            if (isinstance(value, int) == True):
+                kind = "LIT_INTNEG"
+            else:
+                kind = "LIT_DECNEG"
         #elif kind == 'LIT_INTPOS':
         #    value = int(value)
         #elif kind == 'LIT_INTNEG':
