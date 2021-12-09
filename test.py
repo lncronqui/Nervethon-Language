@@ -159,15 +159,16 @@ def assign(input):
 import re
 
 with open('user_input.txt', 'r') as file:
-    user_input = file.read().replace('\n', ' N_L ').replace('\t', '')
-lexime = user_input.split()
+    user_input = file.read().replace('\n', ' N_L ').replace('\t', '')#\n
+lexeme = user_input.split() #splitting based on whitespace -- array of String
+#i like cats --> [i, like, cats]
 count = -1
 
-while(count < len(lexime)):
+while(count < len(lexeme)):
     count += 1
-    if(count >= len(lexime)):
+    if(count >= len(lexeme)):
         break
-    current_char = lexime[count]
+    current_char = lexeme[count]
     if(keyword(current_char)==True):
         print(current_char + "\t-\tKeyword")
     elif(datatype(current_char)==True):
@@ -180,7 +181,6 @@ while(count < len(lexime)):
         print("\\n" + "\t-\tNew Line")
     elif(re.search(identifier, current_char)):
         print(current_char + "\t-\tid")
-    
     else:
         print(current_char + "\t-\tInvalid Input")
         
