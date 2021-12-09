@@ -44,8 +44,8 @@ boolean_true		= "(^True)"
 boolean_false		= "(^False)"
 
 #UNARY OPERATORS#
-unary_plus		    = "[+]{1,1}"
-unary_minus         = "[-]{1,1}"
+unary_plus		    = "^[+]$"
+unary_minus         = "^[-]$"
 
 #ARITHMETIC OPERATORS#
 arithop_mul         = "*"
@@ -65,7 +65,7 @@ relateop_lthanoreqto    = "<="
 #ASSIGNMENT OPERATORS#
 assignop_simple     = "[=]"
 assignop_addAND     = "[+][=]"
-assignop_subAND     = "[-=]"
+assignop_subAND     = "[-][=]"
 assignop_multAND    = "[*=]"
 assignop_divAND     = "[/=]"
 assignop_floorAND   = "[//=]"
@@ -110,12 +110,12 @@ comma        = ","
 identifier   = "[a-z][a-zA-Z0-9]{0,19}"
 
 #LITERALS#
-lit_intposi     = "[1-9]{1,9}"
-lit_intnega     = "-+[1-9]{1,9}"   
+lit_intposi     = "^[1-9]{1,9}"
+lit_intnega     = "^[-][1-9]{1,9}"   
 lit_decposi     = "[1-9]{1,9}+\.[1-9]{1,9}"
-lit_decnega     = "^-+[1-9]{1,9}+\.[1-9]{1,9}"
+lit_decnega     = "^[-][1-9]{1,9}+\.[1-9]{1,9}"
 lit_string      = "(:alpha:)"
-lit_bool        = "(True | False)"
+lit_bool        = "(True|False)"
 
 def keyword(input):
     reserved = [start, end, generate, sys, syscall, discharge, absorb, if_statement, elif_statement, else_statement, switch, execute, default, for_loop, while_loop, exit_statement, continue_statement, avoid, fixed, struct, void, return_statement, boolean_true, boolean_false]
@@ -173,6 +173,7 @@ while(count < len(lexeme)):
         print(current_char + "\t-\tKeyword")
     elif(datatype(current_char)==True):
         print(current_char + "\t-\tData Type")
+    
     elif(arith(current_char)==True):
         print(current_char + "\t-\tArithmetic Operator")
     elif(assign(current_char)==True):
