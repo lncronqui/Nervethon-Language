@@ -108,7 +108,7 @@ identifier   = "^[a-z][a-zA-Z0-9]{0,19}"
 
 #LITERALS#
 lit_intposi     = "^[1-9][\d]{0,8}$"
-lit_intnega     = "^\-([1-9]{1,9})$"   
+lit_intnega     = "^\-[1-9][\d]{0,8}$"   
 lit_decposi     = "^[0-9]{1,9}\.[0-9]{1,6}"
 lit_decnega     = "^\-[0-9]{1,9}\.[0-9]{1,6}"
 lit_string      = "^\"[a-zA-Z]\"&"
