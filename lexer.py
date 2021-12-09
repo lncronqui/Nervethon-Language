@@ -25,18 +25,57 @@ def run(lexeme):
         ('LIT_INTNEGA', r'-[1-9][\d]{0,8}'),
         ('LIT_DECPOSI', r'[0-9]{1,9}.[0-9]{1,6}'),
         ('LIT_DECNEGA', r'-[0-9]{1,9}.[0-9]{1,6}'),
-        ('LIT_STRING', r'[a-zA-Z]'),
+        ('LIT_STRING', r'\"[a-zA-Z]\"'),
         ('LIT_BOOL', r'[T][r][u][e]|[F][a][l][s][e]'),
-        ('SPACE', r'[ ]+'),
-        ('SKIP', r'[\t]+'),
+        ('SPACE', r'[ +]'),
+        ('SKIP', r'[\t+]'),
         ('NEWLINE', r'\n'),
+        ('MISMATCH', r'.'),
     ]
 
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
     line_num = 1
     line_start = 0
-    for x in re.finditer(tok_regex, code):
+    for x in re.finditer(tok_regex, lexeme):
         kind = x.lastgroup
         value = x.group()
         column = x.start() - line_start
         #if --> arithmetic, relational, assignment, logical, symbols, comments, id, literals
+        if kind == 'ARITHMETIC':
+            kind = value
+        elif kind == 'RELATIONAL':
+            kind = value
+        elif kind == 'ASSIGNMENT':
+            kind = value
+        elif kind == 'LOGICAL':
+            kind = value
+        elif kind == 'SYMBOLS':
+            kind = value
+        elif kind == 'COMMENTS':
+            kind = value
+        elif kind == 'ID':
+            kind = value
+        elif value in keywords:
+            kind = value
+        elif kind == 'LIT_INTPOSI':
+            kind = value
+        elif kind == 'LIT_INTNEGA':
+            kind = value
+        elif kind == 'LIT_DECPOSI':
+            kind = value
+        elif kind == 'LIT_DECNEGA':
+            kind = value
+        elif kind == 'LIT_STRING':
+            kind = value
+        elif kind == 'LITERALS':
+            kind = value
+        elif kind == 'LIT_BOOL':
+            kind = value
+        elif kind == 'NEWLINE':
+            kind = value
+            continue
+        elif kind == 'SKIP':
+            continue
+        elif kind == 'MISMATCH':
+            raise RuntimeError(f'{value!r} unexpected on line {line_num}')
+        yield Token(kind, value, line_num, column)
