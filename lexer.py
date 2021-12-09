@@ -64,7 +64,7 @@ def run(lexeme):
             else:
                 kind = "LIT_DECNEG"
         elif kind == 'NEWLINE':
-            value = "\n"
+            value = "\\n"
             line_start = mo.end()
             line_num += 1
         elif kind == 'SPACE':

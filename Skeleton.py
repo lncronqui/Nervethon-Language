@@ -46,25 +46,32 @@ text_area.pack(side="left")
 
 #TRIAL INPUT AND OUTPUT
 def Take_input():
+    Output.configure(state='normal')
+    Errors.configure(state='normal')
+    Output.delete(1.0,END)#How to reset text area
+    Errors.delete(1.0,END)#How to reset text area
     INPUT = text_area.get("1.0", "end-1c")
     for result in lexer.run(INPUT):
         if result.hasError == False:
             #Frame 3 - Output
-            None
-        else:
-            #Frame 2 - Output
-            None
-    
-    if(INPUT == "120"):
-        Output.configure(state='normal')
-        Output.delete(1.0,END)
-        Output.insert(END, 'Correct')
-        Output.configure(state='disabled')
-    else:
-        Errors.configure(state='normal')
-        Errors.delete(1.0,END)
-        Errors.insert(END, "Wrong answer")
-        Errors.configure(state='disabled')
+            Output.configure(state='normal')
+            Output.insert(END, result.value)
+            Output.insert(END, '\t\t\t')
+            Output.insert(END, result.type)
+            Output.insert(END, '\n')
+            Output.configure(state='disabled')
+        elif result.hasError == True:
+            if result.value != "":
+                #Frame 2 - Output
+                Errors.configure(state='normal')
+                Errors.insert(END, result.value)
+                Errors.insert(END, '\t\t')
+                Errors.insert(END, result.column)
+                Errors.insert(END, '\t\t')
+                Errors.insert(END, result.line)
+                Errors.insert(END, '\n')
+                Errors.configure(state='disabled')
+
         
 
         
@@ -72,7 +79,12 @@ def Take_input():
 frame2=Frame(root, width=633, height=100, highlightbackground='#ffffff', bg='#121212', highlightthickness=1)
 frame2.grid(row=3, column=0, padx=25, pady=25, ipadx=25, ipady=25)
 
-Errors = Text(frame2, width = 50, height = 30, font = ("Times New Roman",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0)
+Errors = Text(frame2, width = 68, height = 5, font = ("Times New Roman",13), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled')
+
+scrollbar=ttk.Scrollbar(frame2, orient='vertical')
+scrollbar.config(command=text_area.yview)
+scrollbar.pack(side=RIGHT, fill=Y)
+text_area.pack(side="left")
 
 #Frame 3 - Output
 frame3=Frame(root, width=520, height=660, highlightbackground='#ffffff', background='#121212', highlightthickness=1)
@@ -85,7 +97,7 @@ text_area.pack(side="left")
 
 
 #OUTPUT TEXT AREA
-Output = Text(frame3, width = 50, height = 30, font = ("Times New Roman",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0)
+Output = Text(frame3, width = 50, height = 30, font = ("Times New Roman",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled')
 
 
 #Buttons or inside of Frame_Top
