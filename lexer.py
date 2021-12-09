@@ -7,12 +7,26 @@ class Token(NamedTuple):
     value: str
     line: int
     column: int
-    
+
 #MAIN FUNCTION#
 def run(lexeme):
-    keywords= {}
+    keywords= {'Link.Start', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 'Absorb', 'If', 'Elif', 'Else', 'Switch', 'Execute', 'Default', 'For', 'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Void', 'Return'}
+    datatype = {'Integer','Boolean','String','Decimal'} 
     token_specification = [
-        ()
+        ('ARITHMETIC', r'[+]|[\-]|[\*]|[/]|[%]|[\*][\*]|[/][/]'),
+        ('RELATIONAL', r'[<]|[>]|[=][=]|[!][=]|[>][=]|[<][=]'),
+        ('ASSIGNMENT', r'[=]|[\+][=]|[\-][=]|[][=]|[/][=]|[/][/][=]|[%][=]|[\*][\*][=]'),
+        ('LOGICAL', r'[A][n][d]|[O][r]|[N][o][t]'),
+        ('SYMBOLS', r'[(] | [)] | [{] | [}] | [[] | []] | ["] | ["]'),
+        ('COMMENT', r'[/][\*]|[\*][/]'),
+        ('ESCAPESEQ', r'[\n] | [\t] | [\"] | [\'] | [\\]'),
+        ('ID', r'[a-z]\w{0,19}'),
+        ('LIT_INTPOSI', r'[1-9][\d]{0,8}'),
+        ('LIT_INTNEGA', r'-[1-9][\d]{0,8}'),
+        ('LIT_DECPOSI', r'[0-9]{1,9}.[0-9]{1,6}'),
+        ('LIT_DECNEGA', r'-[0-9]{1,9}.[0-9]{1,6}'),
+        ('LIT_STRING', r'[a-zA-Z]'),
+        ('LIT_BOOL', r'[T][r][u][e]|[F][a][l][s][e]'),
     ]
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
     line_num = 1
