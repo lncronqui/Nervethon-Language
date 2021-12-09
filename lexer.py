@@ -27,7 +27,11 @@ def run(lexeme):
         ('LIT_DECNEGA', r'-[0-9]{1,9}.[0-9]{1,6}'),
         ('LIT_STRING', r'[a-zA-Z]'),
         ('LIT_BOOL', r'[T][r][u][e]|[F][a][l][s][e]'),
+        ('SPACE', r'[ ]+'),
+        ('SKIP', r'[\t]+'),
+        ('NEWLINE', r'\n'),
     ]
+
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
     line_num = 1
     line_start = 0
@@ -35,3 +39,4 @@ def run(lexeme):
         kind = x.lastgroup
         value = x.group()
         column = x.start() - line_start
+        #if --> arithmetic, relational, assignment, logical, symbols, comments, id, literals
