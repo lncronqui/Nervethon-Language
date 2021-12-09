@@ -117,6 +117,8 @@ lit_decnega     = "^\-[0-9]{1,9}\.[0-9]{1,6}"
 lit_string      = "^\"[a-zA-Z]\"&"
 lit_bool        = "(True|False)"
 
+space           = "\s{0,1}"
+
 def keyword(input):
     reserved = [start, end, generate, sys, syscall, discharge, absorb, if_statement, elif_statement, else_statement, switch, execute, default, for_loop, while_loop, exit_statement, continue_statement, avoid, fixed, struct, void, return_statement]
     for x in reserved:
@@ -262,6 +264,8 @@ while(count < len(lexeme)):
         print(current_char + "\t-\tString Literal")
     elif(re.search(lit_bool, current_char)):
         print(current_char + "\t-\tBoolean Literal")
+    elif(re.search(space, current_char)):
+        print("Space" + "\t-\tWhitespace")
     else:
         print(current_char + "\t-\tInvalid Input")
         
