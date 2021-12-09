@@ -1,7 +1,6 @@
 Link.Start
 	Generate Integer x = 5
-	Generate Integer y = 10
-	user.input=x+y
+	Generate Integer y = -10
+	.userinput = x + y
 	Discharge x
-	user.input
 Link.End

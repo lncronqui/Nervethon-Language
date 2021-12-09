@@ -44,8 +44,8 @@ boolean_true		= "(^True)"
 boolean_false		= "(^False)"
 
 #UNARY OPERATORS#
-unary_plus		    = "[+]"
-unary_minus         = "[-]"
+unary_plus		    = "[+]{1,1}"
+unary_minus         = "[-]{1,1}"
 
 #ARITHMETIC OPERATORS#
 arithop_mul         = "*"
@@ -64,7 +64,7 @@ relateop_lthanoreqto    = "<="
 
 #ASSIGNMENT OPERATORS#
 assignop_simple     = "[=]"
-assignop_addAND     = "[+=]"
+assignop_addAND     = "[+][=]"
 assignop_subAND     = "[-=]"
 assignop_multAND    = "[*=]"
 assignop_divAND     = "[/=]"
@@ -107,7 +107,7 @@ semicolon    = ";"
 comma        = ","
 
 #IDENTIFIERS#
-identifier   = "[a-z]([_a-zA-Z0-9]{0,19})"
+identifier   = "[a-z][a-zA-Z0-9]{0,19}"
 
 #LITERALS#
 lit_intposi     = "[1-9]{1,9}"
@@ -181,8 +181,11 @@ while(count < len(lexeme)):
         print("\\n" + "\t-\tNew Line")
     elif(re.search(identifier, current_char)):
         print(current_char + "\t-\tid")
+    elif(re.search(lit_intposi, current_char)):
+        print(current_char + "\t-\tPositive Integer Literal")
+    elif(re.search(lit_intnega, current_char)):
+        print(current_char + "\t-\tNegative Integer Literal")
     else:
         print(current_char + "\t-\tInvalid Input")
         
-
-    
+          
