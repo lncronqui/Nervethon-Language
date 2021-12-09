@@ -107,13 +107,13 @@ semicolon    = ";"
 comma        = ","
 
 #IDENTIFIERS#
-identifier   = "[a-z][a-zA-Z0-9]{0,19}"
+identifier   = "^[a-z][a-zA-Z0-9]{0,19}"
 
 #LITERALS#
-lit_intposi     = "^[1-9]{1,9}"
-lit_intnega     = "^[-][1-9]{1,9}"   
-lit_decposi     = "[1-9]{1,9}+\.[1-9]{1,9}"
-lit_decnega     = "^[-][1-9]{1,9}+\.[1-9]{1,9}"
+lit_intposi     = "^[1-9]{1,9}$"
+lit_intnega     = "^\-([1-9]{1,9})$"   
+lit_decposi     = "^[0-9]{1,9}\.[0-9]{1,6}"
+lit_decnega     = "^\-([0-9]{1,9})\.[0-9]{1,6}"
 lit_string      = "(:alpha:)"
 lit_bool        = "(True|False)"
 
@@ -186,6 +186,10 @@ while(count < len(lexeme)):
         print(current_char + "\t-\tPositive Integer Literal")
     elif(re.search(lit_intnega, current_char)):
         print(current_char + "\t-\tNegative Integer Literal")
+    elif(re.search(lit_decposi, current_char)):
+        print(current_char + "\t-\tPositive Decimal Literal")
+    elif(re.search(lit_decnega, current_char)):
+        print(current_char + "\t-\tNegative Decimal Literal")
     else:
         print(current_char + "\t-\tInvalid Input")
         

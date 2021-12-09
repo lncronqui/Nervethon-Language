@@ -1,6 +1,11 @@
 Link.Start
-	Generate Integer x = 5
+	Generate Integer x = 55.5
+	5
+	-10.2
+	-5.2
+	0.5
+	-0.1
 	Generate Integer y = -10
-	.userinput = x + y
+	userinput = x + y
 	Discharge x
 Link.End
