@@ -7,15 +7,17 @@ class Token(NamedTuple):
     value: str
     line: int
     column: int
+    hasError: bool
 
 #MAIN FUNCTION#
 def run(lexeme):
     keywords= {'Link.Start', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 'Absorb', 'If', 'Elif', 'Else', 'Switch', 'Execute', 'Default', 'For', 'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Void', 'Return'}
     datatype = {'Integer','Boolean','String','Decimal'} 
     token_specification = [
-        ('ARITHMETIC', r'([+]|[\-]|[\*]|[/]|[%]|[\*][\*]|[/][/])'),
-        ('RELATIONAL', r'([<]|[>]|[=][=]|[!][=]|[>][=]|[<][=])'),
-        ('ASSIGNMENT', r'([=]|[\+][=]|[\-][=]|[][=]|[/][=]|[/][/][=]|[%][=]|[\*][\*][=])'),
+        
+        ('RELATIONAL', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
+        ('ASSIGNMENT', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
+        ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
         ('LOGICAL', r'[A][n][d]|[O][r]|[N][o][t]'),
         ('SYMBOLS', r'[(] | [)] | [{] | [}] | [[] | []] | ["] | ["]'),
         ('COMMENT', r'[/][\*]|[\*][/]'),
@@ -31,10 +33,10 @@ def run(lexeme):
         #('LIT_NEG', r'\-\d{1,9}+(\.\d){1,6}'),
         ('LIT_STRING', r'\"[a-zA-Z]\"'),
         ('LIT_BOOL', r'[T][r][u][e]|[F][a][l][s][e]'),
-        ('SPACE', r'[ ]+'),
         ('SKIP', r'[\t]+'),
-        ('NEWLINE', r'\n'),
-        ('MISMATCH', r'.'),
+        ('SPACE', r'[ ]+'),
+        ('NEWLINE', r'[\n]+'),
+        ('MISMATCH', r'.*'),
     ]
 
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
@@ -44,20 +46,10 @@ def run(lexeme):
         kind = mo.lastgroup
         value = mo.group()
         column = mo.start() - line_start
-        #if --> arithmetic, relational, assignment, logical, symbols, comments, id, literals
-        if kind == 'ARITHMETIC':
-            kind = value
-        elif kind == 'RELATIONAL':
-            kind = value
-        elif kind == 'ASSIGNMENT':
-            kind = value
-        elif kind == 'LOGICAL':
-            kind = value
-        elif kind == 'SYMBOLS':
+        hasError = False
+        if kind == 'SYMBOLS':
             kind = value
         elif kind == 'COMMENTS':
-            kind = value
-        elif kind == 'ID':
             kind = value
         elif kind == 'RESERVED_WORD' and value in keywords:
             kind = value
@@ -80,17 +72,27 @@ def run(lexeme):
         elif kind == 'LIT_BOOL':
             kind = value
         elif kind == 'NEWLINE':
+            value = "\n"
             line_start = mo.end()
             line_num += 1
-            continue
+            #continue
+        elif kind == 'SPACE':
+            value = kind
         elif kind == 'SKIP':
             continue
         elif kind == 'MISMATCH':
-            raise RuntimeError(f'{value!r} unexpected on line {line_num}')
-        yield Token(kind, value, line_num, column)
+            #raise RuntimeError(f'{value!r} unexpected on line {line_num}')
+            hasError = True
+        yield Token(kind, value, line_num, column, hasError)
         
 with open('user_input.txt', 'r') as file:
     user_input = file.read()
 
 for result in run(user_input):
-    print(result)
+    if result.hasError == False:
+        print(result)
+
+print("Syntax Error:")
+for result in run(user_input):
+    if result.hasError == True:
+        print(result)
