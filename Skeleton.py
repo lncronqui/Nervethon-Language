@@ -1,4 +1,5 @@
 import tkinter as tk
+
 from tkinter import ttk
 from tkinter import *
 
@@ -45,7 +46,6 @@ text_area.pack(side="left")
 #TRIAL INPUT AND OUTPUT
 def Take_input():
     INPUT = text_area.get("1.0", "end-1c")
-    print(INPUT)
     if(INPUT == "120"):
         Output.configure(state='normal')
         Output.delete(1.0,END)
@@ -66,6 +66,12 @@ frame2.grid(row=3, column=0, padx=25, pady=25, ipadx=25, ipady=25)
 #Frame 3 - Output
 frame3=Frame(root, width=520, height=660, highlightbackground='#ffffff', background='#121212', highlightthickness=1)
 frame3.grid(row=1, column=1, rowspan = 6, columnspan = 2, padx=25, pady=25, ipadx=25, ipady=25)
+
+scrollbar=ttk.Scrollbar(frame3, orient='vertical')
+scrollbar.config(command=text_area.yview)
+scrollbar.pack(side=RIGHT, fill=Y)
+text_area.pack(side="left")
+
 
 #OUTPUT TEXT AREA
 Output = Text(frame3, width = 50, height = 30, font = ("Times New Roman",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0)
