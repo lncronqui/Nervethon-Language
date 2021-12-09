@@ -74,7 +74,7 @@ Output = Text(frame3, width = 50, height = 30, font = ("Times New Roman",15), bg
 #Buttons or inside of Frame_Top
 Run_Button=Button(frame_top, width=175, height=35, image=photo_imageLexical, border=0,background='#0F0F0F', command = lambda:Take_input())
 Run_Button.place(x=925, y=15)
-Run_Button1=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0,background='#0F0F0F')
+Run_Button1=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0,background='#0F0F0F', state='disabled')
 Run_Button1.place(x=1139, y =15)
 
 
