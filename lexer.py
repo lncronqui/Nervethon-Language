@@ -74,16 +74,3 @@ def run(lexeme):
         elif kind == 'MISMATCH':
             hasError = True
         yield Token(kind, value, line_num, column, hasError)
-        
-with open('user_input.txt', 'r') as file:
-    user_input = file.read()
-
-for result in run(user_input):
-    if result.hasError == False:
-        print(result)
-
-print("Syntax Error:")
-for result in run(user_input):
-    if result.hasError == True:
-        if result.value != "":
-            print(result)

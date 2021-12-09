@@ -3,6 +3,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter import *
 
+import lexer
 
 
 #creating the window
@@ -46,22 +47,32 @@ text_area.pack(side="left")
 #TRIAL INPUT AND OUTPUT
 def Take_input():
     INPUT = text_area.get("1.0", "end-1c")
+    for result in lexer.run(INPUT):
+        if result.hasError == False:
+            #Frame 3 - Output
+            None
+        else:
+            #Frame 2 - Output
+            None
+    
     if(INPUT == "120"):
         Output.configure(state='normal')
         Output.delete(1.0,END)
         Output.insert(END, 'Correct')
         Output.configure(state='disabled')
     else:
-        Output.configure(state='normal')
-        Output.delete(1.0,END)
-        Output.insert(END, "Wrong answer")
-        Output.configure(state='disabled')
+        Errors.configure(state='normal')
+        Errors.delete(1.0,END)
+        Errors.insert(END, "Wrong answer")
+        Errors.configure(state='disabled')
         
 
         
 #Frame 2 - Errors
 frame2=Frame(root, width=633, height=100, highlightbackground='#ffffff', bg='#121212', highlightthickness=1)
 frame2.grid(row=3, column=0, padx=25, pady=25, ipadx=25, ipady=25)
+
+Errors = Text(frame2, width = 50, height = 30, font = ("Times New Roman",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0)
 
 #Frame 3 - Output
 frame3=Frame(root, width=520, height=660, highlightbackground='#ffffff', background='#121212', highlightthickness=1)
@@ -83,7 +94,7 @@ Run_Button.place(x=925, y=15)
 Run_Button1=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0,background='#0F0F0F', state='disabled')
 Run_Button1.place(x=1139, y =15)
 
-
+Errors.pack()
 Output.pack()
 text_area.focus()
 root.mainloop()
