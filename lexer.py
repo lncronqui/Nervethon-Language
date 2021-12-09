@@ -33,7 +33,7 @@ class Token:
         token.value = value
         
     def __repr__(token):
-        if token.value: return f'{token.type}:{token.value}'
+        if token.value: return f'{token.value}\t{token.type}'
         return f'token.type'
     
 class Lexer:
@@ -69,5 +69,6 @@ class Lexer:
 #MAIN FUNCTION#
 def run(lexeme):
     lexer = Lexer(lexeme)
+    print(" ".join(lexeme))
     tokens = lexer.make_tokens()
     return tokens

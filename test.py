@@ -1,3 +1,4 @@
+import re
 #######################################
 # CONSTANTS
 #######################################
@@ -88,7 +89,9 @@ close_bracket        = "^\]$"
 close_quotation      = "^\"$"
 
 #COMMENT SYMBOLS#
-comment_full     = "^[/][*](:word:)[*][/]$"
+comment_full     = "^[/][*]\w*[*][/]$"
+comment_open        = "^[/][*]"
+comment_close       = "\*\/$"
 
 #ESCAPE SEQUENCES SYMBOLS#
 newline         = "^\n$"
@@ -104,7 +107,7 @@ semicolon    = "^[;]$"
 comma        = "^[,]$"
 
 #IDENTIFIERS#
-identifier   = "^[a-z][a-zA-Z0-9]{0,19}"
+identifier   = "^[a-z]\w{0,19}$"
 
 #LITERALS#
 lit_intposi     = "^[1-9][\d]{0,8}$"
@@ -186,11 +189,15 @@ def symbols(input):
             continue
     return False
 
+def check_comment(input):
+    if (re.search(comment_close, input)):
+        return True
+    else:
+        return False
+
 #######################################
 # REGEX
 #######################################
-
-import re
 
 with open('user_input.txt', 'r') as file:
     user_input = file.read().replace('\n', ' N_L ').replace('\t', '')#\n
@@ -227,8 +234,20 @@ while(count < len(lexeme)):
         print("\\n" + "\t-\tNew Line")
     elif(re.search(identifier, current_char)):
         print(current_char + "\t-\tid")
-    elif(re.search(comment_full, current_char)):
-        print(current_char + "\t-\tComments")
+    elif(re.search(comment_open, current_char)):
+        comment_str = current_char
+        c = check_comment(current_char)
+        while (c == False):
+            count += 1
+            if(count >= len(lexeme)):
+                break
+            current_char = lexeme[count]
+            comment_str += " " + current_char
+            c = check_comment(current_char)
+            if(c == True):
+                break
+        print(comment_str + "\t-\tComment")
+            
     
     #INTEGERS#
     elif(re.search(lit_intposi, current_char)):
