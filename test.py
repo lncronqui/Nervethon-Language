@@ -117,7 +117,7 @@ lit_decnega     = "^\-[0-9]{1,9}\.[0-9]{1,6}"
 lit_string      = "^\"[a-zA-Z]\"&"
 lit_bool        = "(True|False)"
 
-space           = "\s{0,1}"
+space           = "\s"
 
 def keyword(input):
     reserved = [start, end, generate, sys, syscall, discharge, absorb, if_statement, elif_statement, else_statement, switch, execute, default, for_loop, while_loop, exit_statement, continue_statement, avoid, fixed, struct, void, return_statement]
@@ -203,8 +203,7 @@ def check_comment(input):
 
 with open('user_input.txt', 'r') as file:
     user_input = file.read().replace('\n', ' N_L ').replace('\t', '')#\n
-lexeme = user_input.split() #splitting based on whitespace -- array of String
-#i like cats --> [i, like, cats]
+lexeme = re.split("\s", user_input)
 count = -1
 
 while(count < len(lexeme)):
