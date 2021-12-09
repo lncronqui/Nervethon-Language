@@ -1,10 +1,10 @@
 Link.Start
-	Generate Integer x = 55.5
-	True
-	False
-	Generate Integer y = -10
-	user.input = x + y
-	var
-	Discharge x
-	/*testing again again again*/
+	Generate Integer x
+	x = x + 5
+	Absorb z
+	1 + 1
+	10.4
+	-4
+	3
+	-13.532
 Link.End
