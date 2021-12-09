@@ -30,7 +30,7 @@ def run(lexeme):
         ('SPACE', r'[ +]'),
         ('SKIP', r'[\t+]'),
         ('NEWLINE', r'\n'),
-        ('MISMATCH', r'.'),
+        #('MISMATCH', r'.'),
     ]
 
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
@@ -58,13 +58,13 @@ def run(lexeme):
         elif value in keywords:
             kind = value
         elif kind == 'LIT_INTPOSI':
-            kind = value
+            value = int(value)
         elif kind == 'LIT_INTNEGA':
-            kind = value
+            value = int(value)
         elif kind == 'LIT_DECPOSI':
-            kind = value
+            value = float(value)
         elif kind == 'LIT_DECNEGA':
-            kind = value
+            value = float(value)
         elif kind == 'LIT_STRING':
             kind = value
         elif kind == 'LITERALS':
@@ -72,7 +72,8 @@ def run(lexeme):
         elif kind == 'LIT_BOOL':
             kind = value
         elif kind == 'NEWLINE':
-            kind = value
+            line_start = x.end()
+            line_num += 1
             continue
         elif kind == 'SKIP':
             continue
