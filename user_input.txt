@@ -1,6 +1,3 @@
 Link.Start
-	1.5
-	-2
-	5
-	-6.42
+	.wow
 Link.End

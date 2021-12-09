@@ -36,7 +36,7 @@ def run(lexeme):
         ('SKIP', r'[\t]+'),
         ('SPACE', r'[ ]+'),
         ('NEWLINE', r'[\n]+'),
-        ('MISMATCH', r'.'),
+        ('MISMATCH', r'.*'),
     ]
 
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
@@ -109,4 +109,5 @@ for result in run(user_input):
 print("Syntax Error:")
 for result in run(user_input):
     if result.hasError == True:
-        print(result)
+        if result.value != "":
+            print(result)
