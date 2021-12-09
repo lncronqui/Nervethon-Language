@@ -1,7 +1,9 @@
 import lexer
 with open('user_input.txt', 'r') as file:
     user_input = file.read().replace('\n', ' N_L ').replace('\t', '')#\n
-result = lexer.run(user_input)
+split_input = user_input.split()
 
-while True:
-    print(result)
+for x in split_input:
+    result = lexer.run(x)
+    for x in result:
+        print(x)

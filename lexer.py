@@ -25,6 +25,7 @@ return_statement    = "(^Return)"
 
 reserved_words = [start, end, generate, sys, syscall, discharge, absorb, if_statement, elif_statement, else_statement, switch, execute, default, for_loop, while_loop, exit_statement, continue_statement, avoid, fixed, struct, void, return_statement]
 
+TT_KW   = 'KEYWORD'
 
 class Token:
     def __init__(token, type_, value=None):
@@ -54,8 +55,11 @@ class Lexer:
         	#Reserved Words#
             for x in reserved_words:
                 if(re.search(x, user_input.current_char)):
-                        tokens.append(Token(x))
+                        tokens.append(Token(TT_KW, user_input.current_char))
                         user_input.advance()
+                else:
+                    tokens.append(Token("Invalid", user_input.current_char))
+                    user_input.advance()
         return tokens
 
 #MAIN FUNCTION#
