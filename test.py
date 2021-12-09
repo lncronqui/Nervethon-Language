@@ -181,7 +181,7 @@ def logical(input):
     return False
 
 def symbols(input):
-    symbol_op = [open_parenthesis, open_curly, open_bracket, open_quotation, close_parenthesis, close_curly, close_bracket, close_quotation, newline, tab, backslash, colon, period, semicolon, comma]
+    symbol_op = [open_parenthesis, open_curly, open_bracket, open_quotation, close_parenthesis, close_curly, close_bracket, close_quotation, newline, tab, backslash, colon, period, semicolon, comma, single_quote, double_quote]
     for x in symbol_op:
         if(re.search(x, input)):
             return True
