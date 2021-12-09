@@ -33,8 +33,7 @@ class Token:
         token.value = value
         
     def __repr__(token):
-        if token.value:
-            return f'token.type\t-\ttoken.value\n'
+        if token.value: return f'{token.type}:{token.value}'
         return f'token.type'
     
 class Lexer:
@@ -54,12 +53,17 @@ class Lexer:
         while user_input.current_char != None:
         	#Reserved Words#
             for x in reserved_words:
+                tt_rw = False
                 if(re.search(x, user_input.current_char)):
                         tokens.append(Token(TT_KW, user_input.current_char))
                         user_input.advance()
-                else:
-                    tokens.append(Token("Invalid", user_input.current_char))
-                    user_input.advance()
+                        tt_rw = True
+            if tt_rw == True:
+                tokens.append(Token(TT_KW, user_input.current_char))
+                user_input.advance()
+            else:
+                tokens.append(Token("invalid", user_input.current_char))
+                user_input.advance()
         return tokens
 
 #MAIN FUNCTION#

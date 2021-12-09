@@ -76,26 +76,26 @@ logicalop_or    = "(^Or)"
 logicalop_not   = "(^Not)"
 
 #OPEN SYMBOLS#
-open_parenthesis    = "^[(]$"
-open_curly          = "^[{]$"
-open_bracket        = "^[[]$"
+open_parenthesis    = "^\($"
+open_curly          = "^\{$"
+open_bracket        = "^\[$"
 open_quotation      = "^\"$"
 
 #CLOSE SYMBOLS#
-close_parenthesis    = "^[)]$"
-close_curly          = "^[}]$"
-close_bracket        = "^[]]$"
+close_parenthesis    = "^\)$"
+close_curly          = "^\}$"
+close_bracket        = "^\]$"
 close_quotation      = "^\"$"
 
 #COMMENT SYMBOLS#
 comment_full     = "^[/][*](:word:)[*][/]$"
 
 #ESCAPE SEQUENCES SYMBOLS#
-newline         = "^[\][n]$"
-tab             = "^[\][t]$"
-double_quote    = "^[\"]$"
-single_quote    = "^[\][']$"
-backslash       = "^[\][\]$"
+newline         = "^\n$"
+tab             = "^\t$"
+double_quote    = "^\"$"
+single_quote    = "^\'$"
+backslash       = "^\\$"
 
 #OTHER SYMBOLS#
 colon        = "^[:]$"
