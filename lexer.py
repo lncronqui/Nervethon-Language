@@ -13,7 +13,9 @@ class Token(NamedTuple):
 
 #MAIN FUNCTION#
 def run(lexeme):
-    keywords= {'Link.Start', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 'Absorb', 'If', 'Elif', 'Else', 'Switch', 'Execute', 'Default', 'For', 'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Void', 'Return'}
+    keywords= {'Link.Start', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 
+               'Absorb', 'If', 'Elif', 'Else', 'Switch', 'Execute', 'Default', 'For', 
+               'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Void', 'Return'}
     datatype = {'Integer','Boolean','String','Decimal'}
     logical = {'And', 'Or', 'Not'}
     boolean = {'True', 'False'}
@@ -26,6 +28,8 @@ def run(lexeme):
         ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
         ('SYMBOLS', r'\(|\)|\{|\}|\[|\]|\,|\.|\:'),
         ('ESCAPESEQ', r'\\n|\\t|\\"|\\\'|\\\\'),
+        ('NON_KEYWORD', r'l(?i)(ink.start)'),
+        ('STRUCT_ID', r'[a-z]\w*[\.][a-z]\w*|[a-z]\w*'),
         ('ID', r'[a-z]\w*'),
         ('RESERVED_WORD', r'[A-Z][\w\.]*'),
         ('LIT_STRING', r'(\"[\S\s]*\")|(\“.*\”)'),
@@ -48,6 +52,14 @@ def run(lexeme):
             kind = value
         elif kind == 'ID' and len(value) > 20:
             hasError = True
+        elif kind == 'STRUCT_ID':
+            check_structid = str(value).split('.', 1)
+            check_id1 = check_structid[0]
+            check_id2 = check_structid[1]
+            if(len(check_id1) > 20) or (len(check_id2) > 20):
+                hasError = True
+        #elif kind == 'NON_KEYWORD':
+        #    hasError = True
         elif kind == 'RESERVED_WORD' and value in keywords:
             kind = value
         elif kind == 'RESERVED_WORD' and value in datatype:
