@@ -1,4 +1,6 @@
+import decimal
 from typing import NamedTuple
+from decimal import *
 import re
 
 
@@ -62,11 +64,13 @@ def run(lexeme):
                 else:
                     hasError = True
             else:
-                #check_decimal = value.as_tuple()
-                #if value < 1000000000 and ((value - 0.)):
-                kind = "LIT_DECPOS"
-                #else:
-                hasError = True
+                check_decimal = str(value).split('.',1)
+                digit_place = str(check_decimal[0])
+                decimal_place = str(check_decimal[1])
+                if (len(digit_place) < 10) and (len(decimal_place) < 6):
+                    kind = "LIT_DECPOS"
+                else:
+                    hasError = True
         elif kind == 'NEG_NUMBER':
             value = float(value) if '.' in value else int(value)
             if (isinstance(value, int) == True):
@@ -75,7 +79,10 @@ def run(lexeme):
                 else:
                     hasError = True
             else:
-                if value < 1000000000 and value < 0.999999:
+                check_decimal = str(value).split('.',1)
+                digit_place = str(check_decimal[0])
+                decimal_place = str(check_decimal[1])
+                if (len(digit_place) < 11) and (len(decimal_place) < 6):
                     kind = "LIT_DECNEG"
                 else:
                     hasError = True
