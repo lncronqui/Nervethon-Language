@@ -38,7 +38,7 @@ style.configure("Vertical.TScrollbar", troughcolor="#0F0F0F", highlightcolor="#3
 
 #Scrollbar and Text area
 scrollbar=ttk.Scrollbar(frame1, orient='vertical')
-text_area = Text(frame1, bg='#121212', width = 66, height = 23, font = ("Times New Roman",15), fg="White", yscrollcommand=scrollbar.set)
+text_area = Text(frame1, bg='#121212', width = 66, height = 23, font = ("Times New Roman",15), insertbackground='white', fg="White", yscrollcommand=scrollbar.set)
 scrollbar.config(command=text_area.yview)
 scrollbar.pack(side=RIGHT, fill=Y)
 text_area.pack(side="left")
