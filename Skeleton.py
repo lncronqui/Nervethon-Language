@@ -63,27 +63,16 @@ def Take_input():
             Errors.insert(END, '\n')
             Output.configure(state='disabled')
             Errors.configure(state='disabled')
-<<<<<<< Updated upstream
-        #Frame 3 - Output
-        Output.configure(state='normal')
-        Output.insert(END, '  ')
-        Output.insert(END, result.value)
-        Output.insert(END, '\t\t\t  ')
-        Output.insert(END, result.type)
-        Output.insert(END, '\n')
-        Output.configure(state='disabled')
-        Errors.configure(state='disabled')
-=======
         else:
             #Frame 3 - Output
             Output.configure(state='normal')
+            Output.insert(END, '  ')
             Output.insert(END, result.value)
-            Output.insert(END, '\t\t\t')
+            Output.insert(END, '\t\t\t  ')
             Output.insert(END, result.type)
             Output.insert(END, '\n')
             Output.configure(state='disabled')
             Errors.configure(state='disabled')
->>>>>>> Stashed changes
         
 #Frame 2 - Errors
 frame2=Frame(root, width=633, height=100, highlightbackground='#ffffff', bg='#121212', highlightthickness=1)
