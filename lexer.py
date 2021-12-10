@@ -46,7 +46,7 @@ def run(lexeme):
         hasError = False
         if kind == 'SYMBOLS':
             kind = value
-        elif kind == 'ID' and len(value) :
+        elif kind == 'ID' and len(value) > 20:
             hasError = True
         elif kind == 'RESERVED_WORD' and value in keywords:
             kind = value
