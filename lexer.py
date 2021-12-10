@@ -26,7 +26,7 @@ def run(lexeme):
         ('RELATIONAL', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
         ('ASSIGNMENT', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
         ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
-        ('SYMBOLS', r'\(|\)|\{|\}|\[|\]|\,|\.|\:'),
+        ('SYMBOLS', r'\(|\)|\{|\}|\[|\]|\,|\:'),
         ('ESCAPESEQ', r'\\n|\\t|\\"|\\\'|\\\\'),
         ('NON_KEYWORD', r'(l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys)|s(?i:ys.call)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse))'),
         ('STRUCT_ID', r'[a-z]\w*\.[a-z]\w*'),
@@ -37,7 +37,7 @@ def run(lexeme):
         ('SKIP', r'[\t]+'),
         ('SPACE', r'[ ]+'),
         ('NEWLINE', r'[\n]+'),
-        ('MISMATCH', r'.*'),
+        ('ERROR', r'.*'),
     ]
 
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
@@ -52,14 +52,17 @@ def run(lexeme):
             kind = value
         elif kind == 'ID' and len(value) > 20:
             hasError = True
+            kind = 'ERROR'
         elif kind == 'STRUCT_ID':
             check_structid = str(value).split('.', 1)
             check_id1 = check_structid[0]
             check_id2 = check_structid[1]
             if(len(check_id1) > 20) or (len(check_id2) > 20):
                 hasError = True
+                kind = 'ERROR'
         elif kind == 'NON_KEYWORD':
             hasError = True
+            kind = 'ERROR'
         elif kind == 'RESERVED_WORD' and value in keywords:
             kind = value
         elif kind == 'RESERVED_WORD' and value in datatype:
@@ -70,6 +73,7 @@ def run(lexeme):
             kind = "LIT_BOOLEAN"
         elif kind == 'RESERVED_WORD':
             hasError = True
+            kind = 'ERROR'
         elif kind == 'POS_NUMBER':
             value = float(value) if '.' in value else int(value)
             if (isinstance(value, int) == True):
@@ -77,6 +81,7 @@ def run(lexeme):
                     kind = "LIT_INTPOS"
                 else:
                     hasError = True
+                    kind = 'ERROR'
             else:
                 check_decimal = str(value).split('.',1)
                 digit_place = str(check_decimal[0])
@@ -85,6 +90,7 @@ def run(lexeme):
                     kind = "LIT_DECPOS"
                 else:
                     hasError = True
+                    kind = 'ERROR'
         elif kind == 'NEG_NUMBER':
             value = float(value) if '.' in value else int(value)
             if (isinstance(value, int) == True):
@@ -92,6 +98,7 @@ def run(lexeme):
                     kind = "LIT_INTNEG"
                 else:
                     hasError = True
+                    kind = 'ERROR'
             else:
                 check_decimal = str(value).split('.',1)
                 digit_place = str(check_decimal[0])
@@ -100,6 +107,7 @@ def run(lexeme):
                     kind = "LIT_DECNEG"
                 else:
                     hasError = True
+                    kind = 'ERROR'
         elif kind == 'NEWLINE':
             value = "\\n"
             line_start = mo.end()
@@ -108,6 +116,6 @@ def run(lexeme):
             value = kind
         elif kind == 'SKIP':
             value = "\\t"
-        elif kind == 'MISMATCH':
+        elif kind == 'ERROR':
             hasError = True
         yield Token(kind, value, line_num, column, hasError)
