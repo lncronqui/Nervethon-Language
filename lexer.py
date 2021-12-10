@@ -28,8 +28,8 @@ def run(lexeme):
         ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
         ('SYMBOLS', r'\(|\)|\{|\}|\[|\]|\,|\.|\:'),
         ('ESCAPESEQ', r'\\n|\\t|\\"|\\\'|\\\\'),
-        #('NON_KEYWORD', r'l(?i)(ink.start)'),
-        ('STRUCT_ID', r'[a-z]\w*[\.][a-z]\w*|[a-z]\w*'),
+        ('NON_KEYWORD', r'(l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys)|s(?i:ys.call)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean),s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse))[^ ]?'),
+        ('STRUCT_ID', r'[a-z]\w*\.[a-z]\w*'),
         ('ID', r'[a-z]\w*'),
         ('RESERVED_WORD', r'[A-Z][\w\.]*'),
         ('LIT_STRING', r'(\"[\S\s]*\")|(\“.*\”)'),
@@ -58,8 +58,8 @@ def run(lexeme):
             check_id2 = check_structid[1]
             if(len(check_id1) > 20) or (len(check_id2) > 20):
                 hasError = True
-        #elif kind == 'NON_KEYWORD':
-        #    hasError = True
+        elif kind == 'NON_KEYWORD':
+            hasError = True
         elif kind == 'RESERVED_WORD' and value in keywords:
             kind = value
         elif kind == 'RESERVED_WORD' and value in datatype:
