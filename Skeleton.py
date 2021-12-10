@@ -55,7 +55,9 @@ def Take_input():
         if result.hasError == True:
             #Frame 2 - Error
             Errors.configure(state='normal')
+            Errors.insert(END, '"')
             Errors.insert(END, result.value)
+            Errors.insert(END, '"')
             Errors.insert(END, ' unexpected error on Line ')
             Errors.insert(END, result.line)
             Errors.insert(END, '\n')
