@@ -51,7 +51,8 @@ def Take_input():
     Output.delete(1.0,END)#How to reset text area
     Errors.delete(1.0,END)#How to reset text area
     INPUT = text_area.get("1.0", "end-1c")
-    for result in lexer.run(INPUT):
+    run_code = lexer.run(INPUT)
+    for result in run_code:
         if result.hasError == True:
             #Frame 2 - Error
             Errors.configure(state='normal')

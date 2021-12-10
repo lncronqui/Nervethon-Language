@@ -28,7 +28,7 @@ def run(lexeme):
         ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
         ('SYMBOLS', r'\(|\)|\{|\}|\[|\]|\,|\:'),
         ('ESCAPESEQ', r'\\n|\\t|\\"|\\\'|\\\\'),
-        ('NON_KEYWORD', r'^(l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys)|s(?i:ys.call)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse))$'),
+        ('NON_KEYWORD', r'(l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys)|s(?i:ys.call)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse))[^\s]?'),
         ('STRUCT_ID', r'[a-z]\w*\.[a-z]\w*'),
         ('ID', r'[a-z]\w*'),
         ('RESERVED_WORD', r'[A-Z][\w\.]*'),
@@ -37,9 +37,10 @@ def run(lexeme):
         ('TAB', r'[\t]+'),
         ('SPACE', r'[ ]+'),
         ('NEWLINE', r'[\n]+'),
-        ('ERROR', r'.*'),
+        ('ERROR', r'[^\s]+'),
     ]
 
+    token_data = []
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
     line_num = 1
     line_start = 0
@@ -114,10 +115,29 @@ def run(lexeme):
             line_num += 1
         elif kind == 'SPACE':
             value = kind
-        elif kind == 'SKIP':
+        elif kind == 'TAB':
             value = "\\t"
         elif kind == 'ERROR':
             hasError = True
         if hasError == True and value == "":
             continue
-        yield Token(kind, value, line_num, column, hasError)
+        elif hasError == True and len(token_data) > 0 and value != "" and not(token_data[-1].value == " " or token_data[-1].value == "\n" or token_data[-1].value == "\t"):
+            hold_value = str(token_data[-1].value)
+            token_data = token_data[:-1]
+            value = hold_value + str(value)
+        else:
+            None
+        token_data.append(Token(kind,value,line_num,column,hasError))
+        hasError = False
+    return token_data
+        
+with open('user_input.txt', 'r') as file_open:
+    user_input = file_open.read()
+run_code = run(user_input) 
+for result in run_code:
+    if result.hasError == False:
+        print(str(result.value) + "\t" + result.type)
+print("Syntax Error:")
+for result in run_code:
+    if result.hasError == True:
+        print("\'" + result.value + "\' at line " + str(result.line))

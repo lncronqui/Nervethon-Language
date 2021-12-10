@@ -1,3 +1,1 @@
-Link.Start
-	Generate Integer x
-Link.End
+x = 5? + 2
