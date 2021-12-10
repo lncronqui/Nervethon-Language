@@ -28,7 +28,7 @@ def run(lexeme):
         ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
         ('SYMBOLS', r'\(|\)|\{|\}|\[|\]|\,|\.|\:'),
         ('ESCAPESEQ', r'\\n|\\t|\\"|\\\'|\\\\'),
-        ('NON_KEYWORD', r'l(?i)(ink.start)'),
+        #('NON_KEYWORD', r'l(?i)(ink.start)'),
         ('STRUCT_ID', r'[a-z]\w*[\.][a-z]\w*|[a-z]\w*'),
         ('ID', r'[a-z]\w*'),
         ('RESERVED_WORD', r'[A-Z][\w\.]*'),
