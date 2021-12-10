@@ -65,8 +65,9 @@ def Take_input():
             Errors.configure(state='disabled')
         #Frame 3 - Output
         Output.configure(state='normal')
+        Output.insert(END, '  ')
         Output.insert(END, result.value)
-        Output.insert(END, '\t\t\t')
+        Output.insert(END, '\t\t\t  ')
         Output.insert(END, result.type)
         Output.insert(END, '\n')
         Output.configure(state='disabled')
@@ -94,9 +95,9 @@ scrollbar3.pack(side=RIGHT, fill=Y)
 Output.pack(side="left")
 
 lblLex=Label(root,text="Lexeme", font = ("Times New Roman",19), fg='white',bg='#171717')
-lblLex.place(x=775,y=100)
+lblLex.place(x=760,y=100)
 lblTok=Label(root,text="Token" , font = ("Times New Roman",19), fg='white',bg='#171717')
-lblTok.place(x=1020,y=100)
+lblTok.place(x=1000,y=100) 
 lblErr=Label(root,text="Errors", font = ("Times New Roman",19), fg='white',bg='#171717')
 lblErr.place(x=40,y=620)
 
