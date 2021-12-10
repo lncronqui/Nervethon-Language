@@ -66,10 +66,8 @@ def Take_input():
                 #Frame 2 - Output
                 Errors.configure(state='normal')
                 Errors.insert(END, result.value)
-                Errors.insert(END, '\t\t Unexpected Error on Line:')
+                Errors.insert(END, ' unexpected error on Line ')
                 Errors.insert(END, result.line)
-                Errors.insert(END, '\t ,  Column:')
-                Errors.insert(END, result.column)
                 Errors.insert(END, '\n')
                 Output.configure(state='disabled')
                 Errors.configure(state='disabled')
