@@ -26,7 +26,7 @@ def run(lexeme):
         ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
         ('SYMBOLS', r'\(|\)|\{|\}|\[|\]|\,'),
         #('ESCAPESEQ', r'[\n] | [\t] | [\"] | [\'] | [\\]'),
-        ('ID', r'[a-z]\w{0,19}'),
+        ('ID', r'[a-z]\w*'),
         ('RESERVED_WORD', r'[A-Z][\w\.]*'),
         ('LIT_STRING', r'\".*\"'),
         ('LIT_BOOL', r'[T][r][u][e]|[F][a][l][s][e]'),
@@ -46,6 +46,8 @@ def run(lexeme):
         hasError = False
         if kind == 'SYMBOLS':
             kind = value
+        elif kind == 'ID' and len(value) :
+            hasError = True
         elif kind == 'RESERVED_WORD' and value in keywords:
             kind = value
         elif kind == 'RESERVED_WORD' and value in datatype:
