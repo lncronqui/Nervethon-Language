@@ -79,25 +79,26 @@ def Take_input():
 frame2=Frame(root, width=633, height=100, highlightbackground='#ffffff', bg='#121212', highlightthickness=1)
 frame2.grid(row=3, column=0, padx=25, pady=25, ipadx=25, ipady=25)
 
-Errors = Text(frame2, width = 68, height = 5, font = ("Times New Roman",13), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled')
-
-scrollbar=ttk.Scrollbar(frame2, orient='vertical')
-scrollbar.config(command=text_area.yview)
-scrollbar.pack(side=RIGHT, fill=Y)
+scrollbar2=ttk.Scrollbar(frame2, orient='vertical')
+scrollbar2.config(command=text_area.yview)
+scrollbar2.pack(side=RIGHT, fill=Y)
 text_area.pack(side="left")
+
+Errors = Text(frame2, width = 68, height = 5, font = ("Times New Roman",13), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar2.set)
+
 
 #Frame 3 - Output
 frame3=Frame(root, width=520, height=660, highlightbackground='#ffffff', background='#121212', highlightthickness=1)
-frame3.grid(row=1, column=1, rowspan = 6, columnspan = 2, padx=25, pady=25, ipadx=25, ipady=25)
+frame3.grid(row=1, column=1, rowspan = 6, columnspan = 2, padx=25, pady=(65,25), ipadx=25, ipady=25)
 
-scrollbar=ttk.Scrollbar(frame3, orient='vertical')
-scrollbar.config(command=text_area.yview)
-scrollbar.pack(side=RIGHT, fill=Y)
+scrollbar3=ttk.Scrollbar(frame3, orient='vertical')
+scrollbar3.config(command=text_area.yview)
+scrollbar3.pack(side=RIGHT, fill=Y)
 text_area.pack(side="left")
 
 
 #OUTPUT TEXT AREA
-Output = Text(frame3, width = 50, height = 30, font = ("Times New Roman",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled')
+Output = Text(frame3, width = 50, height =28, font = ("Times New Roman",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar3.set)
 
 
 #Buttons or inside of Frame_Top
