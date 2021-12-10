@@ -96,6 +96,12 @@ scrollbar3.config(command=text_area.yview)
 scrollbar3.pack(side=RIGHT, fill=Y)
 text_area.pack(side="left")
 
+lblLex=Label(root,text="Lexeme", font = ("Times New Roman",19), fg='white',bg='#171717')
+lblLex.place(x=775,y=100)
+lblTok=Label(root,text="Token" , font = ("Times New Roman",19), fg='white',bg='#171717')
+lblTok.place(x=1020,y=100)
+lblErr=Label(root,text="Errors", font = ("Times New Roman",19), fg='white',bg='#171717')
+lblErr.place(x=40,y=620)
 
 #OUTPUT TEXT AREA
 Output = Text(frame3, width = 50, height =28, font = ("Times New Roman",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar3.set)
