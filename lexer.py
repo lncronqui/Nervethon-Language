@@ -13,16 +13,17 @@ class Token(NamedTuple):
 def run(lexeme):
     keywords= {'Link.Start', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 'Absorb', 'If', 'Elif', 'Else', 'Switch', 'Execute', 'Default', 'For', 'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Void', 'Return'}
     datatype = {'Integer','Boolean','String','Decimal'}
-    logical = {'And', 'Or', 'Not'} 
+    logical = {'And', 'Or', 'Not'}
+    boolean = {'True', 'False'}
     token_specification = [
         ('COMMENT', r'\/\*.*\*\/'),
-        ('POS_NUMBER', r'(\d+(\.\d{1,6})?)|(\d?(\.\d{1,6})+)'),
-        ('NEG_NUMBER', r'(\-\d+(\.\d{1,6})?)|\-(\d?(\.\d{1,6})+)'),
+        ('POS_NUMBER', r'(\d+(\.\d+)?)|(\d?(\.\d+)+)'),
+        ('NEG_NUMBER', r'(\-\d+(\.\d+)?)|\-(\d?(\.\d+)+)'),
         ('RELATIONAL', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
         ('ASSIGNMENT', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
         ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
-        ('SYMBOLS', r'[(] | [)] | [{] | [}] | [[] | []] | ["] | ["]'),
-        ('ESCAPESEQ', r'[\n] | [\t] | [\"] | [\'] | [\\]'),
+        ('SYMBOLS', r'\(|\)|\{|\}|\[|\]'),
+        #('ESCAPESEQ', r'[\n] | [\t] | [\"] | [\'] | [\\]'),
         ('ID', r'[a-z]\w{0,19}'),
         ('RESERVED_WORD', r'[A-Z][\w\.]*'),
         ('LIT_STRING', r'\".*\"'),
@@ -49,20 +50,35 @@ def run(lexeme):
             kind = value
         elif kind == 'RESERVED_WORD' and value in logical:
             kind = "LIT_LOGICAL"
+        elif kind == 'RESERVED_WORD' and value in boolean:
+            kind = "LIT_BOOLEAN"
         elif kind == 'RESERVED_WORD':
             hasError = True
         elif kind == 'POS_NUMBER':
             value = float(value) if '.' in value else int(value)
             if (isinstance(value, int) == True):
-                kind = "LIT_INTPOS"
+                if value < 1000000000:
+                    kind = "LIT_INTPOS"
+                else:
+                    hasError = True
             else:
+                #check_decimal = value.as_tuple()
+                #if value < 1000000000 and ((value - 0.)):
                 kind = "LIT_DECPOS"
+                #else:
+                hasError = True
         elif kind == 'NEG_NUMBER':
             value = float(value) if '.' in value else int(value)
             if (isinstance(value, int) == True):
-                kind = "LIT_INTNEG"
+                if value < 1000000000:
+                    kind = "LIT_INTNEG"
+                else:
+                    hasError = True
             else:
-                kind = "LIT_DECNEG"
+                if value < 1000000000 and value < 0.999999:
+                    kind = "LIT_DECNEG"
+                else:
+                    hasError = True
         elif kind == 'NEWLINE':
             value = "\\n"
             line_start = mo.end()
