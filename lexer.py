@@ -18,17 +18,17 @@ def run(lexeme):
     logical = {'And', 'Or', 'Not'}
     boolean = {'True', 'False'}
     token_specification = [
-        ('COMMENT', r'\/\*.*\*\/'),
+        ('COMMENT', r'\/\*[\s\S]*\*\/'),
         ('POS_NUMBER', r'(\d+(\.\d+)?)|(\d?(\.\d+)+)'),
         ('NEG_NUMBER', r'(\-\d+(\.\d+)?)|\-(\d?(\.\d+)+)'),
         ('RELATIONAL', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
         ('ASSIGNMENT', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
         ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
-        ('SYMBOLS', r'\(|\)|\{|\}|\[|\]|\,|\.'),
-        #('ESCAPESEQ', r'[\n] | [\t] | [\"] | [\'] | [\\]'),
+        ('SYMBOLS', r'\(|\)|\{|\}|\[|\]|\,|\.|\:'),
+        ('ESCAPESEQ', r'\\n|\\t|\\"|\\\'|\\\\'),
         ('ID', r'[a-z]\w*'),
         ('RESERVED_WORD', r'[A-Z][\w\.]*'),
-        ('LIT_STRING', r'(\".*\")|(\“.*\”)'),
+        ('LIT_STRING', r'(\"[\S\s]*\")|(\“.*\”)'),
         ('LIT_BOOL', r'[T][r][u][e]|[F][a][l][s][e]'),
         ('SKIP', r'[\t]+'),
         ('SPACE', r'[ ]+'),
@@ -95,7 +95,7 @@ def run(lexeme):
         elif kind == 'SPACE':
             value = kind
         elif kind == 'SKIP':
-            continue
+            value = "\\t"
         elif kind == 'MISMATCH':
             hasError = True
         yield Token(kind, value, line_num, column, hasError)
