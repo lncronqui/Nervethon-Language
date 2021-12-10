@@ -34,7 +34,7 @@ def run(lexeme):
         ('RESERVED_WORD', r'[A-Z][\w\.]*'),
         ('LIT_STRING', r'(\"[\S\s]*\")|(\“.*\”)'),
         ('LIT_BOOL', r'[T][r][u][e]|[F][a][l][s][e]'),
-        ('SKIP', r'[\t]+'),
+        ('TAB', r'[\t]+'),
         ('SPACE', r'[ ]+'),
         ('NEWLINE', r'[\n]+'),
         ('ERROR', r'.*'),
@@ -118,4 +118,6 @@ def run(lexeme):
             value = "\\t"
         elif kind == 'ERROR':
             hasError = True
+        if hasError == True and value == "":
+            continue
         yield Token(kind, value, line_num, column, hasError)

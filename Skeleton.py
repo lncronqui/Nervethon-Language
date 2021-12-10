@@ -52,25 +52,23 @@ def Take_input():
     Errors.delete(1.0,END)#How to reset text area
     INPUT = text_area.get("1.0", "end-1c")
     for result in lexer.run(INPUT):
-        if result.hasError == False:
-            #Frame 3 - Output
-            Output.configure(state='normal')
-            Output.insert(END, result.value)
-            Output.insert(END, '\t\t\t')
-            Output.insert(END, result.type)
-            Output.insert(END, '\n')
+        if result.hasError == True:
+            #Frame 2 - Error
+            Errors.configure(state='normal')
+            Errors.insert(END, result.value)
+            Errors.insert(END, ' unexpected error on Line ')
+            Errors.insert(END, result.line)
+            Errors.insert(END, '\n')
             Output.configure(state='disabled')
             Errors.configure(state='disabled')
-        elif result.hasError == True:
-            if result.value != "":
-                #Frame 2 - Output
-                Errors.configure(state='normal')
-                Errors.insert(END, result.value)
-                Errors.insert(END, ' unexpected error on Line ')
-                Errors.insert(END, result.line)
-                Errors.insert(END, '\n')
-                Output.configure(state='disabled')
-                Errors.configure(state='disabled')
+        #Frame 3 - Output
+        Output.configure(state='normal')
+        Output.insert(END, result.value)
+        Output.insert(END, '\t\t\t')
+        Output.insert(END, result.type)
+        Output.insert(END, '\n')
+        Output.configure(state='disabled')
+        Errors.configure(state='disabled')
         
 #Frame 2 - Errors
 frame2=Frame(root, width=633, height=100, highlightbackground='#ffffff', bg='#121212', highlightthickness=1)
