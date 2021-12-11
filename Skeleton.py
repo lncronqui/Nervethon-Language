@@ -53,13 +53,14 @@ def Take_input():
     INPUT = text_area.get("1.0", "end-1c")
     run_code = lexer.run(INPUT)
     for result in run_code:
-        if result.hasError == True:
+        if result.hasError != "":
             #Frame 2 - Error
             Errors.configure(state='normal')
             Errors.insert(END, '\' ')
             Errors.insert(END, result.value)
-            Errors.insert(END, ' \'')
-            Errors.insert(END, ' unexpected error on Line ')
+            Errors.insert(END, '\' → ')
+            Errors.insert(END, result.hasError)
+            Errors.insert(END, ' on Line ')
             Errors.insert(END, result.line)
             Errors.insert(END, '\n')
             Output.configure(state='disabled')

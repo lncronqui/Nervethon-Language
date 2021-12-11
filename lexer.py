@@ -9,7 +9,7 @@ class Token(NamedTuple):
     value: str
     line: int
     column: int
-    hasError: bool
+    hasError: str
 
 #MAIN FUNCTION#
 def run(lexeme):
@@ -48,11 +48,14 @@ def run(lexeme):
         kind = mo.lastgroup
         value = mo.group()
         column = mo.start() - line_start
-        hasError = False
+        hasError = ""
+        if kind == 'ERROR':
+            hasError = "Invalid character/symbol"
         if kind == 'SYMBOLS':
             kind = value
         elif kind == 'ID' and len(value) > 20:
-            hasError = True
+            value_exceed = len(value) - 20
+            hasError = "Identifier exceeded maximum values by " + str(value_exceed) + " characters"
             kind = 'ERROR'
         elif kind == 'STRUCT_ID':
             check_structid = str(value).split('.', 1)
@@ -62,7 +65,7 @@ def run(lexeme):
                 hasError = True
                 kind = 'ERROR'
         elif kind == 'NON_KEYWORD':
-            hasError = True
+            hasError = "Reserved word cannot be used as an identifier"
             kind = 'ERROR'
         elif kind == 'RESERVED_WORD' and value in keywords:
             kind = value
@@ -73,7 +76,7 @@ def run(lexeme):
         elif kind == 'RESERVED_WORD' and value in boolean:
             kind = "LIT_BOOLEAN"
         elif kind == 'RESERVED_WORD':
-            hasError = True
+            hasError = "The reserved word does not exist"
             kind = 'ERROR'
         elif kind == 'POS_NUMBER':
             value = float(value) if '.' in value else int(value)
@@ -81,7 +84,7 @@ def run(lexeme):
                 if value < 1000000000:
                     kind = "LIT_INTPOS"
                 else:
-                    hasError = True
+                    hasError = "Exceeded number of digits allowed"
                     kind = 'ERROR'
             else:
                 check_decimal = str(value).split('.',1)
@@ -90,7 +93,7 @@ def run(lexeme):
                 if (len(digit_place) < 10) and (len(decimal_place) < 6):
                     kind = "LIT_DECPOS"
                 else:
-                    hasError = True
+                    hasError = "Exceeded number of digits allowed"
                     kind = 'ERROR'
         elif kind == 'NEG_NUMBER':
             value = float(value) if '.' in value else int(value)
@@ -98,7 +101,7 @@ def run(lexeme):
                 if value < 1000000000:
                     kind = "LIT_INTNEG"
                 else:
-                    hasError = True
+                    hasError = "Exceeded number of digits allowed"
                     kind = 'ERROR'
             else:
                 check_decimal = str(value).split('.',1)
@@ -107,7 +110,7 @@ def run(lexeme):
                 if (len(digit_place) < 11) and (len(decimal_place) < 6):
                     kind = "LIT_DECNEG"
                 else:
-                    hasError = True
+                    hasError = "Exceeded number of digits allowed"
                     kind = 'ERROR'
         elif kind == 'NEWLINE':
             value = "\\n"
@@ -117,27 +120,27 @@ def run(lexeme):
             value = kind
         elif kind == 'TAB':
             value = "\\t"
-        elif kind == 'ERROR':
-            hasError = True
-        if hasError == True and value == "":
+        #elif kind == 'ERROR':
+        #    hasError = True
+        if kind == 'ERROR' and value == "":
             continue
-        elif hasError == True and len(token_data) > 0 and value != "" and not(token_data[-1].value == " " or token_data[-1].value == "\n" or token_data[-1].value == "\t"):
+        elif kind == 'ERROR' and len(token_data) > 0 and value != "" and not(token_data[-1].value == " " or token_data[-1].value == "\\n" or token_data[-1].value == "\\t"):
             hold_value = str(token_data[-1].value)
             token_data = token_data[:-1]
             value = hold_value + str(value)
         else:
             None
         token_data.append(Token(kind,value,line_num,column,hasError))
-        hasError = False
+        hasError = ""
     return token_data
         
-with open('user_input.txt', 'r') as file_open:
-    user_input = file_open.read()
-run_code = run(user_input) 
-for result in run_code:
-    if result.hasError == False:
-        print(str(result.value) + "\t" + result.type)
-print("Syntax Error:")
-for result in run_code:
-    if result.hasError == True:
-        print("\'" + result.value + "\' at line " + str(result.line))
+#with open('user_input.txt', 'r') as file_open:
+#    user_input = file_open.read()
+#run_code = run(user_input) 
+#for result in run_code:
+#    if result.hasError == False:
+#        print(str(result.value) + "\t" + result.type)
+#print("Syntax Error:")
+#for result in run_code:
+#    if result.hasError == True:
+#        print("\'" + result.value + "\' at line " + str(result.line))
