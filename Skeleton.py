@@ -28,7 +28,7 @@ canvasLogo.create_image(140,29, image=photo_imageNervethon)
 canvasLogo.place(x=20,y=5)
 
 #Frame 1 Top left size
-frame1=Frame(root, width=633, height=400, highlightbackground='#ffffff', highlightthickness=1)
+frame1=Frame(root, width=633, height=400, bg='#121212')
 frame1.grid(row=2, column=0,padx=25, pady=25)
 
 #Frame 1 Style
@@ -38,7 +38,7 @@ style.configure("Vertical.TScrollbar", troughcolor="#0F0F0F", highlightcolor="#3
 
 #Scrollbar and Text area
 scrollbar=ttk.Scrollbar(frame1, orient='vertical')
-text_area = Text(frame1, bg='#121212', width = 66, height = 23, font = ("Times New Roman",15), insertbackground='white', fg="White", yscrollcommand=scrollbar.set)
+text_area = Text(frame1, bg='#121212', width = 66, height = 28, font = ("Courier",12), insertbackground='white', fg="White", yscrollcommand=scrollbar.set)
 scrollbar.config(command=text_area.yview)
 scrollbar.pack(side=RIGHT, fill=Y)
 text_area.pack(side="left")
@@ -78,30 +78,30 @@ def Take_input():
         
 #Frame 2 - Errors
 frame2=Frame(root, width=633, height=100, highlightbackground='#ffffff', bg='#121212', highlightthickness=1)
-frame2.grid(row=3, column=0, padx=25, pady=25, ipadx=25, ipady=25)
+frame2.grid(row=3, column=0, padx=25, pady=25, ipadx=25, ipady=5)
 
 scrollbar2=ttk.Scrollbar(frame2, orient='vertical')
-Errors = Text(frame2, width = 68, height = 5, font = ("Times New Roman",13), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar2.set)
+Errors = Text(frame2, width = 61, height =7, font = ("Courier",12), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar2.set)
 scrollbar2.config(command=Errors.yview)
 scrollbar2.pack(side=RIGHT, fill=Y)
 Errors.pack(side="left")
 
 #Frame 3 - Output
 frame3=Frame(root, width=520, height=660, highlightbackground='#ffffff', background='#121212', highlightthickness=1)
-frame3.grid(row=1, column=1, rowspan = 6, columnspan = 2, padx=25, pady=(65,25), ipadx=25, ipady=25)
+frame3.grid(row=1, column=1, rowspan = 6, columnspan = 2, padx=25, pady=(65,25), ipadx=20, ipady=5)
 
 #OUTPUT TEXT AREA
 scrollbar3=ttk.Scrollbar(frame3, orient='vertical')
-Output = Text(frame3, width = 50, height =28, font = ("Times New Roman",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar3.set)
+Output = Text(frame3, width = 50, height =36, font = ("Courier",12), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar3.set)
 scrollbar3.config(command=Output.yview)
 scrollbar3.pack(side=RIGHT, fill=Y)
 Output.pack(side="left")
 
-lblLex=Label(root,text="Lexeme", font = ("Times New Roman",19), fg='white',bg='#171717')
-lblLex.place(x=760,y=100)
-lblTok=Label(root,text="Token" , font = ("Times New Roman",19), fg='white',bg='#171717')
-lblTok.place(x=1000,y=100) 
-lblErr=Label(root,text="Errors", font = ("Times New Roman",19), fg='white',bg='#171717')
+lblLex=Label(root,text="Lexeme", font = ("Nunito",14), fg='white',bg='#171717')
+lblLex.place(x=770,y=98)
+lblTok=Label(root,text="Token" , font = ("Nunito",14), fg='white',bg='#171717')
+lblTok.place(x=1010,y=98) 
+lblErr=Label(root,text="Errors", font = ("Nunito",14), fg='white',bg='#171717')
 lblErr.place(x=40,y=620)
 
 #For Clear
