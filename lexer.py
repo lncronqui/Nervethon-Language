@@ -16,7 +16,7 @@ def run(lexeme):
     keywords= {'Link.Start', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 
                'Absorb', 'If', 'Elif', 'Else', 'Switch', 'Execute', 'Default', 'For', 
                'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Void', 'Return'}
-    datatype = {'Integer','Boolean','String','Decimal'}
+    
     logical = {'And', 'Or', 'Not'}
     boolean = {'True', 'False'}
     token_specification = [
@@ -26,20 +26,20 @@ def run(lexeme):
         ('RELATIONAL', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
         ('ASSIGNMENT', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
         ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
+        ('LIT_STRING', r'([\"][\S\s]*[\"])|([\"]?[\S\s]*[\"])|([\"][\S\s]*[\"]?)'),
         ('SYMBOLS', r'\(|\)|\{|\}|\[|\]|\,|\:'),
         ('ESCAPESEQ', r'\\n|\\t|\\"|\\\'|\\\\'),
         ('NON_KEYWORD', r'(l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys)|s(?i:ys.call)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse))[^\s]?'),
         ('STRUCT_ID', r'[a-z]\w*\.[a-z]\w*'),
         ('ID', r'[a-z]\w*'),
         ('RESERVED_WORD', r'[A-Z][\w\.]*'),
-        ('LIT_STRING', r'(\"[\S\s]*\")|(\“.*\”)'),
         ('LIT_BOOL', r'[T][r][u][e]|[F][a][l][s][e]'),
         ('TAB', r'[\t]+'),
         ('SPACE', r'[ ]+'),
         ('NEWLINE', r'[\n]+'),
         ('ERROR', r'[^\s]+'),
     ]
-
+    datatype = {'Integer','Boolean','String','Decimal'}
     token_data = []
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
     line_num = 1
@@ -51,7 +51,15 @@ def run(lexeme):
         hasError = ""
         if kind == 'ERROR':
             hasError = "Invalid character/symbol"
-        if kind == 'SYMBOLS':
+        if kind == 'LIT_STRING':
+            count_quote = 0
+            for i in value:
+                   if(i == "\""):
+                       count_quote += 1
+            if(count_quote != 2):
+                kind = 'ERROR'
+                hasError = "Invalid number of quotation marks available" 
+        elif kind == 'SYMBOLS':
             kind = value
         elif kind == 'ID' and len(value) > 20:
             value_exceed = len(value) - 20
