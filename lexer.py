@@ -26,7 +26,7 @@ def run(lexeme):
         ('RELATIONAL', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
         ('ASSIGNMENT', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
         ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
-        ('LIT_STRING', r'([\"][\S\s]*[\"])|([\"]?![\S\s]*[\"])|([\"][\S\s]*[\"]?!)'), #Added '!' 
+        ('LIT_STRING', r'(\"[ \S]*?\")'),#|([\"]?![\S\s]*?[\"])|([\"][\S\s]*?[\"]?!)'), #Added '!' 
         ('SYMBOLS', r'\(|\)|\{|\}|\[|\]|\,|\:'),
         ('ESCAPESEQ', r'\\n|\\t|\\"|\\\'|\\\\'),
         ('NON_KEYWORD', r'(l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys)|s(?i:ys.call)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse))[^\s]?'),
@@ -50,15 +50,10 @@ def run(lexeme):
         column = mo.start() - line_start
         hasError = ""
         if kind == 'ERROR':
-            hasError = "Invalid character/symbol"
-        if kind == 'LIT_STRING':
-            count_quote = 0
-            for i in value:
-                   if(i == "\""):
-                       count_quote += 1
-            if(count_quote != 2):
-                kind = 'ERROR'
-                hasError = "Invalid number of quotation marks available" 
+            if str(value)[0] == "\"" or str(value)[-1] == "\"":
+                hasError = "Invalid quotation mark"
+            else:
+                hasError = "Invalid character/symbol"
         elif kind == 'SYMBOLS':
             kind = value
         elif kind == 'ID' and len(value) > 20:
@@ -132,7 +127,7 @@ def run(lexeme):
         #    hasError = True
         if kind == 'ERROR' and value == "":
             continue
-        elif kind == 'ERROR' and len(token_data) > 0 and value != "" and not(token_data[-1].value == " " or token_data[-1].value == "\\n" or token_data[-1].value == "\\t"):
+        elif kind == 'ERROR' and len(token_data) > 0 and value != "" and not(token_data[-1].type == 'SPACE' or token_data[-1].value == "\\n" or token_data[-1].value == "\\t"):
             hold_value = str(token_data[-1].value)
             token_data = token_data[:-1]
             value = hold_value + str(value)
