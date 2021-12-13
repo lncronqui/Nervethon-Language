@@ -49,8 +49,10 @@ text_area.pack(side="left")
 def Take_input():
     Output.configure(state='normal')
     Errors.configure(state='normal')
+    OutputTok.configure(state='normal')
     Output.delete(1.0,END)#How to reset text area
     Errors.delete(1.0,END)#How to reset text area
+    OutputTok.delete(1.0,END)
     INPUT = text_area.get("1.0", "end-1c")
     run_code = lexer.run(INPUT)
     for result in run_code:
@@ -70,9 +72,22 @@ def Take_input():
             #Frame 3 - Output
             Output.configure(state='normal')
             OutputTok.configure(state='normal')
-            Output.insert(END, '  ')
-            Output.insert(END, result.value)
-            Output.insert(END, '\n')
+            if len(str(result.value)) > 19:
+                Output.insert(END, '  ')
+                count_letter = 0
+                word_list = list(str(result.value))
+                output_word = ""
+                while count_letter <= 19:
+                    char_letter = word_list[count_letter]
+                    output_word = output_word + char_letter
+                    count_letter += 1
+                Output.insert(END, output_word)
+                Output.insert(END, '...')
+                Output.insert(END, '\n')
+            else:
+                Output.insert(END, '  ')
+                Output.insert(END, result.value)
+                Output.insert(END, '\n')
             OutputTok.insert(END, '  ')
             OutputTok.insert(END, result.type)
             OutputTok.insert(END, '\n')
