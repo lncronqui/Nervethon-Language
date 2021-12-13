@@ -29,7 +29,7 @@ canvasLogo.create_image(140,29, image=photo_imageNervethon)
 canvasLogo.place(x=20,y=5)
 
 #Frame 1 Top left size
-frame1=Frame(root, width=633, height=350, bg='#121212')
+frame1=Frame(root, width=633, height=350, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
 frame1.place(x=35,y=100)
 
 #Frame 1 Style
@@ -96,7 +96,7 @@ def Take_input():
             Errors.configure(state='disabled')
         
 #Frame 2 - Errors
-frame2=Frame(root, width=633, height=100, highlightbackground='#313537', bg='#121212', highlightthickness=1)
+frame2=Frame(root, width=633, height=100, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
 frame2.place(x=35,y=615)
 
 scrollbar2=ttk.Scrollbar(frame2, orient='vertical')
@@ -106,10 +106,10 @@ scrollbar2.pack(side=RIGHT, fill=Y)
 Errors.pack(side="left")
 
 #Frame 3 - Output Lex
-frame3=Frame(root, width=520, height=660, highlightbackground='#313537', background='#121212', highlightthickness=1)
+frame3=Frame(root, width=520, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
 frame3.place(x=725, y=130)
 #Frame 4 - Output Token
-frame4=Frame(root, width=520, height=660, highlightbackground='#313537', background='#121212', highlightthickness=1)
+frame4=Frame(root, width=520, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
 frame4.place(x=1045, y=130)
 
 
