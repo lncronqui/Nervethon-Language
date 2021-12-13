@@ -26,7 +26,7 @@ def run(lexeme):
         ('relational', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
         ('assignment', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
         ('arithmetic', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
-        ('lit_str', r'\"([ \S]*?)\"|([ \S]*?)\"|\"([ \S]*?)'), #Added '!' 
+        ('lit_str', r'\"([ \S]*?)\"'),#|([ \S]*?)\"|\"([ \S]*?)'), #Added '!' 
         ('symbols', r'\(|\)|\{|\}|\[|\]|\,|\:|\.|\;'),
         ('escapeseq', r'\\n|\\t|\\"|\\\'|\\\\'),
         ('non_keyword', r'(l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys)|s(?i:ys.call)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse))[^\s]?'),
@@ -51,7 +51,7 @@ def run(lexeme):
         hasError = ""
         if kind == 'error':
             if str(value)[0] == "\"" or str(value)[-1] == "\"":
-                hasError = "Invalid quotation mark"
+                hasError = "Lacking open/close quotation mark"
             else:
                 hasError = "Invalid character/symbol"
         elif kind == 'symbols':
@@ -91,7 +91,7 @@ def run(lexeme):
             value = float(value) if '.' in value else int(value)
             if (isinstance(value, int) == True):
                 if value < 1000000000:
-                    kind = "lit_intpos"
+                    kind = "lit_intposi"
                 else:
                     hasError = "Exceeded number of digits allowed"
                     kind = 'error'
@@ -100,7 +100,7 @@ def run(lexeme):
                 digit_place = str(check_decimal[0])
                 decimal_place = str(check_decimal[1])
                 if (len(digit_place) < 10) and (len(decimal_place) < 6):
-                    kind = "lit_decpos"
+                    kind = "lit_decposi"
                 else:
                     hasError = "Exceeded number of digits allowed"
                     kind = 'error'
@@ -108,7 +108,7 @@ def run(lexeme):
             value = float(value) if '.' in value else int(value)
             if (isinstance(value, int) == True):
                 if value > -1000000000:
-                    kind = "lit_intneg"
+                    kind = "lit_intnega"
                 else:
                     hasError = "Exceeded number of digits allowed"
                     kind = 'error'
@@ -117,7 +117,7 @@ def run(lexeme):
                 digit_place = str(check_decimal[0])
                 decimal_place = str(check_decimal[1])
                 if (len(digit_place) < 11) and (len(decimal_place) < 6):
-                    kind = "lit_decneg"
+                    kind = "lit_decnega"
                 else:
                     hasError = "Exceeded number of digits allowed"
                     kind = 'error'
@@ -129,8 +129,6 @@ def run(lexeme):
             value = kind
         elif kind == 'tab':
             value = "\\t"
-        #elif kind == 'ERROR':
-        #    hasError = True
         if kind == 'error' and value == "":
             continue
         elif kind == 'error' and len(token_data) > 0 and value != "" and not(token_data[-1].type == 'space' or token_data[-1].value == "\\n" or token_data[-1].value == "\\t"):

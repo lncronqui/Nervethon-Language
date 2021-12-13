@@ -55,9 +55,11 @@ def Take_input():
     OutputTok.delete(1.0,END)
     INPUT = text_area.get("1.0", "end-1c")
     run_code = lexer.run(INPUT)
+    check_Error = False
     for result in run_code:
         if result.hasError != "":
             #Frame 2 - Error
+            check_Error = True
             Errors.configure(state='normal')
             Errors.insert(END, '\' ')
             Errors.insert(END, result.value)
@@ -94,6 +96,10 @@ def Take_input():
             Output.configure(state='disabled')
             OutputTok.configure(state='disabled')
             Errors.configure(state='disabled')
+    if check_Error == False:
+        Errors.configure(state='normal')
+        Errors.insert(END, 'No Error/s Found')
+        Output.configure(state='disabled')
         
 #Frame 2 - Errors
 frame2=Frame(root, width=633, height=100, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
