@@ -139,10 +139,12 @@ def clear_input():
     text_area.delete(1.0,END)#How to reset text area
     Output.configure(state='normal')
     Errors.configure(state='normal')
+    OutputTok.configure(state='normal')
     Output.delete(1.0,END)#How to reset text area
     Errors.delete(1.0,END)#How to reset text area
     Output.configure(state='disabled')
     Errors.configure(state='disabled')
+    OutputTok.configure(state='disabled')
     
 #Buttons or inside of Frame_top
 Clear=Button(frame_top, width=129, height=32, image=photo_imageClear, border=0, activebackground='#0F0F0F', background='#0F0F0F', command = lambda:clear_input())
