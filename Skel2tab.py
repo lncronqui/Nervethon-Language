@@ -72,12 +72,12 @@ def Take_input():
             #Frame 3 - Output
             Output.configure(state='normal')
             OutputTok.configure(state='normal')
-            if len(str(result.value)) > 19:
+            if len(str(result.value)) > 15:
                 Output.insert(END, '  ')
                 count_letter = 0
                 word_list = list(str(result.value))
                 output_word = ""
-                while count_letter <= 19:
+                while count_letter <= 15:
                     char_letter = word_list[count_letter]
                     output_word = output_word + char_letter
                     count_letter += 1
