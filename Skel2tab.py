@@ -142,6 +142,7 @@ def clear_input():
     OutputTok.configure(state='normal')
     Output.delete(1.0,END)#How to reset text area
     Errors.delete(1.0,END)#How to reset text area
+    OutputTok.delete(1.0,END)
     Output.configure(state='disabled')
     Errors.configure(state='disabled')
     OutputTok.configure(state='disabled')
