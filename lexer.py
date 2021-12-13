@@ -13,7 +13,7 @@ class Token(NamedTuple):
 
 #MAIN FUNCTION#
 def run(lexeme):
-    keywords= {'Link.Start', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 
+    keywords= {'Link.Start ', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 
                'Absorb', 'If', 'Elif', 'Else', 'Switch', 'Execute', 'Default', 'For', 
                'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Void', 'Return'}
 
@@ -28,7 +28,7 @@ def run(lexeme):
         ('arithmetic', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
         ('lit_str', r'[\"\“]([ \S]*?)[\"\”]'),#|([ \S]*?)\"|\"([ \S]*?)'), #Added '!' 
         ('symbols', r'\(|\)|\{|\}|\[|\]|\,|\:|\.|\;'),
-        ('escapeseq', r'\\n|\\t|\\"|\\\'|\\\\'),
+        #('escapeseq', r'\\n|\\t|\\"|\\\'|\\\\'),
         ('non_keyword', r'(l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys)|s(?i:ys.call)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse))[^\s]?'),
         ('struct_id', r'[a-z]\w*\.[a-z]\w*'),
         ('id', r'[a-z]\w*'),
@@ -131,10 +131,11 @@ def run(lexeme):
             value = "\\t"
         if kind == 'error' and value == "":
             continue
-        elif kind == 'error' and len(token_data) > 0 and value != "" and not(token_data[-1].type == 'space' or token_data[-1].value == "\\n" or token_data[-1].value == "\\t"):
-            hold_value = str(token_data[-1].value)
-            token_data = token_data[:-1]
-            value = hold_value + str(value)
+        elif kind == 'error' and len(token_data) > 1:
+            if token_data[-1].hasError != "" and len(token_data) > 0 and value != "" and not(token_data[-1].type == 'space' or token_data[-1].value == "\\n" or token_data[-1].value == "\\t" or token_data[-1] == ""):
+                hold_value = str(token_data[-1].value)
+                token_data = token_data[:-1]
+                value = hold_value + str(value)
         else:
             None
         token_data.append(Token(kind,value,line_num,column,hasError))
