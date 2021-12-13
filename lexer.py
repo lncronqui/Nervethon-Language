@@ -107,7 +107,7 @@ def run(lexeme):
         elif kind == 'neg_number':
             value = float(value) if '.' in value else int(value)
             if (isinstance(value, int) == True):
-                if value < -1000000000:
+                if value > -1000000000:
                     kind = "lit_intneg"
                 else:
                     hasError = "Exceeded number of digits allowed"
