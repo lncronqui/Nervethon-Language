@@ -28,7 +28,7 @@ canvasLogo.create_image(140,29, image=photo_imageNervethon)
 canvasLogo.place(x=20,y=5)
 
 #Frame 1 Top left size
-frame1=Frame(root, width=633, height=400, bg='#121212')
+frame1=Frame(root, width=633, height=400, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
 frame1.grid(row=2, column=0,padx=25, pady=25)
 
 #Frame 1 Style
@@ -77,7 +77,7 @@ def Take_input():
             Errors.configure(state='disabled')
         
 #Frame 2 - Errors
-frame2=Frame(root, width=633, height=100, highlightbackground='#ffffff', bg='#121212', highlightthickness=1)
+frame2=Frame(root, width=633, height=100, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
 frame2.grid(row=3, column=0, padx=25, pady=25, ipadx=25, ipady=5)
 
 scrollbar2=ttk.Scrollbar(frame2, orient='vertical')
@@ -87,20 +87,20 @@ scrollbar2.pack(side=RIGHT, fill=Y)
 Errors.pack(side="left")
 
 #Frame 3 - Output
-frame3=Frame(root, width=520, height=660, highlightbackground='#ffffff', background='#121212', highlightthickness=1)
-frame3.grid(row=1, column=1, rowspan = 6, columnspan = 2, padx=25, pady=(65,25), ipadx=20, ipady=5)
+frame3=Frame(root, width=520, height=800, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
+frame3.grid(row=1, column=1, rowspan = 6, columnspan = 2, padx=25, pady=(48,25), ipadx=20, ipady=5)
 
 #OUTPUT TEXT AREA
 scrollbar3=ttk.Scrollbar(frame3, orient='vertical')
-Output = Text(frame3, width = 50, height =36, font = ("Courier",12), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar3.set)
+Output = Text(frame3, width = 50, height =37, font = ("Courier",12), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar3.set)
 scrollbar3.config(command=Output.yview)
 scrollbar3.pack(side=RIGHT, fill=Y)
 Output.pack(side="left")
 
 lblLex=Label(root,text="Lexeme", font = ("Nunito",14), fg='white',bg='#171717')
-lblLex.place(x=770,y=98)
+lblLex.place(x=770,y=90)
 lblTok=Label(root,text="Token" , font = ("Nunito",14), fg='white',bg='#171717')
-lblTok.place(x=1010,y=98) 
+lblTok.place(x=1010,y=90) 
 lblErr=Label(root,text="Errors", font = ("Nunito",14), fg='white',bg='#171717')
 lblErr.place(x=40,y=620)
 
@@ -121,7 +121,7 @@ Run_Lexical=Button(frame_top, width=175, height=35, image=photo_imageLexical, bo
 Run_Lexical.place(x=925, y=15)
 Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', background='#0F0F0F', state='disabled')
 Run_Semantic.place(x=1139, y =15)
-
+    
 Errors.pack()
 Output.pack()
 text_area.focus()
