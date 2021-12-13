@@ -123,7 +123,7 @@ Output.pack(side="left")
 #OUTPUT Lex TEXT AREA
 scrollbar4=ttk.Scrollbar(frame4, orient='vertical')
 OutputTok = Text(frame4, width = 23, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar4.set)
-scrollbar4.config(command=Output.yview)
+scrollbar4.config(command=OutputTok.yview)
 scrollbar4.pack(side=RIGHT, fill=Y)
 OutputTok.pack(side="left")
 
