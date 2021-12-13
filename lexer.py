@@ -16,28 +16,28 @@ def run(lexeme):
     keywords= {'Link.Start', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 
                'Absorb', 'If', 'Elif', 'Else', 'Switch', 'Execute', 'Default', 'For', 
                'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Void', 'Return'}
-    
+
     logical = {'And', 'Or', 'Not'}
     boolean = {'True', 'False'}
     token_specification = [
-        ('COMMENT', r'\/\*[\s\S]*\*\/'),
-        ('POS_NUMBER', r'(\d+(\.\d+)?)|(\d?(\.\d+)+)'),
-        ('NEG_NUMBER', r'(\-\d+(\.\d+)?)|\-(\d?(\.\d+)+)'),
-        ('RELATIONAL', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
-        ('ASSIGNMENT', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
-        ('ARITHMETIC', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
-        ('LIT_STRING', r'\"([ \S]*?)\"|([ \S]*?)\"|\"([ \S]*?)'), #Added '!' 
-        ('SYMBOLS', r'\(|\)|\{|\}|\[|\]|\,|\:'),
-        ('ESCAPESEQ', r'\\n|\\t|\\"|\\\'|\\\\'),
-        ('NON_KEYWORD', r'(l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys)|s(?i:ys.call)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse))[^\s]?'),
-        ('STRUCT_ID', r'[a-z]\w*\.[a-z]\w*'),
-        ('ID', r'[a-z]\w*'),
-        ('RESERVED_WORD', r'[A-Z][\w\.]*'),
-        ('LIT_BOOL', r'[T][r][u][e]|[F][a][l][s][e]'),
-        ('TAB', r'[\t]+'),
-        ('SPACE', r'[ ]+'),
-        ('NEWLINE', r'[\n]+'),
-        ('ERROR', r'[^\s]+'),
+        ('comment', r'\/\*[\s\S]*\*\/'),
+        ('pos_number', r'(\d+(\.\d+)?)|(\d?(\.\d+)+)'),
+        ('neg_number', r'(\-\d+(\.\d+)?)|\-(\d?(\.\d+)+)'),
+        ('relational', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
+        ('assignment', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
+        ('arithmetic', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
+        ('lit_str', r'\"([ \S]*?)\"|([ \S]*?)\"|\"([ \S]*?)'), #Added '!' 
+        ('symbols', r'\(|\)|\{|\}|\[|\]|\,|\:|\.|\;'),
+        ('escapeseq', r'\\n|\\t|\\"|\\\'|\\\\'),
+        ('non_keyword', r'(l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys)|s(?i:ys.call)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse))[^\s]?'),
+        ('struct_id', r'[a-z]\w*\.[a-z]\w*'),
+        ('id', r'[a-z]\w*'),
+        ('reserved_word', r'[A-Z][\w\.]*'),
+        ('lit_bool', r'[T][r][u][e]|[F][a][l][s][e]'),
+        ('tab', r'[\t]+'),
+        ('space', r'[ ]+'),
+        ('newline', r'[\n]+'),
+        ('error', r'[^\s]+'),
     ]
     datatype = {'Integer','Boolean','String','Decimal'}
     token_data = []
@@ -49,85 +49,91 @@ def run(lexeme):
         value = mo.group()
         column = mo.start() - line_start
         hasError = ""
-        if kind == 'ERROR':
+        if kind == 'error':
             if str(value)[0] == "\"" or str(value)[-1] == "\"":
                 hasError = "Invalid quotation mark"
             else:
                 hasError = "Invalid character/symbol"
-        elif kind == 'SYMBOLS':
+        elif kind == 'symbols':
             kind = value
-        elif kind == 'ID' and len(value) > 20:
+        elif kind == 'relational':
+            kind = value
+        elif kind == 'assignment':
+            kind = value
+        elif kind == 'arithmetic':
+            kind = value
+        elif kind == 'id' and len(value) > 20:
             value_exceed = len(value) - 20
             hasError = "Identifier exceeded maximum values by " + str(value_exceed) + " characters"
-            kind = 'ERROR'
-        elif kind == 'STRUCT_ID':
+            kind = 'error'
+        elif kind == 'struct_id':
             check_structid = str(value).split('.', 1)
             check_id1 = check_structid[0]
             check_id2 = check_structid[1]
             if(len(check_id1) > 20) or (len(check_id2) > 20):
                 hasError = True
-                kind = 'ERROR'
-        elif kind == 'NON_KEYWORD':
+                kind = 'error'
+        elif kind == 'non_keyword':
             hasError = "Reserved word cannot be used as an identifier"
-            kind = 'ERROR'
-        elif kind == 'RESERVED_WORD' and value in keywords:
+            kind = 'error'
+        elif kind == 'reserved_word' and value in keywords:
             kind = value
-        elif kind == 'RESERVED_WORD' and value in datatype:
+        elif kind == 'reserved_word' and value in datatype:
             kind = value
-        elif kind == 'RESERVED_WORD' and value in logical:
-            kind = "LIT_LOGICAL"
-        elif kind == 'RESERVED_WORD' and value in boolean:
-            kind = "LIT_BOOLEAN"
-        elif kind == 'RESERVED_WORD':
+        elif kind == 'reserved_word' and value in logical:
+            kind = "lit_logical"
+        elif kind == 'reserved_word' and value in boolean:
+            kind = "lit_bool"
+        elif kind == 'reserved_word':
             hasError = "The reserved word does not exist"
-            kind = 'ERROR'
-        elif kind == 'POS_NUMBER':
+            kind = 'error'
+        elif kind == 'pos_number':
             value = float(value) if '.' in value else int(value)
             if (isinstance(value, int) == True):
                 if value < 1000000000:
-                    kind = "LIT_INTPOS"
+                    kind = "lit_intpos"
                 else:
                     hasError = "Exceeded number of digits allowed"
-                    kind = 'ERROR'
+                    kind = 'error'
             else:
                 check_decimal = str(value).split('.',1)
                 digit_place = str(check_decimal[0])
                 decimal_place = str(check_decimal[1])
                 if (len(digit_place) < 10) and (len(decimal_place) < 6):
-                    kind = "LIT_DECPOS"
+                    kind = "lit_decpos"
                 else:
                     hasError = "Exceeded number of digits allowed"
-                    kind = 'ERROR'
-        elif kind == 'NEG_NUMBER':
+                    kind = 'error'
+        elif kind == 'neg_number':
             value = float(value) if '.' in value else int(value)
             if (isinstance(value, int) == True):
                 if value < -1000000000:
-                    kind = "LIT_INTNEG"
+                    kind = "lit_intneg"
                 else:
                     hasError = "Exceeded number of digits allowed"
-                    kind = 'ERROR'
+                    kind = 'error'
             else:
                 check_decimal = str(value).split('.',1)
                 digit_place = str(check_decimal[0])
                 decimal_place = str(check_decimal[1])
                 if (len(digit_place) < 11) and (len(decimal_place) < 6):
-                    kind = "LIT_DECNEG"
+                    kind = "lit_decneg"
                 else:
                     hasError = "Exceeded number of digits allowed"
-                    kind = 'ERROR'
-        elif kind == 'NEWLINE':
+                    kind = 'error'
+        elif kind == 'newline':
             value = "\\n"
             line_start = mo.end()
             line_num += 1
-        elif kind == 'SPACE':
+        elif kind == 'space':
             value = kind
-        elif kind == 'TAB':
+        elif kind == 'tab':
             value = "\\t"
         #elif kind == 'ERROR':
         #    hasError = True
-        if kind == 'ERROR' and value == "":
+        if kind == 'error' and value == "":
             continue
-        elif kind == 'ERROR' and len(token_data) > 0 and value != "" and not(token_data[-1].type == 'SPACE' or token_data[-1].value == "\\n" or token_data[-1].value == "\\t"):
+        elif kind == 'error' and len(token_data) > 0 and value != "" and not(token_data[-1].type == 'space' or token_data[-1].value == "\\n" or token_data[-1].value == "\\t"):
             hold_value = str(token_data[-1].value)
             token_data = token_data[:-1]
             value = hold_value + str(value)
