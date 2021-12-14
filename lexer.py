@@ -16,7 +16,7 @@ def run(lexeme):
     keywords= {'Link.Start', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 
                'Absorb', 'If', 'Elif', 'Else', 'Switch', 'Execute', 'Default', 'For', 
                'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Void', 'Return', 'Break',
-                'End.Switch'}
+                'End.Switch', 'In'}
 
     logical = {'And', 'Or', 'Not'}
     boolean = {'True', 'False'}
@@ -30,7 +30,7 @@ def run(lexeme):
         ('lit_str', r'[\"\“]([ \S]*?)[\"\”]'),#|([ \S]*?)\"|\"([ \S]*?)'), #Added '!' 
         ('symbols', r'\(|\)|\{|\}|\[|\]|\,|\:|\.|\;'),
         #('escapeseq', r'\\n|\\t|\\"|\\\'|\\\\'),
-        ('non_keyword', r'(e(?i:nd.Switch)|b(?i:reak)|l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys)|s(?i:ys.call)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse))[^\s]?'),
+        ('non_keyword', r'(e(?i:nd.Switch)|b(?i:reak)|l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys)|s(?i:ys.call)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse)|i(?i:n))[^\s]?'),
         ('struct_id', r'[a-z]\w*\.[a-z]\w*'),
         ('id', r'[a-z]\w*'),
         ('reserved_word', r'[A-Z][\w\.]*'),
