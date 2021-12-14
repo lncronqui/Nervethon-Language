@@ -13,7 +13,7 @@ class Token(NamedTuple):
 
 #MAIN FUNCTION#
 def run(lexeme):
-    keywords= {'Link.Start ', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 
+    keywords= {'Link.Start', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 
                'Absorb', 'If', 'Elif', 'Else', 'Switch', 'Execute', 'Default', 'For', 
                'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Void', 'Return', 'Break',
                 'End.Switch'}
