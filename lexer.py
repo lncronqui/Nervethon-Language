@@ -27,7 +27,7 @@ def run(lexeme):
         ('relational', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
         ('assignment', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
         ('arithmetic', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
-        ('lit_str', r'[\"\“]([ \S]*?)[\"\”]'),#|([ \S]*?)\"|\"([ \S]*?)'), #Added '!' 
+        ('lit_str', r'[\"\“]([ \n\S]*?)[\"\”]'),#|([ \S]*?)\"|\"([ \S]*?)'), #Added '!' 
         ('symbols', r'\(|\)|\{|\}|\[|\]|\,|\:|\.|\;'),
         #('escapeseq', r'\\n|\\t|\\"|\\\'|\\\\'),
         ('non_keyword', r'(e(?i:nd.Switch)|b(?i:reak)|l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys\.call)|s(?i:ys)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse)|i(?i:n))[^\s]?'),
@@ -55,6 +55,10 @@ def run(lexeme):
                 hasError = "Lacking open/close quotation mark"
             else:
                 hasError = "Invalid character/symbol"
+        if kind == 'lit_str':
+            if re.search(r'\n', value):
+                kind = 'error'
+                hasError = "Multi-line string"
         elif kind == 'symbols':
             kind = value
         elif kind == 'relational':
