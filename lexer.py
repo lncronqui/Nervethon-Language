@@ -21,7 +21,7 @@ def run(lexeme):
     logical = {'And', 'Or', 'Not'}
     boolean = {'True', 'False'}
     token_specification = [
-        ('comment', r'\/\*[\s\S]*\*\/'),
+        ('comment', r'(\/\*)[\s\S]*?(\*\/)'),
         ('pos_number', r'(\d+(\.\d*)?)|(\d?(\.\d+)+)'),
         ('neg_number', r'(\-\d+(\.\d+)?)|\-(\d?(\.\d+)+)'),
         ('relational', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
