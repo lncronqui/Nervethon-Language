@@ -15,21 +15,20 @@ class Token(NamedTuple):
 def run(lexeme):
     keywords= {'Link.Start', 'Link.End', 'Generate', 'Sys', 'Sys.Call', 'Discharge', 
                'Absorb', 'If', 'Elif', 'Else', 'Switch', 'Execute', 'Default', 'For', 
-               'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Void', 'Return', 'Break',
+               'While', 'Exit', 'Continue', 'Avoid', 'Fixed', 'Struct', 'Return', 'Break',
                 'End.Switch', 'In'}
-
     logical = {'And', 'Or', 'Not'}
     boolean = {'True', 'False'}
     token_specification = [
+        ('lit_str', r'[\"\“]([( \n\S)^\"]*?)[\"\”]'),
         ('comment', r'(\/\*)[\s\S]*?(\*\/)'),
         ('pos_number', r'(\d+(\.\d*)?)|(\d?(\.\d+)+)'),
         ('neg_number', r'(\-\d+(\.\d+)?)|\-(\d?(\.\d+)+)'),
         ('relational', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
         ('assignment', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
         ('arithmetic', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
-        ('lit_str', r'[\"\“]([ \n\S]*?)[\"\”]'),
         ('symbols', r'\(|\)|\{|\}|\[|\]|\,|\:|\.|\;'),
-        ('non_keyword', r'(e(?i:nd\.switch)$|b(?i:reak)$|l(?i:ink\.start)$|l(?i:ink\.end)$|g(?i:enerate)$|s(?i:ys\.call)$|s(?i:ys)$|d(?i:ischarge)$|a(?i:bsorb)$|i(?i:f)$|e(?i:lif)$|e(?i:lse)$|s(?i:witch)$|e(?i:xecute)$|d(?i:efault)$|f(?i:or)$|w(?i:hile)$|e(?i:xit)$|c(?i:ontinue)$|a(?i:void)$|f(?i:ixed)$|s(?i:truct)$|v(?i:oid)$|r(?i:eturn)$|i(?i:nteger)$|b(?i:oolean)$|s(?i:tring)$|d(?i:ecimal)$|a(?i:nd)$|o(?i:r)$|n(?i:ot)$|t(?i:rue)$|f(?i:alse)$|i(?i:n)$)'),
+        ('non_keyword', r'(e(?i:nd\.Switch)$|b(?i:reak)$|l(?i:ink\.start)$|l(?i:ink\.end)$|g(?i:enerate)$|s(?i:ys\.call)$|s(?i:ys)$|d(?i:ischarge)$|a(?i:bsorb)$|i(?i:f)$|e(?i:lif)$|e(?i:lse)$|s(?i:witch)$|e(?i:xecute)$|d(?i:efault)$|f(?i:or)$|w(?i:hile)$|e(?i:xit)$|c(?i:ontinue)$|a(?i:void)$|f(?i:ixed)$|s(?i:truct)$|v(?i:oid)$|r(?i:eturn)$|i(?i:nteger)$|b(?i:oolean)$|s(?i:tring)$|d(?i:ecimal)$|a(?i:nd)$|o(?i:r)$|n(?i:ot)$|t(?i:rue)$|f(?i:alse)$|i(?i:n))[^\s]?'),
         ('struct_id', r'[a-z]\w*\.[a-z]\w*'),
         ('id', r'[a-z]\w*'),
         ('reserved_word', r'[A-Z][\w\.]*'),
@@ -58,6 +57,13 @@ def run(lexeme):
             if re.search(r'\n', value):
                 kind = 'error'
                 hasError = "Multi-line string"
+            count_quote = 0
+            for x in str(value):
+                if x == "\"":
+                    count_quote += 1
+            if count_quote == 1 or count_quote > 2:
+                kind = 'error'
+                hasError = "Lacking open/close quotation mark"
         elif kind == 'symbols':
             kind = value
         elif kind == 'relational':
@@ -66,6 +72,12 @@ def run(lexeme):
             kind = value
         elif kind == 'arithmetic':
             kind = value
+        elif kind == 'non_keyword':
+            hasError = "Reserved word cannot be used as an identifier"
+            kind = 'error'
+        elif kind == 'id' and re.search('e(?i:nd\.Switch)|b(?i:reak)|l(?i:ink\.start)|l(?i:ink\.end)|g(?i:enerate)|s(?i:ys\.call)|s(?i:ys)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:void)|f(?i:ixed)|s(?i:truct)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse)|i(?i:n)', value):
+            hasError = "Reserved word cannot be used as an identifier"
+            kind = 'error'
         elif kind == 'id' and len(value) > 20:
             value_exceed = len(value) - 20
             hasError = "Identifier exceeded maximum values by " + str(value_exceed) + " characters"
@@ -77,9 +89,6 @@ def run(lexeme):
             if(len(check_id1) > 20) or (len(check_id2) > 20):
                 hasError = True
                 kind = 'error'
-        elif kind == 'non_keyword':
-            hasError = "Reserved word cannot be used as an identifier"
-            kind = 'error'
         elif kind == 'reserved_word' and value in keywords:
             kind = value
         elif kind == 'reserved_word' and value in datatype:
@@ -137,12 +146,12 @@ def run(lexeme):
             continue
         elif kind == 'error' and len(token_data) > 0:
             if (token_data[-1].type != 'space' and token_data[-1].value != "\\n" and token_data[-1].value != "\\t"):
-                hold_value = str(token_data[-1].value)
-                token_data = token_data[:-1]
-                value = hold_value + str(value)
-                print("hello")
-            else:
-                print("hi")
+                if (re.search('\"', value)) and (token_data[-1].type == 'lit_str'):
+                    pass
+                else:
+                    hold_value = str(token_data[-1].value)
+                    token_data = token_data[:-1]
+                    value = hold_value + str(value)
         token_data.append(Token(kind,value,line_num,column,hasError))
         hasError = ""
     return token_data
