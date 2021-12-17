@@ -30,7 +30,7 @@ def run(lexeme):
         ('lit_str', r'[\"\“]([ \n\S]*?)[\"\”]'),#|([ \S]*?)\"|\"([ \S]*?)'), #Added '!' 
         ('symbols', r'\(|\)|\{|\}|\[|\]|\,|\:|\.|\;'),
         #('escapeseq', r'\\n|\\t|\\"|\\\'|\\\\'),
-        ('non_keyword', r'(e(?i:nd.Switch)|b(?i:reak)|l(?i:ink.start)|l(?i:ink.end)|g(?i:enerate)|s(?i:ys\.call)|s(?i:ys)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:oid)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse)|i(?i:n))[^\s]?'),
+        ('non_keyword', r'(e(?i:nd\.switch)$|b(?i:reak)$|l(?i:ink\.start)$|l(?i:ink\.end)$|g(?i:enerate)$|s(?i:ys\.call)$|s(?i:ys)$|d(?i:ischarge)$|a(?i:bsorb)$|i(?i:f)$|e(?i:lif)$|e(?i:lse)$|s(?i:witch)$|e(?i:xecute)$|d(?i:efault)$|f(?i:or)$|w(?i:hile)$|e(?i:xit)$|c(?i:ontinue)$|a(?i:void)$|f(?i:ixed)$|s(?i:truct)$|v(?i:oid)$|r(?i:eturn)$|i(?i:nteger)$|b(?i:oolean)$|s(?i:tring)$|d(?i:ecimal)$|a(?i:nd)$|o(?i:r)$|n(?i:ot)$|t(?i:rue)$|f(?i:alse)$|i(?i:n)$)'),
         ('struct_id', r'[a-z]\w*\.[a-z]\w*'),
         ('id', r'[a-z]\w*'),
         ('reserved_word', r'[A-Z][\w\.]*'),
