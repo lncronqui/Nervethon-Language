@@ -27,9 +27,8 @@ def run(lexeme):
         ('relational', r'([<][=]|[>][=]|[!][=]|[<]|[>]|[=][=])'),
         ('assignment', r'\=|(\-\=)|(\+\=)|(\*\=)|(\/\=)|(\*\*\=)|(\%\=)|(\/\/\=)'),
         ('arithmetic', r'\+|\-|(\/\/)|(\*\*)|\*|\/|\%'),
-        ('lit_str', r'[\"\“]([ \n\S]*?)[\"\”]'),#|([ \S]*?)\"|\"([ \S]*?)'), #Added '!' 
+        ('lit_str', r'[\"\“]([ \n\S]*?)[\"\”]'),
         ('symbols', r'\(|\)|\{|\}|\[|\]|\,|\:|\.|\;'),
-        #('escapeseq', r'\\n|\\t|\\"|\\\'|\\\\'),
         ('non_keyword', r'(e(?i:nd\.switch)$|b(?i:reak)$|l(?i:ink\.start)$|l(?i:ink\.end)$|g(?i:enerate)$|s(?i:ys\.call)$|s(?i:ys)$|d(?i:ischarge)$|a(?i:bsorb)$|i(?i:f)$|e(?i:lif)$|e(?i:lse)$|s(?i:witch)$|e(?i:xecute)$|d(?i:efault)$|f(?i:or)$|w(?i:hile)$|e(?i:xit)$|c(?i:ontinue)$|a(?i:void)$|f(?i:ixed)$|s(?i:truct)$|v(?i:oid)$|r(?i:eturn)$|i(?i:nteger)$|b(?i:oolean)$|s(?i:tring)$|d(?i:ecimal)$|a(?i:nd)$|o(?i:r)$|n(?i:ot)$|t(?i:rue)$|f(?i:alse)$|i(?i:n)$)'),
         ('struct_id', r'[a-z]\w*\.[a-z]\w*'),
         ('id', r'[a-z]\w*'),
@@ -136,24 +135,14 @@ def run(lexeme):
             value = "\\t"
         if kind == 'error' and value == "":
             continue
-        elif kind == 'error' and len(token_data) > 1:
-            if token_data[-1].hasError != "" and len(token_data) > 0 and value != "" and not(token_data[-1].type == 'space' or token_data[-1].value == "\\n" or token_data[-1].value == "\\t" or token_data[-1] == ""):
+        elif kind == 'error' and len(token_data) > 0:
+            if (token_data[-1].type != 'space' and token_data[-1].value != "\\n" and token_data[-1].value != "\\t"):
                 hold_value = str(token_data[-1].value)
                 token_data = token_data[:-1]
                 value = hold_value + str(value)
-        else:
-            None
+                print("hello")
+            else:
+                print("hi")
         token_data.append(Token(kind,value,line_num,column,hasError))
         hasError = ""
     return token_data
-        
-#with open('user_input.txt', 'r') as file_open:
-#    user_input = file_open.read()
-#run_code = run(user_input) 
-#for result in run_code:
-#    if result.hasError == False:
-#        print(str(result.value) + "\t" + result.type)
-#print("Syntax Error:")
-#for result in run_code:
-#    if result.hasError == True:
-#        print("\'" + result.value + "\' at line " + str(result.line))
