@@ -143,6 +143,9 @@ def run(lexeme):
                 print("hello")
             else:
                 print("hi")
+        if(kind == 'error'):
+            token_data.append(Token(kind,value,line_num,column,hasError))
+            break
         token_data.append(Token(kind,value,line_num,column,hasError))
         hasError = ""
     return token_data
