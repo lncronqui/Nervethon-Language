@@ -63,7 +63,7 @@ def Take_input():
             Errors.configure(state='normal')
             Errors.insert(END, '\' ')
             Errors.insert(END, result.value)
-            Errors.insert(END, '\' → ')
+            Errors.insert(END, ' \' → ')
             Errors.insert(END, result.hasError)
             Errors.insert(END, ' on Line ')
             Errors.insert(END, result.line)
