@@ -19,7 +19,7 @@ def run(lexeme):
         ('lit_decnega', r'(\-[1-9]\d{0,8}\.\d{0,5})(?= |\n|\<\=|\>\=|\!\=|\<|\>|\=\=|\:|\,|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\)|\]|\}|$)'),
         ('lit_intposi', r'([1-9]\d{0,8})(?= |\n|\<\=|\>\=|\!\=|\<|\>|\=\=|\:|\,|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\)|\]|\}|$)'),
         ('lit_intnega', r'(\-[1-9]\d{0,8})(?= |\n|\<\=|\>\=|\!\=|\<|\>|\=\=|\:|\,|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\)|\]|\}|$)'),
-        ('lit_str', r'([\"\“]([^\"\“][ \S]*?[^\"\”])[\"\”])(?= |\n|\:|\,|\)|\]|\}|$)'),
+        ('lit_str', r'[\"\“]([^\"][ \S]*[^\"])?[\"\”](?= |\n|\:|\,|\)|\]|\}|$)'),
         ('lit_bool', r'(True|False)(?= |\n|\:|\,|\)|\]|\}|$)'),
         ('relational', r'(\<\=|\>\=|\!\=|\<|\>|\=\=)(?= |[a-z]|[0-9]|\()'),
         ('assignment', r'(\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=)(?= |[a-z]|[0-9]|\(|\")'),
@@ -50,14 +50,9 @@ def run(lexeme):
         column = mo.start() - line_start
         hasError = ""
         if kind == 'error':
-            if str(value)[0] == "\"":
-                hasError = "String literal lacks close quotation mark"
-            elif str(value)[-1] == "\"":
-                hasError = "String literal lacks open quotation mark"
-            else:
-                hasError = "Invalid character/delimiter"
+            hasError = "Invalid character/delimiter"
             token_data.append(Token(kind,value,line_num,column,hasError))
-            break
+            return token_data
         if kind == 'relational' or kind == 'arithmetic' or kind == 'assignment' or kind == 'open_par' or kind == 'close_par' or kind == 'open_brace' or kind == 'close_brace' or kind == 'open_bracket' or kind == 'close_bracket' or kind == 'comma' or kind == 'colon' or kind == 'period' or kind == 'keyword':
             kind = value
         elif kind == 'non_keyword':

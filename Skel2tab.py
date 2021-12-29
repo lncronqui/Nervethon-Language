@@ -57,7 +57,7 @@ def Take_input():
     run_code = lexer.run(INPUT)
     check_Error = False
     for result in run_code:
-        if result.hasError != "":
+        if result.type == 'error':
             #Frame 2 - Error
             check_Error = True
             Errors.configure(state='normal')
@@ -70,32 +70,32 @@ def Take_input():
             Errors.insert(END, '\n')
             Output.configure(state='disabled')
             Errors.configure(state='disabled')
-        else:
+        #else:
             #Frame 3 - Output
-            Output.configure(state='normal')
-            OutputTok.configure(state='normal')
-            if len(str(result.value)) > 15:
-                Output.insert(END, '  ')
-                count_letter = 0
-                word_list = list(str(result.value))
-                output_word = ""
-                while count_letter <= 15:
-                    char_letter = word_list[count_letter]
-                    output_word = output_word + char_letter
-                    count_letter += 1
-                Output.insert(END, output_word)
-                Output.insert(END, '...')
-                Output.insert(END, '\n')
-            else:
-                Output.insert(END, '  ')
-                Output.insert(END, result.value)
-                Output.insert(END, '\n')
-            OutputTok.insert(END, '  ')
-            OutputTok.insert(END, result.type)
-            OutputTok.insert(END, '\n')
-            Output.configure(state='disabled')
-            OutputTok.configure(state='disabled')
-            Errors.configure(state='disabled')
+        Output.configure(state='normal')
+        OutputTok.configure(state='normal')
+        if len(str(result.value)) > 15:
+            Output.insert(END, '  ')
+            count_letter = 0
+            word_list = list(str(result.value))
+            output_word = ""
+            while count_letter <= 15:
+                char_letter = word_list[count_letter]
+                output_word = output_word + char_letter
+                count_letter += 1
+            Output.insert(END, output_word)
+            Output.insert(END, '...')
+            Output.insert(END, '\n')
+        else:
+            Output.insert(END, '  ')
+            Output.insert(END, result.value)
+            Output.insert(END, '\n')
+        OutputTok.insert(END, '  ')
+        OutputTok.insert(END, result.type)
+        OutputTok.insert(END, '\n')
+        Output.configure(state='disabled')
+        OutputTok.configure(state='disabled')
+        Errors.configure(state='disabled')
     if check_Error == False:
         Errors.configure(state='normal')
         Errors.insert(END, 'No Error/s Found')
