@@ -19,7 +19,7 @@ def run(lexeme):
         ('lit_decnega', r'(\-[1-9]\d{0,8}\.\d{0,5})(?= |\n|\<\=|\>\=|\!\=|\<|\>|\=\=|\:|\,|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\)|\]|\}|$)'),
         ('lit_intposi', r'([1-9]\d{0,8})(?= |\n|\<\=|\>\=|\!\=|\<|\>|\=\=|\:|\,|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\)|\]|\}|$)'),
         ('lit_intnega', r'(\-[1-9]\d{0,8})(?= |\n|\<\=|\>\=|\!\=|\<|\>|\=\=|\:|\,|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\)|\]|\}|$)'),
-        ('lit_str', r'([\"\“]([ \S]*?)(?=\n)[\"\”])(?= |\n|\:|\,|\)|\]|\}|$)'),
+        ('lit_str', r'([\"\“]([ \S]*?)[\"\”])(?= |\n|\:|\,|\)|\]|\}|$)'),
         ('lit_bool', r'(True|False)(?= |\n|\:|\,|\)|\]|\}|$)'),
         ('relational', r'(\<\=|\>\=|\!\=|\<|\>|\=\=)(?= |[a-z]|[0-9]|\()'),
         ('assignment', r'(\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=)(?= |[a-z]|[0-9]|\(|\")'),
@@ -58,7 +58,7 @@ def run(lexeme):
                 hasError = "Invalid character/delimiter"
             token_data.append(Token(kind,value,line_num,column,hasError))
             break
-        elif kind == 'relational' or kind == 'arithmetic' or kind == 'assignment' or kind == 'open_par' or kind == 'close_par' or kind == 'open_brace' or kind == 'close_brace' or kind == 'open_bracket' or kind == 'close_bracket' or kind == 'comma' or kind == 'colon' or kind == 'period' or kind == 'keyword':
+        if kind == 'relational' or kind == 'arithmetic' or kind == 'assignment' or kind == 'open_par' or kind == 'close_par' or kind == 'open_brace' or kind == 'close_brace' or kind == 'open_bracket' or kind == 'close_bracket' or kind == 'comma' or kind == 'colon' or kind == 'period' or kind == 'keyword':
             kind = value
         elif kind == 'non_keyword':
             hasError = "Reserved word cannot be used as an identifier"
