@@ -83,12 +83,12 @@ def Take_input():
             #Frame 3 - Output
         Output.configure(state='normal')
         OutputTok.configure(state='normal')
-        if len(str(result.value)) > 15:
+        if len(str(result.value)) > 12:
             Output.insert(END, '  ')
             count_letter = 0
             word_list = list(str(result.value))
             output_word = ""
-            while count_letter <= 15:
+            while count_letter <= 12:
                 char_letter = word_list[count_letter]
                 output_word = output_word + char_letter
                 count_letter += 1
@@ -127,14 +127,14 @@ scrollbar3.config(command=Output.yview)
 scrollbar3.pack(side=RIGHT, fill=Y)
 Output.pack(side="left")
 
-#OUTPUT Lex TEXT AREA
+#OUTPUT Token TEXT AREA
 scrollbar4=ttk.Scrollbar(frame4, orient='vertical')
 OutputTok = Text(frame4, width = 18, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar4.set)
 scrollbar4.config(command=OutputTok.yview)
 scrollbar4.pack(side=RIGHT, fill=Y)
 OutputTok.pack(side="left")
 
-#OUTPUT Lex TEXT AREA
+#OUTPUT Semantic TEXT AREA
 scrollbar5=ttk.Scrollbar(frame5, orient='vertical')
 OutputSem = Text(frame5, width = 18, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar5.set)
 scrollbar5.config(command=OutputSem.yview)
