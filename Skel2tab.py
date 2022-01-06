@@ -29,8 +29,8 @@ canvasLogo.create_image(140,29, image=photo_imageNervethon)
 canvasLogo.place(x=20,y=5)
 
 #Frame 1 Top left size
-frame1=Frame(root, width=633, height=350, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
-frame1.place(x=35,y=100)
+frame1=Frame(root, width=600, height=350, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
+frame1.place(x=15,y=100)
 
 #Frame 1 Style
 style=ttk.Style(frame1)
@@ -39,11 +39,20 @@ style.configure("Vertical.TScrollbar", troughcolor="#0F0F0F", highlightcolor="#3
 
 #Scrollbar and Text area
 scrollbar=ttk.Scrollbar(frame1, orient='vertical')
-text_area = Text(frame1, bg='#121212', width = 54, height = 21, font = ("Courier",15), insertbackground='white', fg="White", yscrollcommand=scrollbar.set)
+text_area = Text(frame1, bg='#121212', width = 48, height = 21, font = ("Courier",15), insertbackground='white', fg="White", yscrollcommand=scrollbar.set)
 scrollbar.config(command=text_area.yview)
 scrollbar.pack(side=RIGHT, fill=Y)
 text_area.pack(side="left")
 
+#Frame 2 - Errors
+frame2=Frame(root, width=600, height=100, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
+frame2.place(x=15,y=615)
+
+scrollbar2=ttk.Scrollbar(frame2, orient='vertical')
+Errors = Text(frame2, width = 48, height =6, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar2.set)
+scrollbar2.config(command=Errors.yview)
+scrollbar2.pack(side=RIGHT, fill=Y)
+Errors.pack(side="left")
 
 #TRIAL INPUT AND OUTPUT
 def Take_input():
@@ -100,45 +109,46 @@ def Take_input():
         Errors.configure(state='normal')
         Errors.insert(END, 'No Error/s Found')
         Output.configure(state='disabled')
-        
-#Frame 2 - Errors
-frame2=Frame(root, width=633, height=100, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
-frame2.place(x=35,y=615)
-
-scrollbar2=ttk.Scrollbar(frame2, orient='vertical')
-Errors = Text(frame2, width = 54, height =6, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar2.set)
-scrollbar2.config(command=Errors.yview)
-scrollbar2.pack(side=RIGHT, fill=Y)
-Errors.pack(side="left")
 
 #Frame 3 - Output Lex
-frame3=Frame(root, width=520, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
-frame3.place(x=725, y=130)
+frame3=Frame(root, width=400, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
+frame3.place(x=625, y=130)
 #Frame 4 - Output Token
-frame4=Frame(root, width=520, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
-frame4.place(x=1045, y=130)
-
+frame4=Frame(root, width=400, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
+frame4.place(x=870, y=130)
+#Frame 5 - Semantic
+frame5=Frame(root, width=400, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
+frame5.place(x=1115, y=130)
 
 #OUTPUT Lex TEXT AREA
 scrollbar3=ttk.Scrollbar(frame3, orient='vertical')
-Output = Text(frame3, width = 23, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar3.set)
+Output = Text(frame3, width = 18, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar3.set)
 scrollbar3.config(command=Output.yview)
 scrollbar3.pack(side=RIGHT, fill=Y)
 Output.pack(side="left")
 
 #OUTPUT Lex TEXT AREA
 scrollbar4=ttk.Scrollbar(frame4, orient='vertical')
-OutputTok = Text(frame4, width = 23, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar4.set)
+OutputTok = Text(frame4, width = 18, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar4.set)
 scrollbar4.config(command=OutputTok.yview)
 scrollbar4.pack(side=RIGHT, fill=Y)
 OutputTok.pack(side="left")
 
+#OUTPUT Lex TEXT AREA
+scrollbar5=ttk.Scrollbar(frame5, orient='vertical')
+OutputSem = Text(frame5, width = 18, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar5.set)
+scrollbar5.config(command=OutputSem.yview)
+scrollbar5.pack(side=RIGHT, fill=Y)
+OutputSem.pack(side="left")
+
 lblLex=Label(root,text="Lexeme", font = ("Nunito",14), fg='white',bg='#171717')
-lblLex.place(x=825,y=98)
+lblLex.place(x=630,y=98)
 lblTok=Label(root,text="Token" , font = ("Nunito",14), fg='white',bg='#171717')
-lblTok.place(x=1150,y=98) 
+lblTok.place(x=880,y=98) 
+lblSem=Label(root,text="Semantic" , font = ("Nunito",14), fg='white',bg='#171717')
+lblSem.place(x=1130,y=98) 
 lblErr=Label(root,text="Errors", font = ("Nunito",14), fg='white',bg='#171717')
-lblErr.place(x=40,y=580)
+lblErr.place(x=25,y=580)
 
 #For Clear
 def clear_input():
@@ -158,7 +168,7 @@ Clear=Button(frame_top, width=129, height=32, image=photo_imageClear, border=0, 
 Clear.place(x=760, y =16)
 Run_Lexical=Button(frame_top, width=175, height=35, image=photo_imageLexical, border=0, activebackground='#0F0F0F', background='#0F0F0F', command = lambda:Take_input())
 Run_Lexical.place(x=925, y=15)
-Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', background='#0F0F0F', state='disabled')
+Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', background='#0F0F0F')
 Run_Semantic.place(x=1139, y =15)
 
 
