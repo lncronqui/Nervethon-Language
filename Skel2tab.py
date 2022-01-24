@@ -86,6 +86,8 @@ def Take_input():
             #Frame 3 - Output
         Output.configure(state='normal')
         OutputTok.configure(state='normal')
+        if(result.type == 'error'):
+            break
         if len(str(result.value)) > 12:
             Output.insert(END, '  ')
             count_letter = 0
