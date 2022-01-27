@@ -39,7 +39,7 @@ def run(lexeme):
         ('newline', r'\n'),
         ('tab_space', r'[ \t]'),
         ('id', r'([a-z]\w{0,19})(?=[\s\.\,\(\)\[\]\{\}]|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\<\=|\>\=|\!\=|\<|\>|\=\=)'),
-        ('error1', r'(((\/\*)[\s\S]*?(\*\/))|([1-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4})|([1-9]\d{0,8})|(\-[1-9]\d{0,8})|([\"\“]([^\"][ \S]*[^\"])?[\"\”])|True|False|\<\=|\>\=|\!\=|\<|\>|\=\=|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\(|\)|\[|\]|\{|\}|\.|\,|\:|Link.Start|Link.End|Generate|Sys|Sys.Call|Discharge|Absorb|Boolean|Integer|Decimal|String|If|Elif|Else|Switch|Execute|Default|For|In|While|Break|Continue|Avoid|And|Not|Or|Fixed|Struct|Return|True|False)(?=\s|\S)'),
+        ('error1', r'(((\/\*)[\s\S]*?(\*\/))|([1-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4})|([1-9]\d{0,8})|(\-[1-9]\d{0,8})|([\"\“]([^\"][ \S]*[^\"])?[\"\”])|True|False|\<\=|\>\=|\!\=|\<|\>|\=\=|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\(|\)|\[|\]|\{|\}|\.|\,|\:|Link.Start|Link.End|Generate|Sys|Sys.Call|Discharge|Absorb|Boolean|Integer|Decimal|String|If|Elif|Else|Switch|Execute|Default|For|In|While|Break|Continue|Avoid|And|Not|Or|Fixed|Struct|Return|True|False)(?=\s|\S|$)|([a-z]\w{0,19})(?=\S|$)'),
         ('error', r'[\S]{1}'),
     ]
     token_data = []
