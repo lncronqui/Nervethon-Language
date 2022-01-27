@@ -23,7 +23,7 @@ def run(lexeme):
         ('lit_bool', r'(True|False)(?=[\s\,\(\)\[\]\{\}])'),
         ('relational', r'(\<\=|\>\=|\!\=|\<|\>|\=\=)(?= |[a-z]|[0-9]|\()'),
         ('equal', r'\=(?= |[a-z]|[0-9]|\(|\")'),
-        ('assignment', r'(\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=)(?= |[a-z]|[0-9]|\()'),
+        ('assignment', r'(\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=)(?= |[a-z]|[0-9]|\()'),
         ('arithmetic', r'(\+|\-|(\/\/)|(\*\*)|\*|\/|\%)(?= |[a-z]|[0-9]|\()'),
         ('open_par', r'\((?=[ANO0-9\(\)])'),
         ('close_par', r'\)(?=And|Or|Not|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\<\=|\>\=|\!\=|\<|\>|\=\=|[\s\:\[\)])'),
@@ -39,7 +39,8 @@ def run(lexeme):
         ('newline', r'\n'),
         ('tab_space', r'[ \t]'),
         ('id', r'([a-z]\w{0,19})(?=[\s\.\,\(\)\[\]\{\}]|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\<\=|\>\=|\!\=|\<|\>|\=\=)'),
-        ('error', r'[^\s]{1}(?=[^\s])'),
+        ('error1', r'(((\/\*)[\s\S]*?(\*\/))|([1-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4})|([1-9]\d{0,8})|(\-[1-9]\d{0,8})|([\"\“]([^\"][ \S]*[^\"])?[\"\”])|True|False|\<\=|\>\=|\!\=|\<|\>|\=\=|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\(|\)|\[|\]|\{|\}|\.|\,|\:|Link.Start|Link.End|Generate|Sys|Sys.Call|Discharge|Absorb|Boolean|Integer|Decimal|String|If|Elif|Else|Switch|Execute|Default|For|In|While|Break|Continue|Avoid|And|Not|Or|Fixed|Struct|Return|True|False)(?=\s|\S)'),
+        ('error', r'[\S]{1}'),
     ]
     token_data = []
     tok_regex = '|'.join('(?P<%s>%s)' % pair for pair in token_specification)
@@ -50,7 +51,7 @@ def run(lexeme):
         value = mo.group()
         column = mo.start() - line_start
         hasError = ""
-        if kind == 'error':
+        if kind == 'error' or kind == 'error1':
             hasError = "Invalid character/delimiter"
             token_data.append(Token(kind,value,line_num,column,hasError))
             return token_data

@@ -69,11 +69,12 @@ def Take_input():
     run_code = lexer.run(INPUT)
     check_Error = False
     for result in run_code:
-        if result.type == 'error':
+        if result.type == 'error' or result.type == 'error1':
             #Frame 2 - Error
             check_Error = True
             Errors.configure(state='normal')
             Errors.insert(END, '\' ')
+            check_numerror = len(result.value)
             Errors.insert(END, result.value)
             Errors.insert(END, ' \' → ')
             Errors.insert(END, result.hasError)
@@ -86,7 +87,7 @@ def Take_input():
             #Frame 3 - Output
         Output.configure(state='normal')
         OutputTok.configure(state='normal')
-        if(result.type == 'error'):
+        if(result.type == 'error' or result.type == 'error1'):
             break
         if len(str(result.value)) > 12:
             Output.insert(END, '  ')
