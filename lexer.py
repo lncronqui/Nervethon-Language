@@ -31,7 +31,7 @@ def run(lexeme):
         ('open_brace',r'\{(?=[a-zA-Z\d\"])'),
         ('close_brace',r'\}(?=[\s\)]|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\<\=|\>\=|\!\=|\<|\>|\=\=|And|Or|Not)'),
         ('open_bracket', r'\[(?=[\sa-z\"\d])'),
-        ('close_bracket', r'\](?=\n|$)'),
+        ('close_bracket', r'\](?= |\n|$)'),
         ('comma', r'\,(?=[ A-Za-z])'),
         ('colon', r'\:(?=[\s\[])'),
         ('period', r'\.(?=[a-zA-Z\d])'),
