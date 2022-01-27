@@ -40,7 +40,7 @@ def run(lexeme):
         ('newline', r'\n'),
         ('tab_space', r'[ \t]'),
         ('id', r'([a-z]\w{0,19})(?=[\s\.\,\(\)\[\]]|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\<\=|\>\=|\!\=|\<|\>|\=\=)'),
-        ('error1', r'([a-z]\w{0,19}\{[0-9]+\}|[a-z]\w{0,19})(?=\S|$)|(((\/\*)[\s\S]*?(\*\/))|([1-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4})|([1-9]\d{0,8})|(\-[1-9]\d{0,8})|([\"\“]([^\"][ \S]*[^\"])?[\"\”])|T(r(u(e)?)?)?|F(a(l(s(e)?)?)?)?|\<\=|\>\=|\!\=|\<|\>|\=\=|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\(|\)|\[|\]|\{|\}|\.|\,|\:|L(i(n(k(.(S(t(a(r(t)?)?)?)?)?)?)?)?)?|L(i(n(k(.(E(n(d)?)?)?)?)?)?)?|G(e(n(e(r(a(t(e)?)?)?)?)?)?)?|S(y(s)?)?|S(y(s(.(C(a(l(l)?)?)?)?)?)?)?|D(i(s(c(h(a(r(g(e)?)?)?)?)?)?)?)?|A(b(s(o(r(b)?)?)?)?)?|B(o(o(l(e(a(n)?)?)?)?)?)?|I(n(t(e(g(e(r)?)?)?)?)?)?|D(e(c(i(m(a(l)?)?)?)?)?)?|S(t(r(i(n(g)?)?)?)?)?|I(f)?|E(l(i(f)?)?)?|E(l(s(e)?)?)?|S(w(i(t(c(h)?)?)?)?)?|E(x(e(c(u(t(e)?)?)?)?)?)?|D(e(f(a(u(l(t)?)?)?)?)?)?|F(o(r)?)?|I(n)?|W(h(i(l(e)?)?)?)?|B(r(e(a(k)?)?)?)?|C(o(n(t(i(n(u(e)?)?)?)?)?)?)?|A(v(o(i(d)?)?)?)?|A(n(d)?)?|N(o(t)?)?|O(r)?|F(i(x(e(d)?)?)?)?|S(t(r(u(c(t)?)?)?)?)?|R(e(t(u(r(n)?)?)?)?)?)(?=\s|\S|$)'),
+        ('error1', r'([a-z]\w{0,19}(\{([0-9]+(\})?)?)?|[a-z]\w{0,19})(?=\S|$)|(\/(\*([\s\S]*(\*(\/)?)?)?)?|([1-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4})|([1-9]\d{0,8})|(\-[1-9]\d{0,8})|([\"\“]([^\"][ \S]*[^\"])?[\"\”])|T(r(u(e)?)?)?|F(a(l(s(e)?)?)?)?|\<\=?|\>\=?|\!\=?|\<|\>|\=\=?|\=|\-\=?|\+\=?|\*\=?|\/\=?|\*(\*(\=)?)?|\%\=?|\/(\/(\=)?)?|\+|\-|(\/\/?)|(\*\*?)|\*|\/|\%|\(|\)|\[|\]|\{|\}|\.|\,|\:|L(i(n(k(.(S(t(a(r(t)?)?)?)?)?)?)?)?)?|L(i(n(k(.(E(n(d)?)?)?)?)?)?)?|G(e(n(e(r(a(t(e)?)?)?)?)?)?)?|S(y(s)?)?|S(y(s(.(C(a(l(l)?)?)?)?)?)?)?|D(i(s(c(h(a(r(g(e)?)?)?)?)?)?)?)?|A(b(s(o(r(b)?)?)?)?)?|B(o(o(l(e(a(n)?)?)?)?)?)?|I(n(t(e(g(e(r)?)?)?)?)?)?|D(e(c(i(m(a(l)?)?)?)?)?)?|S(t(r(i(n(g)?)?)?)?)?|I(f)?|E(l(i(f)?)?)?|E(l(s(e)?)?)?|S(w(i(t(c(h)?)?)?)?)?|E(x(e(c(u(t(e)?)?)?)?)?)?|D(e(f(a(u(l(t)?)?)?)?)?)?|F(o(r)?)?|I(n)?|W(h(i(l(e)?)?)?)?|B(r(e(a(k)?)?)?)?|C(o(n(t(i(n(u(e)?)?)?)?)?)?)?|A(v(o(i(d)?)?)?)?|A(n(d)?)?|N(o(t)?)?|O(r)?|F(i(x(e(d)?)?)?)?|S(t(r(u(c(t)?)?)?)?)?|R(e(t(u(r(n)?)?)?)?)?)(?=\s|\S|$)'),
         ('error', r'[\S]{1}'),
     ]
     token_data = []
@@ -52,8 +52,12 @@ def run(lexeme):
         value = mo.group()
         column = mo.start() - line_start
         hasError = ""
-        if kind == 'error' or kind == 'error1':
-            hasError = "Invalid character/delimiter"
+        if kind == 'error':
+            hasError = "Invalid character"
+            token_data.append(Token(kind,value,line_num,column,hasError))
+            return token_data
+        if kind == 'error1':
+            hasError = "Invalid delimiter"
             token_data.append(Token(kind,value,line_num,column,hasError))
             return token_data
         if kind == 'equal' or kind == 'relational' or kind == 'arithmetic' or kind == 'assignment' or kind == 'open_par' or kind == 'close_par' or kind == 'open_brace' or kind == 'close_brace' or kind == 'open_bracket' or kind == 'close_bracket' or kind == 'comma' or kind == 'colon' or kind == 'period' or kind == 'keyword':
