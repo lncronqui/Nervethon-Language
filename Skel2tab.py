@@ -89,6 +89,8 @@ def Take_input():
         OutputTok.configure(state='normal')
         if(result.type == 'error' or result.type == 'error1'):
             break
+        if(result.type == 'comment'):
+            continue
         if len(str(result.value)) > 12:
             Output.insert(END, '  ')
             count_letter = 0
