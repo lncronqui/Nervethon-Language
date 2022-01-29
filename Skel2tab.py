@@ -87,9 +87,7 @@ def Take_input():
             #Frame 3 - Output
         Output.configure(state='normal')
         OutputTok.configure(state='normal')
-        if(result.type == 'error' or result.type == 'error1'):
-            break
-        if(result.type == 'comment'):
+        if(result.type == 'comment' or result.type == 'error' or result.type =='error1'):
             continue
         if len(str(result.value)) > 12:
             Output.insert(END, '  ')
