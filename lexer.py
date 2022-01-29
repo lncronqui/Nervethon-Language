@@ -33,7 +33,7 @@ def run(lexeme):
         ('close_brace',r'\}(?=[\s\)]|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\<\=|\>\=|\!\=|\<|\>|\=\=|And|Or|Not)'),
         ('open_bracket', r'\[(?=[\sa-z\"\“\d])'),
         ('close_bracket', r'\](?= |\n|$)'),
-        ('comma', r'\,(?=[ A-Za-z])'),
+        ('comma', r'\,(?=[ A-Za-z0-9])'),
         ('colon', r'\:(?=[\s\[])'),
         ('period', r'\.(?=[a-zA-Z\d])'),
         ('keyword', r'((Integer|Decimal|String|Boolean|Struct|Generate|Absorb|Discharge|Switch|For|In|Sys|Sys\.Call|Execute|Fixed|Return)(?= ))|((Default|Else)(?=\:))|((If|Elif|And|Or|Not|While)(?=[ \(]))|Link\.End(?=\n|$)|(Link\.Start|End\.Switch|Break|Continue|Avoid)(?=\n)'),
