@@ -1,9 +1,13 @@
+from asyncio.windows_events import NULL
 import tkinter as tk
 
 from tkinter import ttk
 from tkinter import *
+from xmlrpc.client import boolean
 
 import lexer
+
+import syntax
 
 
 #creating the window
@@ -115,7 +119,24 @@ def Take_input():
         Errors.configure(state='normal')
         Errors.insert(END, 'No Error/s Found')
         Output.configure(state='disabled')
+    return run_code
 
+def runSemantic():
+    INPUT = text_area.get("1.0", "end-1c")
+    run_code = lexer.run(INPUT)
+    hasError = False
+    for result in run_code:
+        if result.type == 'error' or result.type == 'error1':
+            hasError = True
+    if hasError == True:
+        Errors.delete(1.0,END)
+        Errors.configure(state='normal')
+        Errors.insert(END, 'Errors found in lexical analyzer. Run Lexical to see errors.')
+        Errors.configure(state='disabled')
+    run_syntax = syntax.run(run_code)
+    print(run_syntax)
+            
+    
 #Frame 3 - Output Lex
 frame3=Frame(root, width=400, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
 frame3.place(x=625, y=130)
@@ -174,7 +195,7 @@ Clear=Button(frame_top, width=129, height=32, image=photo_imageClear, border=0, 
 Clear.place(x=760, y =16)
 Run_Lexical=Button(frame_top, width=175, height=35, image=photo_imageLexical, border=0, activebackground='#0F0F0F', background='#0F0F0F', command = lambda:Take_input())
 Run_Lexical.place(x=925, y=15)
-Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', background='#0F0F0F')
+Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', background='#0F0F0F' , command= lambda:runSemantic())
 Run_Semantic.place(x=1139, y =15)
 
 
