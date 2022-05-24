@@ -73,7 +73,7 @@ def Take_input():
     run_code = lexer.run(INPUT)
     check_Error = False
     for result in run_code:
-        if result.type == 'ERROR' or result.type == 'ERROR1':
+        if result.type == 'error' or result.type == 'error1':
             #Frame 2 - Error
             check_Error = True
             Errors.configure(state='normal')
@@ -91,7 +91,7 @@ def Take_input():
             #Frame 3 - Output
         Output.configure(state='normal')
         OutputTok.configure(state='normal')
-        if(result.type == 'COMMENT' or result.type == 'ERROR' or result.type =='ERROR1'):
+        if(result.type == 'comment' or result.type == 'error' or result.type =='error1'):
             continue
         if len(str(result.value)) > 12:
             Output.insert(END, '  ')
@@ -126,7 +126,7 @@ def runSemantic():
     run_code = lexer.run(INPUT)
     hasError = False
     for result in run_code:
-        if result.type == 'ERROR' or result.type == 'ERROR1':
+        if result.type == 'error' or result.type == 'error1':
             hasError = True
     if hasError == True:
         Errors.delete(1.0,END)
