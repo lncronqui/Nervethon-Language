@@ -8,7 +8,7 @@ def p_literals(self, p):
                     | lit_decnega'''
 
 def p_arithmetic_expression(self, p):
-        '''arithmetic_expression : (arithmetic_expression)
+        '''arithmetic_expression : ( arithmetic_expression )
                                  | num_value arithmetic_operators num_value'''
 
 def p_arithmetic_operators(self, p):
@@ -21,7 +21,7 @@ def p_arithmetic_operators(self, p):
                                 | **'''
 
 def p_id_struct(self, p):
-        '''id_struct : .id_array
+        '''id_struct : . id_array
                      | null'''
 
 
@@ -49,7 +49,7 @@ def p_assignment_statements(self, p):
 
 def p_assignment_statements2(self, p):
         '''assignment_statements2 : array id_struct assignment_exp 
-                                  | {lit_intposi} more_array = { value1 }'''
+                                  | { lit_intposi } more_array = { value1 }'''
 
 def p_assignment_exp(self, p):
         '''assignment_exp : assignment_operators num_value
@@ -73,7 +73,7 @@ def p_assignment_operators(self, p):
                                 | **='''
 
 def p_more_array(self, p):
-        '''more_array : = id {lit_intposi} more_array
+        '''more_array : = id { lit_intposi } more_array
                       | null'''
 
 def p_looping_statements(self, p):
@@ -81,10 +81,10 @@ def p_looping_statements(self, p):
                               | while_statements'''
 
 def p_for_statements(self, p):
-        '''for_statements : For id In id{}: [inside_statements]'''
+        '''for_statements : For id In id { } : [ inside_statements ]'''
 
 def p_while_statements(self, p):
-        '''while_statements : While(condition): [inside_statements]'''
+        '''while_statements : While ( condition ): [ inside_statements ]'''
 
 def p_inside_statements(self, p):
         '''inside_statements : statements inside_statements

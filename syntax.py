@@ -72,7 +72,7 @@ def p_id_array_var(self, p):
     
 def p_id_array_var2(self, p):
     ''' id_array_var2 : var_init id_var1
-                      | { lit_intposi }array_init array_var1'''
+                      | { lit_intposi } array_init array_var1'''
 
 def p_var_init(self, p):
     ''' var_init : = value id_var1
