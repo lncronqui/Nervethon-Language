@@ -1,3 +1,7 @@
+import ply.yacc as yacc
+from lexer import Tokens
+
+
 def p_program(self, p):
     '''program : global_dec Link.Start declare_statements statements Link.End functions'''
     
@@ -315,10 +319,16 @@ def p_function_body(self, p):
 def p_return_statement(self, p):
     ''' return_statement    : Return value'''
     
+def run():
+    print(Tokens.tokens)
 
-                   
-                   
-                   
-                   
-                   
-                   
+# parser = yacc.yacc()
+
+# while True:
+#     try:
+#         s = raw_input('calc > ')
+#     except EOFError:
+#         break
+#     if not s: continue
+#     result = parser.parse(s)
+#     print(result)

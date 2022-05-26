@@ -73,7 +73,7 @@ def Take_input():
     run_code = lexer.run(INPUT)
     check_Error = False
     for result in run_code:
-        if result.type == 'ERROR' or result.type == 'ERROR1':
+        if result.type == 'error' or result.type == 'error1':
             #Frame 2 - Error
             check_Error = True
             Errors.configure(state='normal')
@@ -91,7 +91,7 @@ def Take_input():
             #Frame 3 - Output
         Output.configure(state='normal')
         OutputTok.configure(state='normal')
-        if(result.type == 'COMMENT' or result.type == 'ERROR' or result.type =='ERROR1'):
+        if(result.type == 'comment' or result.type == 'error' or result.type =='error1'):
             continue
         if len(str(result.value)) > 12:
             Output.insert(END, '  ')
@@ -119,22 +119,27 @@ def Take_input():
         Errors.configure(state='normal')
         Errors.insert(END, 'No Error/s Found')
         Output.configure(state='disabled')
-    return run_code
+
 
 def runSemantic():
+    Output.configure(state='normal')
+    Errors.configure(state='normal')
+    OutputTok.configure(state='normal')
+    Output.delete(1.0,END)#How to reset text area
+    Errors.delete(1.0,END)#How to reset text area
+    OutputTok.delete(1.0,END)
     INPUT = text_area.get("1.0", "end-1c")
     run_code = lexer.run(INPUT)
     hasError = False
     for result in run_code:
-        if result.type == 'ERROR' or result.type == 'ERROR1':
+        if result.type == 'error' or result.type == 'error1':
             hasError = True
     if hasError == True:
         Errors.delete(1.0,END)
         Errors.configure(state='normal')
         Errors.insert(END, 'Errors found in lexical analyzer. Run Lexical to see errors.')
         Errors.configure(state='disabled')
-    run_syntax = syntax.run(run_code)
-    print(run_syntax)
+    syntax.run()
             
     
 #Frame 3 - Output Lex
@@ -195,7 +200,7 @@ Clear=Button(frame_top, width=129, height=32, image=photo_imageClear, border=0, 
 Clear.place(x=760, y =16)
 Run_Lexical=Button(frame_top, width=175, height=35, image=photo_imageLexical, border=0, activebackground='#0F0F0F', background='#0F0F0F', command = lambda:Take_input())
 Run_Lexical.place(x=925, y=15)
-Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', background='#0F0F0F')
+Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', background='#0F0F0F', command = lambda:runSemantic())
 Run_Semantic.place(x=1139, y =15)
 
 

@@ -1,8 +1,12 @@
+from array import array
 import decimal
 from typing import NamedTuple
 from decimal import *
 import re
 
+token = (
+    
+)
 
 class Token(NamedTuple):
     type: str
@@ -10,6 +14,9 @@ class Token(NamedTuple):
     line: int
     column: int
     hasError: str
+    
+class Tokens(NamedTuple):
+    tokens: array
 
 #MAIN FUNCTION#
 def run(lexeme):
@@ -73,5 +80,6 @@ def run(lexeme):
         elif kind == 'tab_space':
             continue
         token_data.append(Token(kind,value,line_num,column,hasError))
+        Tokens.tokens = token_data
         hasError = ""
     return token_data
