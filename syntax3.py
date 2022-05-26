@@ -1,13 +1,13 @@
 def p_condition(self, p):
     ''' condition   : relational_expression
                     | logical_expression
-                    | LIT_BOOL
+                    | lit_bool
                     | Not ( condition_not )'''
                     
 def p_condition_not(self, p):
     ''' condition_not   : relational_expression
                         | logical_expression
-                        | LIT_BOOL'''
+                        | lit_bool'''
                         
 def p_relational_expression(self,p):
     ''' relational_expression   : value relational_operators value'''
@@ -27,7 +27,7 @@ def p_logical_operand(self, p):
     ''' logical_operand : Not ( logical_operand )
                         | relational_expression
                         | logical_expression
-                        | LIT_BOOL'''
+                        | lit_bool'''
                         
 def p_logical_operators(self, p):
     ''' logical_operators   : And
@@ -58,9 +58,9 @@ def p_execute(self, p):
     ''' execute : Execute switch_lit: statements Break execute1'''
     
 def p_switch_lit(self, p):
-    ''' switch_lit  : LIT_STR
-                    | LIT_INTPOSI
-                    | LIT_INTNEGA'''
+    ''' switch_lit  : lit_str
+                    | lit_intposi
+                    | lit_intnega'''
 
 def p_execute1(self, p):
     ''' execute1    : execute
