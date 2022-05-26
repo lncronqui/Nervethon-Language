@@ -7,6 +7,7 @@ from xmlrpc.client import boolean
 
 import lexer
 
+from syntax import Parser
 import syntax
 
 
@@ -70,7 +71,7 @@ def Take_input():
     Errors.delete(1.0,END)#How to reset text area
     OutputTok.delete(1.0,END)
     INPUT = text_area.get("1.0", "end-1c")
-    run_code = lexer.run(INPUT)
+    run_code = lexer.RunLexer.run(INPUT)
     check_Error = False
     for result in run_code:
         if result.type == 'error' or result.type == 'error1':
@@ -129,7 +130,7 @@ def runSemantic():
     Errors.delete(1.0,END)#How to reset text area
     OutputTok.delete(1.0,END)
     INPUT = text_area.get("1.0", "end-1c")
-    run_code = lexer.run(INPUT)
+    run_code = lexer.RunLexer.run(INPUT)
     hasError = False
     for result in run_code:
         if result.type == 'error' or result.type == 'error1':
@@ -139,7 +140,9 @@ def runSemantic():
         Errors.configure(state='normal')
         Errors.insert(END, 'Errors found in lexical analyzer. Run Lexical to see errors.')
         Errors.configure(state='disabled')
-    syntax.run()
+        return
+    
+    syntax.run(run_code)
             
     
 #Frame 3 - Output Lex
