@@ -27,8 +27,6 @@ reserved_words = {
     'Or': 'Or',
     'Not': 'Not',
     'While': 'While',
-    'Link.End': 'Link.End',
-    'Link.Start': 'Link.Start',
     'End.Switch': 'End.Switch',
     'Break': 'Break',
     'Continue': 'Continue',
@@ -37,33 +35,44 @@ reserved_words = {
 
 # list of tokens
 tokens = [
-	('comment', r'(\/\*)[\s\S]*?(\*\/)(?=\s|\S|$)'),
-    ('lit_decposi', r'(([0-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4}))(?= |\n|\<\=|\>\=|\!\=|\<|\>|\=\=|\:|\,|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\)|\]|\})'),
-    ('lit_decnega', r'\-(([0-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4}))(?= |\n|\<\=|\>\=|\!\=|\<|\>|\=\=|\:|\,|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\)|\]|\})'),
-    ('lit_intposi', r'([0-9]\d{0,8})(?=[\s\,\(\)\[\]\{\}]|\<\=|\>\=|\!\=|\<|\>|\=\=|\+|\-|(\/\/)|(\*\*)|\*|\/|\%)'),
-    ('lit_intnega', r'(\-[1-9]\d{0,8})(?=[\s\,\(\)\[\]\{\}]|\<\=|\>\=|\!\=|\<|\>|\=\=|\+|\-|(\/\/)|(\*\*)|\*|\/|\%)'),
-    ('lit_str', r'[\"\“]{1}([^\"^\n^\“^\”])*?[\"\”]{1}(?=[\s\,\(\)\[\]\{\}\:])'),
-    ('lit_bool', r'(True|False)(?=[\s\,\(\)\[\]\{\}])'),
-    ('relational', r'(\<\=|\>\=|\!\=|\<|\>|\=\=)(?= |[a-z]|[0-9]|\()'),
-    ('equal', r'\=(?= |[a-z]|[0-9]|\(|\"|\“)'),
-    ('assignment', r'(\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=)(?= |[a-z]|[0-9]|\()'),
-    ('arithmetic', r'(\+|\-|(\/\/)|(\*\*)|\*|\/|\%)(?= |[a-z]|[0-9]|\()'),
-    ('open_par', r'\((?=[a-zANOISDB0-9\(\)])'),
-    ('close_par', r'\)(?=And|Or|Not|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\<\=|\>\=|\!\=|\<|\>|\=\=|[\s\:\[\)])'),
-    ('open_brace',r'\{(?=[a-zA-Z\d\"|\“|\}])'),
-    ('close_brace',r'\}(?=[\s\)]|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\<\=|\>\=|\!\=|\<|\>|\=\=|And|Or|Not)'),
-    ('open_bracket', r'\[(?=[\sa-z\"\“\d])'),
-    ('close_bracket', r'\](?= |\n|$)'),
-    ('comma', r'\,(?=[ A-Za-z0-9])'),
-    ('colon', r'\:(?=[\s\[])'),
-    ('period', r'\.(?=[a-zA-Z\d])'),
-    ('keyword', r'((Integer|Decimal|String|Boolean|Struct|Generate|Absorb|Discharge|Switch|For|In|Sys|Sys\.Call|Execute|Fixed|Return)(?= ))|((Default|Else)(?=\:))|((If|Elif|And|Or|Not|While)(?=[ \(]))|Link\.End(?=\n|$)|(Link\.Start|End\.Switch|Break|Continue|Avoid)(?=\n)'),
-    ('non_keyword', r'(e(?i:nd\.switch)|b(?i:reak)|l(?i:ink\.start)|l(?i:ink\.end)|g(?i:enerate)|s(?i:ys\.call)|s(?i:ys)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:void)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse)|i(?i:n))(?=[\s\.\,\(\)\[\]\{\}]|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\<\=|\>\=|\!\=|\<|\>|\=\=)'),
-    ('newline', r'\n'),
-    ('tab_space', r'[ \t]'),
-    ('id', r'([a-z]\w{0,19})(?=[\s\.\,\(\)\[\]]|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\<\=|\>\=|\!\=|\<|\>|\=\=|\:|\{)'),
-    ('error1', r'([a-z]\w{0,19}(\{([0-9]+(\})?)?)?|[a-z]\w{0,19})(?=\S|$)|(\/(\*([\s\S]*(\*(\/)?)?)?)?|([1-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4})|([1-9]\d{0,8})|(\-[1-9]\d{0,8})|[\"\“]{1}([^\"^\n^\“^\”])*?[\"\”]{1}|T(r(u(e)?)?)?|F(a(l(s(e)?)?)?)?|\<\=?|\>\=?|\!\=?|\<|\>|\=\=?|\=|\-\=?|\+\=?|\*\=?|\/\=?|\*(\*(\=)?)?|\%\=?|\/(\/(\=)?)?|\+|\-|(\/\/?)|(\*\*?)|\*|\/|\%|\(|\)|\[|\]|\{|\}|\.|\,|\:|L(i(n(k(\.(S(t(a(r(t)?)?)?)?)?)?)?)?)?|L(i(n(k(\.(E(n(d)?)?)?)?)?)?)?|G(e(n(e(r(a(t(e)?)?)?)?)?)?)?|S(y(s)?)?|S(y(s(\.(C(a(l(l)?)?)?)?)?)?)?|D(i(s(c(h(a(r(g(e)?)?)?)?)?)?)?)?|A(b(s(o(r(b)?)?)?)?)?|B(o(o(l(e(a(n)?)?)?)?)?)?|I(n(t(e(g(e(r)?)?)?)?)?)?|D(e(c(i(m(a(l)?)?)?)?)?)?|S(t(r(i(n(g)?)?)?)?)?|I(f)?|E(l(i(f)?)?)?|E(l(s(e)?)?)?|S(w(i(t(c(h)?)?)?)?)?|E(x(e(c(u(t(e)?)?)?)?)?)?|D(e(f(a(u(l(t)?)?)?)?)?)?|F(o(r)?)?|I(n)?|W(h(i(l(e)?)?)?)?|B(r(e(a(k)?)?)?)?|C(o(n(t(i(n(u(e)?)?)?)?)?)?)?|A(v(o(i(d)?)?)?)?|A(n(d)?)?|N(o(t)?)?|O(r)?|F(i(x(e(d)?)?)?)?|S(t(r(u(c(t)?)?)?)?)?|E(n(d(\.(S(w(i(t(c(h)?)?)?)?)?)?)?)?)?|R(e(t(u(r(n)?)?)?)?)?)(?=\s|\S|$)'),
-    ('error', r'[\S]{1}'),
+    'Link.Start',
+    'Link.End',
+	'comment',
+    'lit_decposi',
+    'lit_decnega',
+    'lit_intposi',
+    'lit_intnega',
+    'lit_str', 
+    'lit_bool',
+    'less_than_equal',
+    'great_than_equal',
+    'not_equal',
+    'less_than',
+    'greater_than',
+    'equal_equal',
+    'equal',
+    'minus_equal',
+    'plus_equal',
+    'times_equal',
+    'divide_equal',
+    'times_times_equal',
+    'modulo_equal',
+    'divide_divide_equal',
+    'plus',
+    'minus',
+    'times',
+    'divide',
+    'modulo',
+    'open_par',
+    'close_par',
+    'open_brace',
+    'close_brace',
+    'open_bracket',
+    'close_bracket',
+    'comma',
+    'colon', 
+    'period',
+    'id',
 ] + list(reserved_words.values())
 
 delimDict = {
@@ -160,6 +169,8 @@ def t_ID(t):
 	t.type = reserved_words.get(t.value, 'ID')  # Check for reserved words
 	return t
 
+t_comment = r'(\/\*)[\s\S]*?(\*\/)'
+
 t_MainFunctionBegin = r'\^AIM'
 t_MainFunctionEnd = r'\^SHOOT'
 t_PLUSASSIGN = r'\+='
@@ -198,44 +209,66 @@ t_DOT = r'\.'
 t_ignore = ' \t'
 
 symbols = {
-    '+=',
-    '-=',
-    '*=',
-    '=',
-    '%=',
-    '==',
-    '!=',
-    '>=',
+    #relational
     '<=',
+    '>=',
+    '!=',
+    '<',
+    '>',
+    '==',
+    
+    #equal
+    '=',
+
+    #assignment
+    '-=',
+    '+=',
+    '*=',
+    '/=',
+    '**=',
+    '%=',
+    '//=',
+
+    #arithmetic
     '+',
     '-',
-    '~',
+    '//',
+    '**',
     '*',
     '/',
     '%',
-    '=',
-    '!',
-    '>',
-    '<',
-    '++',
-    '--',
-    ',',
-    '"',
-    '\'',
+
+    #open_par
     '(',
+
+    #close_par
     ')',
-    '[',
-    ']',
+
+    #open_brace
     '{',
+
+    #close_brace
     '}',
+
+    #open_bracket
+    '[',
+
+    #close_bracket
+    ']',
+
+    #comma
+    ',',
+
+    #colon
     ':',
-    '|',
+
+    #period
     '.',
+
+    #extraBs
     '\n',
     '\t',
     ' '
-    
-        
 }
 
 
