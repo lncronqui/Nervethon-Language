@@ -30,26 +30,35 @@ reserved_words = {
     'End.Switch': 'End.Switch',
     'Break': 'Break',
     'Continue': 'Continue',
-    'Avoid': 'Avoid',
+    'Avoid': 'Avoid'
 }
 
 # list of tokens
 tokens = [
+    #start & end of program
     'Link.Start',
     'Link.End',
+
+    #comment
 	'comment',
+
+    #literals
     'lit_decposi',
     'lit_decnega',
     'lit_intposi',
     'lit_intnega',
     'lit_str', 
     'lit_bool',
+
+    #relational
     'less_than_equal',
     'great_than_equal',
     'not_equal',
     'less_than',
     'greater_than',
     'equal_equal',
+    
+    #assignment
     'equal',
     'minus_equal',
     'plus_equal',
@@ -58,21 +67,31 @@ tokens = [
     'times_times_equal',
     'modulo_equal',
     'divide_divide_equal',
+
+    #arithemetic
     'plus',
     'minus',
+    'divide_divide',
+    'times_times',
     'times',
     'divide',
     'modulo',
+
+    #parenthesis and bracket
     'open_par',
     'close_par',
     'open_brace',
     'close_brace',
     'open_bracket',
     'close_bracket',
+
+    #dots nsht
     'comma',
     'colon', 
     'period',
-    'id',
+
+    #identifier
+    'id', 
 ] + list(reserved_words.values())
 
 delimDict = {
@@ -158,14 +177,14 @@ delimDict = {
 
     #'SPACE':['SPACE','\n','\t']
 }
+
 # Define a rule so we can track line numbers
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
 
 def t_ID(t):
-	r'[a-zA-Z][a-zA-Z_0-9]{0,9}'
-	#(\[([a-zA-Z][a-zA-Z_0-9]*(\[([a-zA-Z][a-zA-Z_0-9]* | [0-9]*)?\])?(\[([a-zA-Z][a-zA-Z_0-9]* | [0-9]*)?\])? | [0-9]*)?\])?(\[([a-zA-Z][a-zA-Z_0-9]*(\[([a-zA-Z][a-zA-Z_0-9]* | [0-9]*)?\])?(\[([a-zA-Z][a-zA-Z_0-9]* | [0-9]*)?\])? | [0-9]*)?\])?(\.?[a-zA-Z][a-zA-Z_0-9]*(\[([a-zA-Z][a-zA-Z_0-9]*(\[([a-zA-Z][a-zA-Z_0-9]* | [0-9]*)?\])?(\[([a-zA-Z][a-zA-Z_0-9]* | [0-9]*)?\])? | [0-9]*)?\])?(\[([a-zA-Z][a-zA-Z_0-9]*(\[([a-zA-Z][a-zA-Z_0-9]* | [0-9]*)?\])?(\[([a-zA-Z][a-zA-Z_0-9]* | [0-9]*)?\])? | [0-9]*)?\]))?'
+	r'([a-z]\w{0,19})'
 	t.type = reserved_words.get(t.value, 'ID')  # Check for reserved words
 	return t
 
@@ -265,7 +284,7 @@ symbols = {
     #period
     '.',
 
-    #extraBs
+    #extra buusht
     '\n',
     '\t',
     ' '
@@ -277,29 +296,30 @@ symbols = {
 # 	r'[ \t]+'
 # 	return t
 
-def t_FLOATLit(t):
-	r'~?[0-9]{0,9}\.[0-9]{1,5}'
+def t_lit_decposi(t):
+	r'(([0-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4}))'
 	return t
 
-def t_INTLit(t):
-	r'~?[0-9]{1,9}'
+def t_lit_decnega(t):
+	r'\-(([0-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4}))'
 	return t
 
-def t_CHARLit(t):
-	#r'\'([^\\\n]|(\\.))*?\''
-    r'\'(.|\n)*?\''
+def t_lit_intposi(t):
+	r'([0-9]\d{0,8})'
+	return t
+
+def t_lit_intnega(t):
+	r'(\-[1-9]\d{0,8})'
+	return t
+
+def t_lit_str(t):
+    r'[\"\“]{1}([^\"^\n^\“^\”])*?[\"\”]{1}'
     return t
 
-def t_STRLit(t):
-	#r'\"([^\\\n]|(\\.))*?\"'
-    r'\"(.|\n)*?\"'
-    return t
-
-def t_ignore_COMMENT(t):
-	r'@\$(.|\n)*?\$@'
-	#return t
+def t_lit_bool(t):
+	r'(True|False)'
+	return t
     
-
 def t_error(t):
      #print('Lexical Error: Invalid delim for "{}" token'.format(t.value[0]))
      t.lexer.skip(1)
