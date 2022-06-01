@@ -14,7 +14,7 @@ reserved_words = {
     'For': 'For',
     'In': 'In',
     'Sys': 'Sys',
-    'Sys.Call': 'Sys.Call',
+    'Sys.Call': 'Sys_Call',
     'Execute': 'Execute',
     'Fixed': 'Fixed',
     'Return': 'Return',
@@ -27,18 +27,17 @@ reserved_words = {
     'Or': 'Or',
     'Not': 'Not',
     'While': 'While',
-    'End.Switch': 'End.Switch',
+    'End.Switch': 'End_Switch',
     'Break': 'Break',
     'Continue': 'Continue',
-    'Avoid': 'Avoid'
+    'Avoid': 'Avoid',
+    'Link.Start' : 'Link_Start',
+    'Link.End' : 'Link_End'
 }
 
 # list of tokens
 tokens = [
-    #start & end of program
-    'Link.Start',
-    'Link.End',
-
+    'ID',
     #comment
 	'comment',
 
@@ -89,94 +88,136 @@ tokens = [
     'comma',
     'colon', 
     'period',
+    
+    'SPACE',
 
     #identifier
     'id', 
+    'reserved_words',
+    'error'
 ] + list(reserved_words.values())
 
 delimDict = {
-    'Andlogical' : ['\n', '(', '\'', '"','STRLit','CHARLit', '~', '+','++','-','--','!','ID', 'INTLit','FLOATLit'],
-    'Case' : ['\n', '(', '\'', '~', 'INTLit','CHARLit'],
-    'Boolean' : ['\n', 'ID'],
-    'Break' : ['\n', '|'],
-    'Character' : ['\n','ID'],
-    'Continue': ['\n', '|'],
-    'Constant': ['\n', 'INT','FLOAT','CHAR','STR','BOOLEAN'],
-    'Default': ['\n', ':'],
-    'Struct': ['\n', 'ID'],
-    'Elsestatement': ['\n', '{'],
-    'Elseifstatement': ['\n', '('],
-    'BoolFalse' : ['\n', '|', ',', ')', '=', '!=', '!'], 
-    'Float': ['\n','ID'],
-    'LoopFor': ['\n','('],
-    'Ifstatement': ['\n', '('],
-    'Input': ['\n', '('],
-    'Integer' : ['\n', 'ID'],
-    'Null' : ['\n', '|', ',', '=', ')', '!','==','!='],
-    'Orlogical': ['\n', '(', '\'', '"','STRLit','CHARLit', '~', '+','++','-','--','!','ID', 'INTLit','FLOATLit'],
-    'Output': ['\n', '('],
-    'Switchstatement': ['\n', '('],
-    'Return' : ['\n', '|', '(', '\'', '"', '~','ID','STRLit','INTLit', 'FLOATLit','CHARLit','TRUE', 'FALSE'],
-    'String': ['\n','ID'],
-    'BoolTrue': ['\n', '|', ',', '=', ')', '!'],
-    'Void': ['\n','ID','+'],
-    'LoopWhile': ['\n', '('],
-    'MainFunctionBegin': ['\n', '{'], 
-    'MainFunctionEnd': ['\n'],
-    'NOT': ['\n','(','\'','"','ID','TRUE','FALSE'],
-    'NOTEQUALTO': ['\n','(','\'','"','ID','INTLit','FLOATLit','CHARLit','NULL','TRUE','FALSE'],
-    'ADD': ['\n', '(', 'ID', 'INTLit', 'FLOATLit','~'],
-    'INCREMENT': ['\n', ',', '|', ')','ID'],
-    'PLUSASSIGN': ['\n', '(', 'ID', 'INTLit', 'FLOATLit','~'],
-    'MINUS': ['\n', '(', 'ID', 'INTLit', 'FLOATLit','~'],
-    'DECREMENT': ['\n', ',', '|', ')','ID'],
-    'MINUSASSIGN': ['\n', '(', 'ID', 'INTLit', 'FLOATLit','~'],
-    'MULTIPLY': ['\n', '(', 'ID', 'INTLit', 'FLOATLit','~'],
-    'MULTIPLYASSIGN': ['\n', '(', 'ID', 'INTLit', 'FLOATLit','~'],
-    'DIVIDE': ['\n', '(', 'ID', 'INTLit', 'FLOATLit','~'],
-    'DIVIDEASSIGN': ['\n', '(', 'ID', 'INTLit', 'FLOATLit','~'],
-    'MODULO': ['\n', '(', 'ID', 'INTLit', 'FLOATLit','~'],
-    'MODULOASSIGN': ['\n', '(', 'ID', 'INTLit', 'FLOATLit','~'],
-    'GREATERTHAN': ['\n','(','\'','"','ID','INTLit','FLOATLit','~'],
-    'GREATEROREQUAL': ['\n','(','\'','"','ID','INTLit','FLOATLit','~'],
-    'LESSTHAN': ['\n','(','\'','"','ID','INTLit','FLOATLit','~'],
-    'LESSOREQUAL': ['\n','(','\'','"','ID','INTLit','FLOATLit','~'],
-    'EQUALS':['\n','(','ID','INTLit','FLOATLit','CHARLit', 'STRLit','NULL','TRUE','FALSE', '~', '\'', '"', '{'],
-    'EQUALTO': ['\n','(','\'','"','ID','INTLit','FLOATLit','CHARLit','NULL','TRUE','FALSE','~'],
-    'DOT':['ID'],
-    'COMMA': ['\n','(','ID','TRUE','FALSE','INT','FLOAT','CHAR','STR','BOOLEAN','STRLit','INTLit', 'FLOATLit','CHARLit','~','\'','"'],
-    'LPAREN': ['\n','(','ID','INT','FLOAT','CHAR','STR','BOOLEAN','TRUE','FALSE','STRLit','INTLit', 'FLOATLit','CHARLit','NULL','~','\'','"',')','NOT','+','++','-','--','|','.'],
-    'RPAREN':['\n','|',',',')','+','-','/','*','%',']','{', '}',':','>','>=','<','<=','==','=','!','!=','AND','OR'],
-    'LBRACKET':['\n','(','ID','INTLit','~','+','-','++','--',']'],
-    'RBRACKET':['\n','|',',','AND','OR','>','>=','<','<=','==','=','!','!=','+','-','/','*','%','++','--','[',']',')','}','.'],
-    'LCURLY':['\n','(','ID','Integer', 'FLOAT', 'STR', 'CHAR', 'BOOLEAN', 'DOJO',
-              'PRINT', 'INPUT', 'IF','ELSEIF','ELSE', 'FOR', 'WHILE', 'BREAK', 'CONTINUE',
-              'DEFAULT', 'ARROW', 'QUIVER','RETURN','NULL','TRUE','FALSE','INTLit','FLOATLit',
-              'CHARLit','STRLit','\'','"','{','}','~', '+','++','-','--','.'],
-    
-    'RCURLY' : ['\n', '|', ',', '}' ,'^AIM', '^SHOOT', 'ID', 'INT', 'FLOAT', 'STR', 'CHAR', 
-                'BOOLEAN', 'DOJO', 'VOID','PRINT', 'INPUT', 'IF', 'FOR', 'WHILE', 
-                'DEFAULT', 'QUIVER', 'BREAK','CONTINUE','CONS','ELSEIF','ELSE','RETURN','+','++','-','--'],
-    
-    'COLON' : ['\n', 'ID', 'PRINT', 'INPUT', 'IF', 'FOR', 'WHILE', 'BREAK', 'DEFAULT', 'ARROW', 
-               'QUIVER', 'INT', 'FLOAT', 'STR', 'CHAR', 'BOOLEAN', 'DOJO','RETURN', '+', '++', '-', '--'],
-    
-    
-    'TERMINATOR' : ['\n', '}', '(', 'ID', '^AIM','PRINT', 'INPUT', 'IF', 'FOR', 'WHILE', 'BREAK', 'DEFAULT',
-                    'ARROW', 'QUIVER', 'INT', 'FLOAT', 'STR', 'CHAR', 'BOOLEAN', 'DOJO', 'CONTINUE', 'RETURN', 
-                    'TRUE', 'FALSE', 'INTLit', 'FLOATLit','NULL','VOID', '+', '++', '-', '--', '~', '|','.'],
-    
-    'STRLit' : ['\n', '|', ',',')','}'],
-    'CHARLit': ['\n', '|', ',', '>','>=','<','<=','==','=','!','!=','AND','OR',')','}',':'],
-    'INTLit':['\n', '|', ',', '>','>=','<','<=','==','=','!','!=','AND','OR',')','}',':',
-              '+','-','/','*','%',']'],
-    'FLOATLit':['\n', '|', ',', '>','>=','<','<=','==','=','!','!=','AND','OR',')','}',
-              '+','-','/','*','%'],
-    'ID':['\n', '|', ',', '>','>=','<','<=','==','=','!','!=',')','}', 
-              '+','-','/','*','%','++','--','(','[','{',']','.','+=','-=']
-
-    #'SPACE':['SPACE','\n','\t']
+    'Integer' : [' '],
+    'Decimal' : [' '],
+    'String' : [' '],
+    'Boolean' : [' '],
+    'Struct' : [' '],
+    'Generate' : [' '],
+    'Absorb' : [' '],
+    'Discharge' : [' '],
+    'Switch' : [' '],
+    'For' : [' '],
+    'In' : [' '],
+    'Sys' : [' '],
+    'Sys.Call' : [' '],
+    'Execute' : [' '],
+    'Fixed' : [' '],
+    'Return' : [' '],
+    'Default' : ['\:'],
+    'Else' : ['colon'],
+    'If' : [' ', 'open_par'],
+    'Elif' : [' ', 'open_par'],
+    'And' : [' ', 'open_par'],
+    'Or' : [' ', 'open_par'],
+    'Not' : [' ', 'open_par'],
+    'While' : [' ', 'open_par'],
+    'End.Switch' : ['\n'],
+    'Break' : ['\n'],
+    'Continue' : ['\n'],
+    'Avoid' : ['\n'],
+    'Link.Start' : ['\n'],
+    'Link.End' : ['\n', '$'],
+	'comment' : ['\s', '\S', '$'],
+    'lit_decposi' : [' ', '\n', 'great_than_equal', 'less_than_equal', 'not_equal', 
+                     'greater_than', 'less_than', 'equal_equal', 'colon', 'comma', 
+                     'plus', 'minus', 'divide_divide', 'times_times', 'times', 'divide', 
+                     'modulo', 'close_par', 'close_bracket', 'close_brace'],
+    'lit_decnega' : [' ', '\n', 'great_than_equal', 'less_than_equal', 'not_equal', 
+                     'greater_than', 'less_than', 'equal_equal', 'colon', 'comma', 
+                     'plus', 'minus', 'divide_divide', 'times_times', 'times', 'divide', 
+                     'modulo', 'close_par', 'close_bracket', 'close_brace'],
+    'lit_intposi' : [' ', '\n', 'great_than_equal', 'less_than_equal', 'not_equal', 
+                     'greater_than', 'less_than', 'equal_equal', 'colon', 'comma', 
+                     'plus', 'minus', 'divide_divide', 'times_times', 'times', 'divide', 
+                     'modulo', 'close_par', 'close_bracket', 'close_brace', 'colon'],
+    'lit_intnega' : [' ', '\n', 'great_than_equal', 'less_than_equal', 'not_equal', 
+                     'greater_than', 'less_than', 'equal_equal', 'colon', 'comma', 
+                     'plus', 'minus', 'divide_divide', 'times_times', 'times', 'divide', 
+                     'modulo', 'close_par', 'close_bracket', 'close_brace', 'colon'],
+    'lit_str' : ['\s', 'comma', 'open_par', 'close_par', 'open_bracket', 'close_bracket', 'open_brace', 'close_brace', 'colon'], 
+    'lit_bool' : ['\s', 'comma', 'open_par', 'close_par', 'open_bracket', 'close_bracket', 'open_brace', 'close_brace'],
+    'less_than_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'great_than_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'not_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'less_than' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'greater_than' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'equal_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
+    'minus_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
+    'plus_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
+    'times_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
+    'divide_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
+    'times_times_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
+    'modulo_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
+    'divide_divide_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
+    'plus' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'minus' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'times' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'divide' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'times_times' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'divide_divide' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'modulo' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
+    'open_par' : ['\d', 'And', 'Or', 'Not', 'open_par', 'close_par'],
+    'close_par' : [' ', 'open_bracket', 'plus', 'minus', 'times', 'divide', 'modulo', 'times_times', 'divide_divide', 'greater_than', 'less_than', 'equal_equal', 'not_equal', 'great_equal', 'less_equal', 'And', 'Or', 'Not', 'colon', 'close_par'],
+    'open_brace' : ['id', '[A-Z]', '\d', 'lit_str', 'close_brace'],
+    'close_brace' : ['\s', 'close_par', 'plus', 'minus', 'divide_divide', 'times_times', 'times', 'divide', 'modulo', 'equal', 'minus_equal', 'plus_equal', 'times_equal', 'divide_equal', 'times_times_equal', 'modulo_equal', 'divide_divide_equal', 'less_equal', 'great_equal', 'not_equal', 'greater_than', 'less_than', 'equal_equal', 'And', 'Or', 'Not'],
+    'open_bracket' : ['\s', 'id', '\"', '\“', '\d'],
+    'close_bracket' : [' ', '\n', '$'],
+    'comma' : [' ', 'id', '[A-Z]', '\d'],
+    'colon' : ['\s', 'open_bracket'], 
+    'period' : ['id', '\d'],
+    'id' : ['\s', 'period', 'comma', 'open_par', 'close_par', 'open_bracket', 'close_bracket', 
+            'plus', 'minus', 'divide_divide', 'times_times', 'times', 'divide', 'modulo', 'equal', 
+            'minus_equal', 'plus_equal', 'times_equal', 'divide_equal', 'times_times_equal', 
+            'modulo_equal', 'divide_divide_equal', 'great_equal', 'less_equal', 'not_equal', 
+            'greater_than', 'less_than', 'equal_equal', 'colon', 'open_brace']
 }
+
+
+
+t_ignore_comment = r'(\/\*)[\s\S]*?(\*\/)'
+t_less_than_equal = r'\<='
+t_great_than_equal = r'\>='
+t_not_equal = r'\!='
+t_less_than = r'\<'
+t_greater_than = r'\>'
+t_equal_equal = r'=='
+t_equal = r'='
+t_minus_equal = r'\-='
+t_plus_equal = r'\+='
+t_times_equal = r'\*='
+t_divide_equal = r'\/='
+t_times_times_equal = r'\*\*='
+t_modulo_equal = r'%='
+t_divide_divide_equal = r'\/\/='
+t_plus = r'\+'
+t_minus = r'-'
+t_times = r'\*' 
+t_times_times = r'\*\*'
+t_divide = r'/'
+t_divide_divide = r'//'
+t_modulo = r'%'
+t_open_par = r'\('
+t_close_par = r'\)'
+t_open_brace = r'\['
+t_close_brace = r'\}'
+t_open_bracket = r'\['
+t_close_bracket = r'\]'
+t_comma = r','
+t_colon = r':'
+t_period = r'\.'
+t_ignore_tab = r' \t'
 
 # Define a rule so we can track line numbers
 def t_newline(t):
@@ -185,47 +226,12 @@ def t_newline(t):
 
 def t_ID(t):
 	r'([a-z]\w{0,19})'
-	t.type = reserved_words.get(t.value, 'ID')  # Check for reserved words
 	return t
 
-t_comment = r'(\/\*)[\s\S]*?(\*\/)'
-
-t_MainFunctionBegin = r'\^AIM'
-t_MainFunctionEnd = r'\^SHOOT'
-t_PLUSASSIGN = r'\+='
-t_MINUSASSIGN = r'-='
-t_MULTIPLYASSIGN = r'\*='
-t_DIVIDEASSIGN = r'/='
-t_MODULOASSIGN = r'%='
-t_EQUALTO = r'=='
-t_NOTEQUALTO = r'!='
-t_GREATEROREQUAL = r'\>='
-t_LESSOREQUAL = r'\<='
-t_ADD = r'\+'
-t_MINUS = r'-'
-t_NEGATIVE = r'~'
-t_MULTIPLY = r'\*'
-t_DIVIDE = r'/'
-t_MODULO = r'%'
-t_EQUALS = r'='
-t_NOT = r'!'
-t_GREATERTHAN = r'\>'
-t_LESSTHAN = r'\<'
-t_INCREMENT = r'\+\+'
-t_DECREMENT = r'--'
-t_COMMA = r','
-t_DQUOTE = r'\"'
-t_SQUOTE = r'\''
-t_LPAREN = r'\('
-t_RPAREN = r'\)'
-t_LBRACKET = r'\['
-t_RBRACKET = r'\]'
-t_LCURLY = r'\{'
-t_RCURLY = r'\}'
-t_COLON = r':'
-t_TERMINATOR = r'\|'
-t_DOT = r'\.'
-t_ignore = ' \t'
+def t_reserved_words(t):
+    r'([A-Z][\w\.]{0,19})'
+    t.type = reserved_words.get(t.value, 'error') #t.value will be error if not within reserved words list
+    return t
 
 symbols = {
     #relational
@@ -292,9 +298,9 @@ symbols = {
 
 
 
-# def t_SPACE(t):
-# 	r'[ \t]+'
-# 	return t
+def t_SPACE(t):
+    r'[ \t]+'
+    #return t --> no need to output space???
 
 def t_lit_decposi(t):
 	r'(([0-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4}))'
@@ -321,41 +327,8 @@ def t_lit_bool(t):
 	return t
     
 def t_error(t):
-     #print('Lexical Error: Invalid delim for "{}" token'.format(t.value[0]))
      t.lexer.skip(1)
      return t
  
 
 lexi = lex.lex()
-
-# data = '''
-# INT A =5|
-# ^AIM{INT A =5|}^SHOOT INT A =5|
-# '''
-
-# lexer.input(data)
-# lexerrors=[]
-# toks=[]
-# previousToken=' '
-# previousValue=' '
-# for tok in lexer:
-#     if(tok.type != 'SPACE'):
-#         print(tok.type, ": ", tok.value)
-#     try:
-#         listVal = delimDict[previousToken]
-        
-#         if((tok.value not in listVal and tok.type not in listVal) or tok.type=='error'):         
-#             lexerrors.append('Lexical Error: Invalid lexem for \'{}\' '.format(previousValue))
-#         previousToken = tok.type
-#         previousValue = tok.value
-#         toks.append(tok)
-        
-#     except:
-#         previousToken = tok.type
-#         previousValue = tok.value
-#         toks.append(tok)
-# if(lexerrors):
-#     for i in lexerrors:
-#         print(i)
-# else:
-#     print("No error")
