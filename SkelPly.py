@@ -87,10 +87,39 @@ def Take_input():
         print(tok)
         try:
             listVal = delimDict[previousToken]
+            previousToken = tok.type
+            previousValue = tok.value
+            toks.append(tok)
+            
+            if((tok.value not in listVal and tok.type not in listVal) or tok.type=='error'):
+                lexerrors.append('ERROR: Invalid lexeme for \'{}\' '.format(previousValue))
+                tokctr.append(ctr-1)
+            if(tok.type=='error' and flag == False):
+                print(tok.value)
+                flag=True
+            previousToken = tok.type
+            previousValue = tok.value
+            toks.append(tok)
         except:
             previousToken = tok.type
             previousValue = tok.value
             toks.append(tok)
+        if(tok.type == 'SPACE' or tok.type == 'error'):
+            tokctr.append(ctr)
+        tokens.append("   {:15s} {:20s}".format(tok.value,tok.type))
+        
+        ctr+=1
+        
+    ctr = 0
+    
+    if(lexerrors):
+        Run_Semantic.configure(state = 'disabled')
+        for i in lexerrors:
+            Errors.insert(END, (i))
+    else:
+        Run_Semantic.configure(state='normal')
+        Errors.insert(END, ("   {:15s}".format("No Lexical Error")))
+        
     
 
             
