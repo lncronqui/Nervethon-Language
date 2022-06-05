@@ -37,7 +37,6 @@ reserved_words = {
 
 # list of tokens
 tokens = [
-    'ID',
     #comment
 	'comment',
 
@@ -89,99 +88,100 @@ tokens = [
     'colon', 
     'period',
     
-    'SPACE',
+    'space',
+    'newline',
 
     #identifier
     'id', 
     'reserved_words',
-    'error'
+    'error',
+    'error1'
 ] + list(reserved_words.values())
 
 delimDict = {
-    'Integer' : [' '],
-    'Decimal' : [' '],
-    'String' : [' '],
-    'Boolean' : [' '],
-    'Struct' : [' '],
-    'Generate' : [' '],
-    'Absorb' : [' '],
-    'Discharge' : [' '],
-    'Switch' : [' '],
-    'For' : [' '],
-    'In' : [' '],
-    'Sys' : [' '],
-    'Sys.Call' : [' '],
-    'Execute' : [' '],
-    'Fixed' : [' '],
-    'Return' : [' '],
-    'Default' : ['\:'],
-    'Else' : ['colon'],
-    'If' : [' ', 'open_par'],
-    'Elif' : [' ', 'open_par'],
-    'And' : [' ', 'open_par'],
-    'Or' : [' ', 'open_par'],
-    'Not' : [' ', 'open_par'],
-    'While' : [' ', 'open_par'],
-    'End.Switch' : ['\n'],
-    'Break' : ['\n'],
-    'Continue' : ['\n'],
-    'Avoid' : ['\n'],
-    'Link.Start' : ['\n'],
-    'Link.End' : ['\n', '$'],
-	'comment' : ['\s', '\S', '$'],
-    'lit_decposi' : [' ', '\n', 'great_than_equal', 'less_than_equal', 'not_equal', 
-                     'greater_than', 'less_than', 'equal_equal', 'colon', 'comma', 
-                     'plus', 'minus', 'divide_divide', 'times_times', 'times', 'divide', 
-                     'modulo', 'close_par', 'close_bracket', 'close_brace'],
-    'lit_decnega' : [' ', '\n', 'great_than_equal', 'less_than_equal', 'not_equal', 
-                     'greater_than', 'less_than', 'equal_equal', 'colon', 'comma', 
-                     'plus', 'minus', 'divide_divide', 'times_times', 'times', 'divide', 
-                     'modulo', 'close_par', 'close_bracket', 'close_brace'],
-    'lit_intposi' : [' ', '\n', 'great_than_equal', 'less_than_equal', 'not_equal', 
-                     'greater_than', 'less_than', 'equal_equal', 'colon', 'comma', 
-                     'plus', 'minus', 'divide_divide', 'times_times', 'times', 'divide', 
-                     'modulo', 'close_par', 'close_bracket', 'close_brace', 'colon'],
-    'lit_intnega' : [' ', '\n', 'great_than_equal', 'less_than_equal', 'not_equal', 
-                     'greater_than', 'less_than', 'equal_equal', 'colon', 'comma', 
-                     'plus', 'minus', 'divide_divide', 'times_times', 'times', 'divide', 
-                     'modulo', 'close_par', 'close_bracket', 'close_brace', 'colon'],
-    'lit_str' : ['\s', 'comma', 'open_par', 'close_par', 'open_bracket', 'close_bracket', 'open_brace', 'close_brace', 'colon'], 
-    'lit_bool' : ['\s', 'comma', 'open_par', 'close_par', 'open_bracket', 'close_bracket', 'open_brace', 'close_brace'],
-    'less_than_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'great_than_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'not_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'less_than' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'greater_than' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'equal_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
-    'minus_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
-    'plus_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
-    'times_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
-    'divide_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
-    'times_times_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
-    'modulo_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
-    'divide_divide_equal' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus', 'lit_str'],
-    'plus' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'minus' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'times' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'divide' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'times_times' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'divide_divide' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'modulo' : [' ', '[a-z]', '[0-9]', 'open_par', 'minus'],
-    'open_par' : ['\d', 'And', 'Or', 'Not', 'open_par', 'close_par'],
-    'close_par' : [' ', 'open_bracket', 'plus', 'minus', 'times', 'divide', 'modulo', 'times_times', 'divide_divide', 'greater_than', 'less_than', 'equal_equal', 'not_equal', 'great_equal', 'less_equal', 'And', 'Or', 'Not', 'colon', 'close_par'],
-    'open_brace' : ['id', '[A-Z]', '\d', 'lit_str', 'close_brace'],
-    'close_brace' : ['\s', 'close_par', 'plus', 'minus', 'divide_divide', 'times_times', 'times', 'divide', 'modulo', 'equal', 'minus_equal', 'plus_equal', 'times_equal', 'divide_equal', 'times_times_equal', 'modulo_equal', 'divide_divide_equal', 'less_equal', 'great_equal', 'not_equal', 'greater_than', 'less_than', 'equal_equal', 'And', 'Or', 'Not'],
-    'open_bracket' : ['\s', 'id', '\"', '\“', '\d'],
-    'close_bracket' : [' ', '\n', '$'],
-    'comma' : [' ', 'id', '[A-Z]', '\d'],
-    'colon' : ['\s', 'open_bracket'], 
-    'period' : ['id', '\d'],
-    'id' : ['\s', 'period', 'comma', 'open_par', 'close_par', 'open_bracket', 'close_bracket', 
-            'plus', 'minus', 'divide_divide', 'times_times', 'times', 'divide', 'modulo', 'equal', 
-            'minus_equal', 'plus_equal', 'times_equal', 'divide_equal', 'times_times_equal', 
-            'modulo_equal', 'divide_divide_equal', 'great_equal', 'less_equal', 'not_equal', 
-            'greater_than', 'less_than', 'equal_equal', 'colon', 'open_brace']
+    'Integer' : ['space'],
+    'Decimal' : ['space'],
+    'String' : ['space'],
+    'Boolean' : ['space'],
+    'Struct' : ['space'],
+    'Generate' : ['space'],
+    'Absorb' : ['space'],
+    'Discharge' : ['space'],
+    'Switch' : ['space'],
+    'For' : ['space'],
+    'In' : ['space'],
+    'Sys' : ['space'],
+    'Sys.Call' : ['space'],
+    'Execute' : ['space'],
+    'Fixed' : ['space'],
+    'Return' : ['space'],
+    'Default' : [':'],
+    'Else' : [':'],
+    'If' : ['space', '('],
+    'Elif' : ['space', '('],
+    'And' : ['space', '('],
+    'Or' : ['space', '('],
+    'Not' : ['space', '('],
+    'While' : ['space', '('],
+    'End.Switch' : ['newline'],
+    'Break' : ['newline'],
+    'Continue' : ['newline'],
+    'Avoid' : ['newline'],
+    'Link_Start' : ['newline'],
+    'Link_End' : ['newline', ''],
+    'lit_decposi' : ['space', 'newline', '>=', '<=', '!=', 
+                     '>', '<', '==', ':', ',', 
+                     '+', '-', '//', '**', '*', '/', 
+                     '%', ')', ']', '}'],
+    'lit_decnega' : ['space', 'newline', '>=', '<=', '!=', 
+                     '>', '<', '==', ':', ',', 
+                     '+', '-', '//', '**', '*', '/', 
+                     '%', ')', ']', '}'],
+    'lit_intposi' : ['space', 'newline', '>=', '<=', '!=', 
+                     '>', '<', '==', ':', ',', 
+                     '+', '-', '//', '**', '*', '/', 
+                     '%', ')', ']', '}', ':'],
+    'lit_intnega' : ['space', 'newline', '>=', '<=', '!=', 
+                     '>', '<', '==', ':', ',', 
+                     '+', '-', '//', '**', '*', '/', 
+                     '%', ')', ']', '}', ':'],
+    'lit_str' : ['id', 'reserved_word', ',', '(', ')', '[', ']', '{', '}', ':'], 
+    'lit_bool' : ['id', 'reserved_word', ',', '(', ')', '[', ']', '{', '}'],
+    'less_than_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'great_than_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'not_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'less_than' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'greater_than' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'equal_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'minus_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'plus_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'times_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'divide_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'times_times_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'modulo_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'divide_divide_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'plus' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'minus' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'times' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'divide' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'times_times' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'divide_divide' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'modulo' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'open_par' : ['lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', 'And', 'Or', 'Not', '(', ')'],
+    'close_par' : ['space', '[', '+', '-', '*', '/', '%', '**', '//', '>', '<', '==', '!=', '>=', '<=', 'And', 'Or', 'Not', ':', ')'],
+    'open_brace' : ['id', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', 'lit_str', '}'],
+    'close_brace' : ['id', 'reserved_word', ')', '+', '-', '//', '**', '*', '/', '%', '=', '-=', '+=', '*=', '/=', '**=', '%=', '//=', '<=', '>=', '!=', '>', '<', '==', 'And', 'Or', 'Not'],
+    'open_bracket' : ['id', 'reserved_word', 'id', '\"', '\“', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
+    'close_bracket' : ['space', 'newline', ''],
+    'comma' : ['space', 'id', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
+    'colon' : ['id', 'reserved_word', '['], 
+    'period' : ['id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
+    'id' : ['space', 'newline', '.', ',', '(', ')', '[', ']', 
+            '+', '-', '//', '**', '*', '/', '%', '=', 
+            '-=', '+=', '*=', '/=', '**=', 
+            '%=', '//=', '>=', '<=', '!=', 
+            '>', '<', '==', ':', '{']
 }
 
 
@@ -223,15 +223,18 @@ t_ignore_tab = r' \t'
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += len(t.value)
+    return t
 
-def t_ID(t):
+def t_id(t):
 	r'([a-z]\w{0,19})'
+    
 	return t
 
 def t_reserved_words(t):
-    r'([A-Z][\w\.]{0,19})'
-    t.type = reserved_words.get(t.value, 'error') #t.value will be error if not within reserved words list
+    r'((Integer|Decimal|String|Boolean|Struct|Generate|Absorb|Discharge|Switch|For|In|Sys|Sys\.Call|Execute|Fixed|Return)(?= ))|((Default|Else)(?=\:))|((If|Elif|And|Or|Not|While)(?=[ \(]))|Link\.End(?=\n|$)|(Link\.Start|End\.Switch|Break|Continue|Avoid)(?=\n)'
+    t.type = reserved_words.get(t.value, 'error1') #t.value will be error if not within reserved words list
     return t
+
 
 symbols = {
     #relational
@@ -298,9 +301,9 @@ symbols = {
 
 
 
-def t_SPACE(t):
-    r'[ \t]+'
-    #return t --> no need to output space???
+def t_space(t):
+    r'[ \t]'
+    return t
 
 def t_lit_decposi(t):
 	r'(([0-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4}))'
@@ -325,10 +328,17 @@ def t_lit_str(t):
 def t_lit_bool(t):
 	r'(True|False)'
 	return t
+
+def t_error1(t):
+     r'\s'
+     t.lexer.skip(1)
+     return t
+ 
     
 def t_error(t):
      t.lexer.skip(1)
      return t
- 
+
+
 
 lexi = lex.lex()

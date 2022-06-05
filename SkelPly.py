@@ -10,6 +10,8 @@ from lexer2 import *
 from syntax import Parser
 import syntax
 
+from typing import NamedTuple
+
 
 #creating the window
 root= tk.Tk()
@@ -62,6 +64,12 @@ scrollbar2.config(command=Errors.yview)
 scrollbar2.pack(side=RIGHT, fill=Y)
 Errors.pack(side="left")
 
+class Token(NamedTuple):
+    type: str
+    value: str
+    lineno: int
+    lexpos: int
+
 #TRIAL INPUT AND OUTPUT
 def Take_input():
     Output.configure(state='normal')
@@ -84,17 +92,17 @@ def Take_input():
     flag = False
     
     for tok in lexi:
-        print(tok)
         try:
             listVal = delimDict[previousToken]
             previousToken = tok.type
             previousValue = tok.value
+            prevLineNo = tok.lineno
             toks.append(tok)
-            
-            if((tok.value not in listVal and tok.type not in listVal) or tok.type=='error'):
-                lexerrors.append('ERROR: Invalid lexeme for \'{}\' '.format(previousValue))
+            if((tok.value not in listVal and tok.type not in listVal) or (tok.type=='error' or tok.type=='error1')):
+                print("entered error")
+                lexerrors.append('ERROR: Invalid lexeme for \'{}\' at Line {}'.format(previousValue, prevLineNo))
                 tokctr.append(ctr-1)
-            if(tok.type=='error' and flag == False):
+            if((tok.type=='error' or tok.type=='error1') and flag == False):
                 print(tok.value)
                 flag=True
             previousToken = tok.type
@@ -104,10 +112,13 @@ def Take_input():
             previousToken = tok.type
             previousValue = tok.value
             toks.append(tok)
-        if(tok.type == 'SPACE' or tok.type == 'error'):
+            if(tok.type=='error' or tok.type=='error1'):
+                lexerrors.append('ERROR: Invalid lexeme for \'{}\' at Line {}'.format(previousValue, tok.lineno))
+                tokctr.append(ctr-1)
+        if(tok.type == 'SPACE' or tok.type == 'error' or tok.type=='error1'):
             tokctr.append(ctr)
-        tokens.append("   {:15s} {:20s}".format(tok.value,tok.type))
-        
+        tokens.append(Token(tok.type, tok.value, tok.lineno, tok.lexpos))
+        print(Token(tok.type, tok.value, tok.lineno, tok.lexpos))
         ctr+=1
         
     ctr = 0
@@ -116,9 +127,21 @@ def Take_input():
         Run_Semantic.configure(state = 'disabled')
         for i in lexerrors:
             Errors.insert(END, (i))
+            Errors.insert(END, '\n')
     else:
         Run_Semantic.configure(state='normal')
-        Errors.insert(END, ("   {:15s}".format("No Lexical Error")))
+        Errors.insert(END, ("   {}".format("No Lexical Error")))
+    if(tokens):
+        for i in tokens:
+            if(i.type == 'space' or i.type == 'newline'):
+                continue
+            OutputTok.insert(END, i.type)
+            OutputTok.insert(END, '\n')
+            Output.insert(END, i.value)
+            Output.insert(END, '\n')
+    Output.configure(state='disabled')
+    OutputTok.configure(state='disabled')
+    Errors.configure(state='disabled')
         
     
 
