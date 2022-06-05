@@ -1,0 +1,355 @@
+import ply.yacc as yacc
+from lexer import (
+    Tokens,
+    Lexer
+)
+
+tokens = Lexer.tokens
+
+class Parser:
+    def p_program(self, p):
+        '''program : global_dec Link_Start declare_statements statements Link_End functions'''
+        
+    def p_null(self, p):
+        '''null : empty '''
+            
+    def p_global_dec(self, p):
+        '''global_dec : struct_dec global_dec
+                      | declare_statements global_dec 
+                      | null'''
+                    
+    def p_struct_dec(self, p):
+        '''struct_dec : Struct id open_bracket struct_element1 struct_element2 close_bracket id_array1'''
+        
+    def p_struct_element1(self, p):
+        '''struct_element1 : data_type id_array_dec'''
+        
+    def p_data_type(self, p):
+        '''data_type : Integer
+                     | Decimal
+                     | String
+                     | Boolean'''
+
+    def p_id_array_dec(self, p):
+        '''id_array_dec : id id_array_dec2'''
+
+    def p_id_array_dec2(self, p):
+        '''id_array_dec2 : id_dec1
+                         | open_brace lit_intposi close_brace array_dec1
+                         | null'''
+            
+    def p_id_dec1(self, p):
+        '''id_dec1 : comma id id_dec1
+                   | null'''
+        
+    def p_array_dec1(self, p):
+        '''array_dec1 : comma id open_bracket lit_intposi close_bracket array_dec1
+                      | null'''
+        
+    def p_struct_element2(self, p):
+        '''struct_element2 : comma struct_element1 struct_element2
+                           | null'''
+                            
+    def p_declare_statements(self, p):
+        '''declare_statements : Generate const_var_dec declare_statements 
+                              | null'''
+                            
+    def p_const_var_dec(self, p):
+        '''const_var_dec : Fixed data_type id_array_const
+                         | data_type id_array_var'''
+                        
+    def p_id_array_const(self, p):
+        '''id_array_const : id id_array_const2'''
+
+    def p_id_array_const2(self, p):
+        '''id_array_const2 : equal value id_const1 
+                           | open_bracket lit_intposi close_bracket equal open_bracket value1 close_bracket array_const1'''
+                            
+    def p_id_const1(self, p):
+        '''id_const1 : comma id equal value id_const1 
+                     | null'''
+
+    def p_array_const1(self, p):
+        '''array_const1 : comma id close_bracket lit_intposi open_bracket equal open_bracket value1 close_bracket array_const1 
+                        | null'''
+                        
+    def p_id_array_var(self, p):
+        '''id_array_var : id id_array_var2'''
+        
+    def p_id_array_var2(self, p):
+        '''id_array_var2 : var_init id_var1
+                         | open_bracket lit_intposi close_bracket array_init array_var1'''
+
+    def p_var_init(self, p):
+        '''var_init : equal value id_var1
+                    | null'''
+                    
+    def p_id_var1(self, p):
+        '''id_var1 : comma id var_init id_var1
+                   | null'''
+                    
+    def p_array_init(self, p):
+        '''array_init : equal open_bracket value1 close_bracket array_var1 
+                      | null'''
+                    
+    def p_array_var1(self, p):
+        '''array_var1 : comma id open_bracket lit_intposi close_bracket array_init array_var1
+                      | null'''
+    
+    def p_value(self, p):
+        '''value : num_value
+                 | lit_str
+                 | lit_bool''' 
+                
+    def p_num_value(self, p):
+        '''num_value : id_array id_struct
+                     | literals 
+                     | arithmetic_expression
+                     | func_call'''
+                    
+    def p_id_array(self, p):
+        '''id_array : id array'''
+        
+    def p_array(self, p):
+        '''array : open_bracket lit_intposi close_bracket 
+                 | null''' 
+
+    def p_id_array1(self, p):
+        '''id_array1 : id_array id_array2'''
+        
+    def p_id_array2(self, p):
+        '''id_array2 : comma id_array1
+                     | null'''             
+
+    def p_literals(self, p):
+            '''literals : lit_intposi
+                        | lit_intnega
+                        | lit_decposi
+                        | lit_decnega'''
+
+    def p_arithmetic_expression(self, p):
+            '''arithmetic_expression : open_par arithmetic_expression close_par
+                                     | num_value arithmetic_operators num_value'''
+
+    def p_arithmetic_operators(self, p):
+            '''arithmetic_operators : +
+                                    | -
+                                    | *
+                                    | /
+                                    | //
+                                    | %
+                                    | **'''
+
+    def p_id_struct(self, p):
+            '''id_struct : period id_array
+                         | null'''
+
+
+    def p_value1(self, p):
+            '''value1 : value value2'''
+
+    def p_value2(self, p):
+            '''value2 : comma value1 
+                      | null'''
+    
+    # start here again
+    def p_statements(self, p):
+            '''statements : assignment_statements statements 
+                          | looping_statements statements
+                          | conditional_statements statements
+                          | io_statements statements
+                          | func_call statements
+                          | null'''
+
+    def p_assignment_statements(self, p):
+            '''assignment_statements : id assignment_statements2'''
+
+    def p_assignment_statements2(self, p):
+            '''assignment_statements2 : array id_struct assignment_exp 
+                                      | open_bracket lit_intposi close_bracket more_array equal open_bracket value1 close_bracket'''
+
+    def p_assignment_exp(self, p):
+            '''assignment_exp : assignment_operators num_value
+                              | equal assign_value'''
+
+    def p_assign_value(self, p):
+            '''assign_value : num_value
+                            | more_id value'''
+
+    def p_more_id(self, p):
+            '''more_id : id_array id_struct equal more_id
+                       | null'''
+
+    def p_assignment_operators(self, p):
+            '''assignment_operators : +=
+                                    | -=
+                                    | *=
+                                    | /=
+                                    | //=
+                                    | %=
+                                    | **='''
+
+    def p_more_array(self, p):
+            '''more_array : equal id open_bracket lit_intposi close_bracket more_array
+                          | null'''
+
+    def p_looping_statements(self, p):
+            '''looping_statements : for_statements
+                                  | while_statements'''
+
+    def p_for_statements(self, p):
+            '''for_statements : For id In id open_bracket close_bracket colon open_brace inside_statements close_brace'''
+
+    def p_while_statements(self, p):
+            '''while_statements : While open_par condition close_par colon open_brace inside_statements close_brace'''
+
+    def p_inside_statements(self, p):
+            '''inside_statements : statements inside_statements
+                                 | control_statements inside_statements'''
+
+    def p_control_statements(self, p):
+            '''control_statements : Break
+                                  | Continue
+                                  | Avoid'''
+                                
+    def p_condition(self, p):
+        '''condition   : relational_expression
+                       | logical_expression
+                       | lit_bool
+                       | Not open_par condition_not close_par'''
+                        
+    def p_condition_not(self, p):
+        '''condition_not   : relational_expression
+                           | logical_expression
+                           | lit_bool'''
+                            
+    def p_relational_expression(self,p):
+        '''relational_expression   : value relational_operators value'''
+        
+    def p_relational_operators(self, p):
+        '''relational_operators    : >
+                                   | <
+                                   | ==
+                                   | !=
+                                   | >=
+                                   | <='''
+                                    
+    def p_logical_expression(self, p):
+        '''logical_expression  : open_par logical_operand close_par logical_operator open_par logical_operand close_par'''
+        
+    def p_logical_operand(self, p):
+        '''logical_operand : Not open_par logical_operand close_par
+                           | relational_expression
+                           | logical_expression
+                           | lit_bool'''
+                            
+    def p_logical_operators(self, p):
+        '''logical_operators   : And
+                               | Or'''
+                                
+    def p_conditional_statements(self,p):
+        '''conditional_statements  : if_statement
+                                   | switch_statements'''
+                                    
+    def p_if_statement(self, p):
+        '''if_statement    : If open_par condition close_par colon open_bracket inside_statements close_bracket condition_else'''
+        
+    def p_condition_else(self,p):
+        '''condition_else  : elif_statement
+                           | else_statement
+                           | null'''
+                            
+    def p_elif_statement(self, p):
+        '''elif_statement  : Elif open_par condition close_par colon open_brace inside_statements close_brace condition_else'''
+        
+    def p_else_statement(self, p):
+        '''else_statement  : Else colon inside_statements'''
+        
+    def p_switch_statements(self, p):
+        '''switch_statements   : Switch id colon open_brace execute Default colon inside_statements close_brace End.Switch'''
+        
+    def p_execute(self, p):
+        '''execute  : Execute switch_lit colon statements Break execute1'''
+        
+    def p_switch_lit(self, p):
+        '''switch_lit  : lit_str
+                       | lit_intposi
+                       | lit_intnega'''
+
+    def p_execute1(self, p):
+        '''execute1    : execute
+                       | null'''
+                        
+    def p_io_statements(self, p):
+        '''io_statements   : input_statements
+                           | output_statements'''
+                            
+    def p_input_statements(self, p):
+        '''input_statements    : Absorb id_array id_struct'''
+        
+    def p_output_statement(self, p):
+        '''output_statements   : Discharge value'''
+        
+    def p_func_call(self, p):
+        '''func_call   : Sys.Call id open_par function_param close_par'''
+        
+    def p_function_param(self, p):
+        '''function_param  : value1 more_param
+                           | id open_bracket close_bracket more_param
+                           | null'''
+                            
+    def p_more_param(self, p):
+        '''more_param  : comma value1 more_param
+                       | comma id open_bracket close_bracket more_param
+                       | null'''
+                        
+    def p_functions(self, p):
+        '''functions   : Sys id open_param parameters close_param open_brace declare_statements function_body close_brace functions
+                       | null'''
+                        
+    def p_parameters(self, p):
+        '''parameters  : data_type id parameters
+                       | null'''
+                        
+    def p_function_body(self, p):
+        '''function_body   : statements function_body
+                           | return_statement function_body
+                           | null'''
+                            
+    def p_return_statement(self, p):
+        '''return_statement    : Return value'''
+        
+    def p_error(self,p):
+        print("Syntax error in input")
+        
+    def __init__(self):
+        self.parser = yacc.yacc(start=self.start ,module=self)
+        
+    def run(self, data):
+        result = yacc.yacc(start=self.start ,module=self)
+        return result
+    
+    
+
+def run(data):
+    while True:
+        try:
+            s = input('calc > ')
+        except EOFError:
+            break
+        if not s: continue
+        result = yacc.yacc(data)
+        print(result)
+
+
+
+# parser = yacc.yacc()
+
+# while True:
+#     try:
+#         s = raw_input('calc > ')
+#     except EOFError:
+#         break
+#     if not s: continue
+#     result = parser.parse(s)
+#     print(result)
