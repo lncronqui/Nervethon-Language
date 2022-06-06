@@ -94,7 +94,8 @@ tokens = [
     #identifier
     'id', 
     'reserved_words',
-    'error'
+    'error',
+    'error1'
     
 ] + list(reserved_words.values())
 
