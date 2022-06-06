@@ -90,12 +90,12 @@ tokens = [
     
     'space',
     'newline',
-
+    'error1',
     #identifier
     'id', 
     'reserved_words',
-    'error',
-    'error1'
+    'error'
+    
 ] + list(reserved_words.values())
 
 delimDict = {
@@ -225,6 +225,10 @@ def t_newline(t):
     t.lexer.lineno += len(t.value)
     return t
 
+def t_error1(t):
+     t.lexer.skip(1)
+     return t
+
 def t_id(t):
 	r'([a-z]\w{0,19})'
     
@@ -329,10 +333,7 @@ def t_lit_bool(t):
 	r'(True|False)'
 	return t
 
-def t_error1(t):
-     r'\s'
-     t.lexer.skip(1)
-     return t
+
  
     
 def t_error(t):
