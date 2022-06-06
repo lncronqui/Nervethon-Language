@@ -94,8 +94,7 @@ tokens = [
     #identifier
     'id', 
     'reserved_words',
-    'error',
-    'error1'
+    'error'
     
 ] + list(reserved_words.values())
 
@@ -226,9 +225,6 @@ def t_newline(t):
     t.lexer.lineno += len(t.value)
     return t
 
-def t_error1(t):
-     t.lexer.skip(1)
-     return t
 
 def t_id(t):
 	r'([a-z]\w{0,19})'
@@ -237,7 +233,7 @@ def t_id(t):
 
 def t_reserved_words(t):
     r'((Integer|Decimal|String|Boolean|Struct|Generate|Absorb|Discharge|Switch|For|In|Sys|Sys\.Call|Execute|Fixed|Return)(?= ))|((Default|Else)(?=\:))|((If|Elif|And|Or|Not|While)(?=[ \(]))|Link\.End(?=\n|$)|(Link\.Start|End\.Switch|Break|Continue|Avoid)(?=\n)'
-    t.type = reserved_words.get(t.value, 'error1') #t.value will be error if not within reserved words list
+    t.type = reserved_words.get(t.value, 'error') #t.value will be error if not within reserved words list
     return t
 
 
@@ -333,7 +329,6 @@ def t_lit_str(t):
 def t_lit_bool(t):
 	r'(True|False)'
 	return t
-
 
  
     
