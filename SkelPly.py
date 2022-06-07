@@ -94,14 +94,16 @@ def Take_input():
     for tok in lexi:
         try:
             listVal = delimDict[previousToken]
+            lexemeValue = previousValue
             previousToken = tok.type
             previousValue = tok.value
             prevLineNo = tok.lineno
             toks.append(tok)
             if((tok.value not in listVal and tok.type not in listVal) or (tok.type=='error' or tok.type=='error1')):
                 print("entered error")
-                lexerrors.append('ERROR: Invalid lexeme for \'{}\' at Line {}'.format(previousValue, prevLineNo))
+                lexerrors.append('ERROR: Invalid lexeme for \'{}\' at Line {}'.format(lexemeValue, prevLineNo))
                 tokctr.append(ctr-1)
+                tokens = tokens[:-1]
             if((tok.type=='error' or tok.type=='error1') and flag == False):
                 print(tok.value)
                 flag=True
