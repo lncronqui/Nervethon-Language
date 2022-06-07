@@ -78,6 +78,7 @@ def Take_input():
     Output.delete(1.0,END)#How to reset text area
     Errors.delete(1.0,END)#How to reset text area
     OutputTok.delete(1.0,END)
+    lexi.input("")
     INPUT = text_area.get("1.0", "end-1c")
     lexi.input(INPUT)
     
@@ -122,7 +123,7 @@ def Take_input():
         tokens.append(Token(tok.type, tok.value, tok.lineno, tok.lexpos))
         print(Token(tok.type, tok.value, tok.lineno, tok.lexpos))
         ctr+=1
-        
+    lexi.lineno=1
     ctr = 0
     
     if(lexerrors):
