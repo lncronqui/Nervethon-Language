@@ -76,16 +76,50 @@ def Take_input():
     
     tokens=[]
     lexerrors=[]
-    for tok in lexer:
-        if tok.type == 'error':
-            lexerrors.append("ERROR: Incorrect lexeme '{}' at line {}".format(tok.value, tok.lineno))
-            continue
-        if tok.type == 'error1':
-            lexerrors.append("ERROR: Reserved word '{}' as identifier at line {}".format(tok.value, tok.lineno))
-            continue
-        if tok.type == 'error2':
-            lexerrors.append("ERROR: Invalid delimiter '{}' at line {}".format(tok.value,tok.lineno))
-        tokens.append(tok)
+    prevToken = ''
+    prevValue = ''
+    
+    
+    while True:
+        tok = lexer.token()
+        if not tok:
+                break
+        try:
+            listVal = delimDict[prevToken]
+            if not(tok.type == 'space' or tok.type == 'newline'):
+                if (tok.value not in listVal and tok.type not in listVal):
+                    lexerrors.append("ERROR: '{}' not a delimiter for '{}' at line {}".format(tok.value, prevValue, tok.lineno))
+                    tokens = tokens[:-1]
+            prevToken = tok.type
+            prevValue = tok.value
+            if tok.type == 'error':
+                lexerrors.append("ERROR: Incorrect lexeme '{}' at line {}".format(tok.value, tok.lineno))
+                continue
+            if tok.type == 'error1':
+                lexerrors.append("ERROR: Reserved word '{}' as identifier at line {}".format(tok.value, tok.lineno))
+                continue
+            if tok.type == 'error2':
+                lexerrors.append("ERROR: Invalid lexeme/delim '{}' at line {}".format(tok.value,tok.lineno))
+                continue
+            tokens.append(tok)
+        except:
+            prevToken = tok.type
+            prevValue = tok.value
+            if tok.type == 'error':
+                lexerrors.append("ERROR: Incorrect lexeme '{}' at line {}".format(tok.value, tok.lineno))
+                continue
+            if tok.type == 'error1':
+                lexerrors.append("ERROR: Reserved word '{}' as identifier at line {}".format(tok.value, tok.lineno))
+                continue
+            if tok.type == 'error2':
+                lexerrors.append("ERROR: Incomplete word/missing delim '{}' at line {}".format(tok.value,tok.lineno))
+                continue
+            if tok.type == 'space' or tok.type == 'newline':
+                continue
+            tokens.append(tok)
+            
+    
+    lexer.lineno = 1
     
     if(lexerrors):
         Run_Semantic.configure(state = 'disabled')
@@ -97,6 +131,8 @@ def Take_input():
         Errors.insert(END, ("{}".format("No Lexical Error")))
     if(tokens):
         for i in tokens:
+            if i.type == 'space' or i.type == 'newline':
+                continue
             OutputTok.insert(END, i.type)
             OutputTok.insert(END, '\n')
             Output.insert(END, i.value)

@@ -4,6 +4,10 @@ from ply.lex import TOKEN
 
 # list of tokens
 tokens = [
+    'comment',
+    'space',
+    'newline',
+    
     #(?= )
     'Integer',
     'Decimal',
@@ -96,10 +100,15 @@ tokens = [
     #identifier
     'id',
     
+    
+    
     #errors
     'error1', #non-keyword
     'error2' #incomplete word
 ]
+
+def t_ignore_comment(t):
+    r'(\/\*)[\s\S]*?(\*\/)'
 
 t_Integer = r'Integer(?= )'
 t_Decimal = r'Decimal(?= )'
@@ -157,7 +166,7 @@ def t_lit_intnega(t):
     r'(\-[1-9]\d{0,8})(?=[\s\,\(\)\[\]\{\}]|\<\=|\>\=|\!\=|\<|\>|\=\=|\+|\-|(\/\/)|(\*\*)|\*|\/|\%)'
     t.value = int(t.value)
     return t
-t_lit_str = r'[\"\“]{1}([^\"^\n^\“^\”])*?[\"\”]{1}(?=[\s\,\(\)\[\]\{\}\:])'
+t_lit_str = r'[\"\“]{1}(([^\"^\n^\“^\”])*)?[\"\”]{1}(?=[\s\,\(\)\[\]\{\}\:])'
 t_lit_bool = r'(True|False)(?=[\s\,\(\)\[\]\{\}])'
 
 
@@ -194,7 +203,7 @@ def t_divide_divide_equal(t):
     r'\/\/\=(?= |[a-z]|[0-9]|\()'
     return t
 def t_equal(t):
-    r'\=(?= |[a-z]|[0-9]|\(|\"|\“)'
+    r'\=(?=[ ]|[a-z]|[0-9]|\(|\"|\“)'
     return t
 
 #arithmetic
@@ -236,14 +245,18 @@ t_period =  r'\.(?=[a-zA-Z\d])'
 t_id = r'([a-z]\w{0,19})(?=[\s\.\,\(\)\[\]]|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\<\=|\>\=|\!\=|\<|\>|\=\=|\:|\{)'
 
 t_error1 = r'(e(?i:nd\.switch)|b(?i:reak)|l(?i:ink\.start)|l(?i:ink\.end)|g(?i:enerate)|s(?i:ys\.call)|s(?i:ys)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:void)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse)|i(?i:n))(?=[\s\.\,\(\)\[\]\{\}]|\+|\-|(\/\/)|(\*\*)|\*|\/|\%|\=|\-\=|\+\=|\*\=|\/\=|\*\*\=|\%\=|\/\/\=|\<\=|\>\=|\!\=|\<|\>|\=\=)'
+t_error2 = r'[\S]+'
 
-t_ignore = r'[ \t]+|(\/\*)[\s\S]*?(\*\/)'
 
+def t_space(t):
+    r'[ \t]'
+    return t
 
 # Define a rule so we can track line numbers
 def t_newline(t):
-    r'\n+'
+    r'\n'
     t.lexer.lineno += len(t.value)
+    return t
 
 
 def t_error(t):
@@ -251,3 +264,90 @@ def t_error(t):
      return t
 
 lexer = lex.lex()
+
+delimDict = {
+    'Integer' : ['space'],
+    'Decimal' : ['space'],
+    'String' : ['space'],
+    'Boolean' : ['space'],
+    'Struct' : ['space'],
+    'Generate' : ['space'],
+    'Absorb' : ['space'],
+    'Discharge' : ['space'],
+    'Switch' : ['space'],
+    'For' : ['space'],
+    'In' : ['space'],
+    'Sys' : ['space'],
+    'Sys.Call' : ['space'],
+    'Execute' : ['space'],
+    'Fixed' : ['space'],
+    'Return' : ['space'],
+    'Default' : [':'],
+    'Else' : [':'],
+    'If' : ['space', '('],
+    'Elif' : ['space', '('],
+    'And' : ['space', '('],
+    'Or' : ['space', '('],
+    'Not' : ['space', '('],
+    'While' : ['space', '('],
+    'End.Switch' : ['newline'],
+    'Break' : ['newline'],
+    'Continue' : ['newline'],
+    'Avoid' : ['newline'],
+    'Link_Start' : ['newline'],
+    'Link_End' : ['newline', ''],
+    'lit_decposi' : ['space', 'newline', '>=', '<=', '!=', 
+                     '>', '<', '==', ':', ',', 
+                     '+', '-', '//', '**', '*', '/', 
+                     '%', ')', ']', '}'],
+    'lit_decnega' : ['space', 'newline', '>=', '<=', '!=', 
+                     '>', '<', '==', ':', ',', 
+                     '+', '-', '//', '**', '*', '/', 
+                     '%', ')', ']', '}'],
+    'lit_intposi' : ['space', 'newline', '>=', '<=', '!=', 
+                     '>', '<', '==', ':', ',', 
+                     '+', '-', '//', '**', '*', '/', 
+                     '%', ')', ']', '}', ':'],
+    'lit_intnega' : ['space', 'newline', '>=', '<=', '!=', 
+                     '>', '<', '==', ':', ',', 
+                     '+', '-', '//', '**', '*', '/', 
+                     '%', ')', ']', '}', ':'],
+    'lit_str' : ['id', 'reserved_word', ',', '(', ')', '[', ']', '{', '}', ':' , 'space' , 'newline'], 
+    'lit_bool' : ['id', 'reserved_word', ',', '(', ')', '[', ']', '{', '}'],
+    'less_than_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'great_than_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'not_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'less_than' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'greater_than' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'equal_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'minus_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'plus_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'times_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'divide_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'times_times_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'modulo_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'divide_divide_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-', 'lit_str'],
+    'plus' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'minus' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'times' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'divide' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'times_times' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'divide_divide' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'modulo' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
+    'open_par' : ['lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', 'And', 'Or', 'Not', '(', ')', 'space', 'id'],
+    'close_par' : ['space', '[', '+', '-', '*', '/', '%', '**', '//', '>', '<', '==', '!=', '>=', '<=', 'And', 'Or', 'Not', ':', ')', 'newline'],
+    'open_brace' : ['id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', 'lit_str', '}', 'space', 'newline'],
+    'close_brace' : ['id', 'reserved_word', ')', '+', '-', '//', '**', '*', '/', '%', '=', '-=', '+=', '*=', '/=', '**=', '%=', '//=', '<=', '>=', '!=', '>', '<', '==', 'And', 'Or', 'Not', 'space', 'newline'],
+    'open_bracket' : ['id', 'reserved_word', 'id', '\"', '\“', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
+    'close_bracket' : ['space', 'newline', ''],
+    'comma' : ['space', 'id', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
+    'colon' : ['id', 'reserved_word', '['], 
+    'period' : ['id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
+    'id' : ['space', 'newline', '.', ',', '(', ')', '[', ']', 
+            '+', '-', '//', '**', '*', '/', '%', '=', 
+            '-=', '+=', '*=', '/=', '**=', 
+            '%=', '//=', '>=', '<=', '!=', 
+            '>', '<', '==', ':', '{']
+    
+}
