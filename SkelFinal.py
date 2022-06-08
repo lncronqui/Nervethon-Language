@@ -6,6 +6,8 @@ from tkinter import *
 from xmlrpc.client import boolean
 
 from lexer3 import *
+from syntax_lexer import *
+from syntax_analyze import *
 
 from typing import NamedTuple
 
@@ -119,8 +121,6 @@ def Take_input():
             tokens.append(tok)
             
     
-    lexer.lineno = 1
-    
     if(lexerrors):
         Run_Semantic.configure(state = 'disabled')
         for i in lexerrors:
@@ -142,6 +142,21 @@ def Take_input():
     Errors.configure(state='disabled')
         
     
+    
+def Run_Syntax():
+    Output.configure(state='normal')
+    Errors.configure(state='normal')
+    OutputTok.configure(state='normal')
+    Output.delete(1.0,END)#How to reset text area
+    Errors.delete(1.0,END)#How to reset text area
+    OutputTok.delete(1.0,END)
+    lexer_syntax.lineno = 1
+    INPUT = text_area.get("1.0", "end-1c")
+    lexer_syntax.input(INPUT)
+    
+    result = parser.parse(INPUT)
+    for x in result:
+        print(result)
 
             
     
@@ -203,7 +218,7 @@ Clear=Button(frame_top, width=129, height=32, image=photo_imageClear, border=0, 
 Clear.place(x=760, y =16)
 Run_Lexical=Button(frame_top, width=175, height=35, image=photo_imageLexical, border=0, activebackground='#0F0F0F', background='#0F0F0F', command = lambda:Take_input())
 Run_Lexical.place(x=925, y=15)
-Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', background='#0F0F0F')
+Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', background='#0F0F0F', command = lambda:Run_Syntax())
 Run_Semantic.place(x=1139, y =15)
 
 
