@@ -318,15 +318,6 @@ def p_return_statement(p):
     ''' return_statement    : Return value'''
     
 def p_error(p):
-    print("Syntax error in input ", p.value)
+    print("Syntax error in input ", p.type)
     
 parser = yacc.yacc()
-
-while True:
-    try:
-        s = input()
-    except EOFError:
-        break
-    if not s: continue
-    result = parser.parse(s)
-    print(result)
