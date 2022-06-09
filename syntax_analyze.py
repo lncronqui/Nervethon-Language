@@ -17,8 +17,7 @@ def p_global_dec(p):
                 | empty'''
                 
 def p_struct_dec(p):
-    ''' struct_dec : Struct id open_bracket struct_element1 struct_element2 close_bracket id_array1
-                    | empty'''
+    ''' struct_dec : Struct id open_bracket struct_element1 struct_element2 close_bracket id_array1'''
     
 def p_struct_element1(p):
     ''' struct_element1 : data_type id_array_dec'''
@@ -50,8 +49,8 @@ def p_struct_element2(p):
                         | empty'''
                         
 def p_declare_statements(p):
-    ''' declare_statements : Generate const_var_dec declare_statements 
-                        | empty'''
+    ''' declare_statements : Generate const_var_dec declare_statements
+                            | empty'''
                         
 def p_const_var_dec(p):
     ''' const_var_dec : Fixed data_type id_array_const
@@ -114,8 +113,7 @@ def p_array(p):
             | empty''' 
 
 def p_id_array1(p):
-    ''' id_array1 : id_array id_array2
-                    | empty'''
+    ''' id_array1 : id_array id_array2'''
     
 def p_id_array2(p):
     ''' id_array2 : comma id_array1
@@ -194,16 +192,13 @@ def p_more_array(p):
 
 def p_looping_statements(p):
         '''looping_statements : for_statements
-                            | while_statements
-                            | empty'''
+                            | while_statements'''
 
 def p_for_statements(p):
-        '''for_statements : For id In id open_brace close_brace colon open_bracket inside_statements close_bracket
-                            | empty'''
+        '''for_statements : For id In id open_brace close_brace colon open_bracket inside_statements close_bracket'''
 
 def p_while_statements(p):
-        '''while_statements : While open_par condition close_par colon open_bracket inside_statements close_bracket
-                            | empty'''
+        '''while_statements : While open_par condition close_par colon open_bracket inside_statements close_bracket'''
 
 def p_inside_statements(p):
         '''inside_statements : statements inside_statements
@@ -252,12 +247,10 @@ def p_logical_operators(p):
                             
 def p_conditional_statements(p):
     ''' conditional_statements  : if_statement
-                                | switch_statements
-                                | empty'''
+                                | switch_statements'''
                                 
 def p_if_statement(p):
-    ''' if_statement    : If open_par condition close_par colon open_bracket inside_statements close_bracket condition_else
-                        | empty'''
+    ''' if_statement    : If open_par condition close_par colon open_bracket inside_statements close_bracket condition_else'''
     
 def p_condition_else(p):
     ''' condition_else  : elif_statement
@@ -265,16 +258,13 @@ def p_condition_else(p):
                         | empty'''
                         
 def p_elif_statement(p):
-    ''' elif_statement  : Elif open_par condition close_par colon open_bracket inside_statements close_bracket condition_else
-                        | empty'''
+    ''' elif_statement  : Elif open_par condition close_par colon open_bracket inside_statements close_bracket condition_else'''
     
 def p_else_statement(p):
-    ''' else_statement  : Else colon inside_statements
-                        | empty'''
+    ''' else_statement  : Else colon open_bracket inside_statements close_bracket'''
     
 def p_switch_statements(p):
-    ''' switch_statements   : Switch id colon open_bracket execute Default colon inside_statements close_bracket End_Switch
-                            | empty'''
+    ''' switch_statements   : Switch id colon open_bracket execute Default colon inside_statements close_bracket End_Switch'''
     
 def p_execute(p):
     ''' execute : Execute switch_lit colon statements Break execute1'''
@@ -328,6 +318,15 @@ def p_return_statement(p):
     ''' return_statement    : Return value'''
     
 def p_error(p):
-    print("Syntax error in input")
+    print("Syntax error in input ", p.value)
     
 parser = yacc.yacc()
+
+while True:
+    try:
+        s = input()
+    except EOFError:
+        break
+    if not s: continue
+    result = parser.parse(s)
+    print(result)
