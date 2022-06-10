@@ -2,6 +2,15 @@ import ply.yacc as yacc
 
 from syntax_lexer import tokens
 
+class Node:
+    def __init__(self,type,children=None,leaf=None):
+        self.type = type
+        if children:
+            self.children = children
+        else:
+            self.children = [ ]
+        self.leaf = leaf
+
 start = 'program'
 
 def p_program(p):
