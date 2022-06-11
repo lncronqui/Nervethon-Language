@@ -143,7 +143,7 @@ t_While = r'While'
 t_Link_End = r'Link\.End'
 
 
-t_Link_Start = r'Link\.Start(?=(?!$))'
+t_Link_Start = r'Link\.Start'
 t_End_Switch = r'End\.Switch'
 t_Break = r'Break'
 t_Continue = r'Continue'
