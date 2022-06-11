@@ -156,14 +156,24 @@ def Run_Syntax():
     lexer_syntax.lineno = 1
     INPUT = text_area.get("1.0", "end-1c")
     lexer_syntax.input(INPUT)
-    while True:
-        tok = lexer_syntax.token()
-        if not tok:
-            break
-        print(tok)
     lexer_syntax.lineno = 1
     result = parser.parse(INPUT, lexer=lexer_syntax)
-    result.traverse()
+    out = result.traverse()
+    print(errors)
+    if errors:
+        for i in errors:
+            Errors.insert(END, ("Syntax error at token '{}' on line {}".format(i.type, i.lineno)))
+            Errors.insert(END, '\n')
+    else:
+        Errors.insert(END, ("{}".format("No Lexical Error")))
+    for x in out:
+        # print(x)
+        y = x.tabs
+        z = 0
+        while y > z:
+            print("|__", end=" ")
+            z += 1
+        print(x.output)
 
             
     
