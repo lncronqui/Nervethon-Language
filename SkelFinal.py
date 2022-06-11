@@ -156,10 +156,14 @@ def Run_Syntax():
     lexer_syntax.lineno = 1
     INPUT = text_area.get("1.0", "end-1c")
     lexer_syntax.input(INPUT)
-    
-    result = parser.parse(INPUT)
-    for x in result:
-        print(result)
+    while True:
+        tok = lexer_syntax.token()
+        if not tok:
+            break
+        print(tok)
+    lexer_syntax.lineno = 1
+    result = parser.parse(INPUT, lexer=lexer_syntax)
+    result.traverse()
 
             
     

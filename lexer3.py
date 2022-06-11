@@ -104,7 +104,7 @@ tokens = [
     
     #errors
     'error1', #non-keyword
-    'error2' #incomplete word
+    #'error2' #incomplete word
 ]
 
 def t_ignore_comment(t):
@@ -202,7 +202,7 @@ def t_modulo_equal(t):
 def t_divide_divide_equal(t):
     r'\/\/\='
     return t
-t_equal = r'\='
+t_equal = r'[=]'
 
 #arithmetic
 def t_plus(t):
@@ -243,7 +243,7 @@ t_period =  r'\.'
 t_id = r'([a-z]\w{0,19})'
 
 t_error1 = r'(e(?i:nd\.switch)|b(?i:reak)|l(?i:ink\.start)|l(?i:ink\.end)|g(?i:enerate)|s(?i:ys\.call)|s(?i:ys)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:void)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse)|i(?i:n))'
-t_error2 = r'[\S]+'
+#t_error2 = r'[\S]+'
 
 
 def t_space(t):

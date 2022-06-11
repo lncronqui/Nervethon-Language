@@ -3,30 +3,29 @@ import ply.yacc as yacc
 from syntax_lexer import tokens
 
 class Node:
-    def __init__(self,value=""):
-        self.value = value
+    def __init__(self,value):
+        if value != None:
+            self.value = value
+        else:
+            self.remove_child(self)
         self.children = []
         
-    def add_child(self, value):
-        if self.value:
-            if self.children is None:
-                self.children = Node(value)
-            else:
-                self.children.append(Node(value))
-        else:
-            self.value = value
+    def add_child(self, child_node):
+        self.children.append(child_node)
+        
+    def remove_child(self, child_node):
+        self.children =  [child for child in self.children 
+                     if child is not child_node]
         
     def traverse(self):
-        if self.value is not None:
-            if type(self.value) is Node or isinstance(self.value, Node):
-                self.value.traverse()
-            if not isinstance(self.value, Node):
-                print(self.value)
-            if self.children:
-                for tok in self.children:
-                    tok.traverse()
-        
+        nodes_to_visit = [self]
+        while len(nodes_to_visit) > 0:
+            current_node = nodes_to_visit.pop()
+            if current_node != None:
+                print(current_node)
+                nodes_to_visit += current_node.children
             
+
 start = 'program'
 
 
@@ -835,8 +834,6 @@ def p_return_statement(p):
     p[0].add_child(p[2])
     
 def p_error(p):
-    if p is not None:
-        print("Syntax error in '{}' token at Line {}".format(p.type, p.lineno))
-    parser.errok()
+    print("Syntax error in input", p.type)
     
 parser = yacc.yacc()
