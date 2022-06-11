@@ -14,18 +14,18 @@ from typing import NamedTuple
 
 #creating the window
 root= tk.Tk()
-root.geometry('1366x768')
+root.geometry('1440x768')
 root.resizable(FALSE, FALSE)
 root.configure(bg='#171717')
 root.title('Nervethon')
 
 #Frame Top
-frame_top=Frame(root,width=1366,height=70, background='#0F0F0F')
+frame_top=Frame(root,width=1440,height=70, background='#0F0F0F')
 frame_top.grid(row=0, column=0, columnspan=2)
 
 #Photos
 photo_imageClear=PhotoImage(file='Clear.png')
-photo_imageSemantic=PhotoImage(file='Semantic.png')
+photo_imageSemantic=PhotoImage(file='Syntax.png')
 photo_imageLexical=PhotoImage(file='Lexical.png')
 photo_imageNervethon=PhotoImage(file='Nervy.png')
 
@@ -181,11 +181,11 @@ def Run_Syntax():
 frame3=Frame(root, width=400, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
 frame3.place(x=625, y=130)
 #Frame 4 - Output Token
-frame4=Frame(root, width=400, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
+frame4=Frame(root, width=850, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
 frame4.place(x=870, y=130)
 #Frame 5 - Semantic
-frame5=Frame(root, width=400, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
-frame5.place(x=1115, y=130)
+#frame5=Frame(root, width=400, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
+#frame5.place(x=1115, y=130)
 
 #OUTPUT Lex TEXT AREA
 scrollbar3=ttk.Scrollbar(frame3, orient='vertical')
@@ -196,24 +196,22 @@ Output.pack(side="left")
 
 #OUTPUT Token TEXT AREA
 scrollbar4=ttk.Scrollbar(frame4, orient='vertical')
-OutputTok = Text(frame4, width = 18, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar4.set)
+OutputTok = Text(frame4, width = 44, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar4.set)
 scrollbar4.config(command=OutputTok.yview)
 scrollbar4.pack(side=RIGHT, fill=Y)
 OutputTok.pack(side="left")
 
 #OUTPUT Semantic TEXT AREA
-scrollbar5=ttk.Scrollbar(frame5, orient='vertical')
-OutputSem = Text(frame5, width = 18, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar5.set)
-scrollbar5.config(command=OutputSem.yview)
-scrollbar5.pack(side=RIGHT, fill=Y)
-OutputSem.pack(side="left")
+#scrollbar5=ttk.Scrollbar(frame5, orient='vertical')
+#OutputSem = Text(frame5, width = 18, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar5.set)
+#scrollbar5.config(command=OutputSem.yview)
+#scrollbar5.pack(side=RIGHT, fill=Y)
+#OutputSem.pack(side="left")
 
 lblLex=Label(root,text="Lexeme", font = ("Nunito",14), fg='white',bg='#171717')
 lblLex.place(x=630,y=98)
-lblTok=Label(root,text="Token" , font = ("Nunito",14), fg='white',bg='#171717')
+lblTok=Label(root,text="Tokens / Syntax" , font = ("Nunito",14), fg='white',bg='#171717')
 lblTok.place(x=880,y=98) 
-lblSem=Label(root,text="Semantic" , font = ("Nunito",14), fg='white',bg='#171717')
-lblSem.place(x=1130,y=98) 
 lblErr=Label(root,text="Errors", font = ("Nunito",14), fg='white',bg='#171717')
 lblErr.place(x=25,y=580)
 
