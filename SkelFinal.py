@@ -86,9 +86,12 @@ def Take_input():
                 break
         try:
             listVal = delimDict[prevToken]
-            if not(tok.type == 'space' or tok.type == 'newline'):
+            if not(tok.type == 'space'):
                 if (tok.value not in listVal and tok.type not in listVal):
-                    lexerrors.append("ERROR: '{}' not a delimiter for '{}' at line {}".format(tok.value, prevValue, tok.lineno))
+                    if(tok.value == '\n'):
+                        lexerrors.append("ERROR: '{}' not a delimiter for '{}' at line {}".format('\\n', prevValue, tok.lineno))
+                    else:
+                        lexerrors.append("ERROR: '{}' not a delimiter for '{}' at line {}".format(tok.value, prevValue, tok.lineno))
                     tokens = tokens[:-1]
             prevToken = tok.type
             prevValue = tok.value
@@ -99,7 +102,7 @@ def Take_input():
                 lexerrors.append("ERROR: Reserved word '{}' as identifier at line {}".format(tok.value, tok.lineno))
                 continue
             if tok.type == 'error2':
-                lexerrors.append("ERROR: Invalid lexeme/delim '{}' at line {}".format(tok.value,tok.lineno))
+                lexerrors.append("ERROR: Invalid lexeme '{}' at line {}".format(tok.value,tok.lineno))
                 continue
             tokens.append(tok)
         except:
@@ -112,7 +115,7 @@ def Take_input():
                 lexerrors.append("ERROR: Reserved word '{}' as identifier at line {}".format(tok.value, tok.lineno))
                 continue
             if tok.type == 'error2':
-                lexerrors.append("ERROR: Incomplete word/missing delim '{}' at line {}".format(tok.value,tok.lineno))
+                lexerrors.append("ERROR: Invalid lexeme '{}' at line {}".format(tok.value,tok.lineno))
                 continue
             if tok.type == 'space' or tok.type == 'newline':
                 continue
