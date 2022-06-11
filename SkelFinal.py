@@ -166,14 +166,21 @@ def Run_Syntax():
             Errors.insert(END, '\n')
     else:
         Errors.insert(END, ("{}".format("No Lexical Error")))
-    for x in out:
-        # print(x)
-        y = x.tabs
-        z = 0
-        while y > z:
-            print("|__", end=" ")
-            z += 1
-        print(x.output)
+        
+    if out:
+        for x in out:
+            # print(x)
+            y = x.tabs
+            z = 0
+            while y > z:
+                print("|__", end=" ")
+                OutputTok.insert(END, '|__')
+                z += 1
+            OutputTok.insert(END, x.output)
+            OutputTok.insert(END, '\n')
+    Output.configure(state='disabled')
+    OutputTok.configure(state='disabled')
+    Errors.configure(state='disabled')
 
             
     
