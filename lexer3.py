@@ -20,8 +20,8 @@ tokens = [
     'Switch',
     'For',
     'In',
-    'Sys',
     'Sys_Call',
+    'Sys',
     'Execute',
     'Fixed',
     'Return',
@@ -121,8 +121,8 @@ t_Discharge = r'Discharge'
 t_Switch = r'Switch'
 t_For = r'For'
 t_In = r'In'
+t_Sys_Call = r'Sys\.Call'
 t_Sys = r'Sys'
-t_Sys_Call = r'Sys_Call'
 t_Execute = r'Execute'
 t_Fixed = r'Fixed'
 t_Return = r'Return'
@@ -337,7 +337,7 @@ delimDict = {
     'close_par' : ['space', '[', '+', '-', '*', '/', '%', '**', '//', '>', '<', '==', '!=', '>=', '<=', 'And', 'Or', 'Not', ':', ')', 'newline'],
     'open_brace' : ['id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', 'lit_str', '}', 'space', 'newline'],
     'close_brace' : ['id', 'reserved_word', ')', '+', '-', '//', '**', '*', '/', '%', '=', '-=', '+=', '*=', '/=', '**=', '%=', '//=', '<=', '>=', '!=', '>', '<', '==', 'And', 'Or', 'Not', 'space', 'newline'],
-    'open_bracket' : ['id', 'reserved_word', 'id', '\"', '\“', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
+    'open_bracket' : ['id', 'newline', 'reserved_word', 'id', '\"', '\“', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
     'close_bracket' : ['space', 'newline', ''],
     'comma' : ['space', 'id', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
     'colon' : ['id', 'reserved_word', '['], 

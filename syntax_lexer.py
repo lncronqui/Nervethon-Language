@@ -19,8 +19,8 @@ tokens = [
     'Switch',
     'For',
     'In',
-    'Sys',
     'Sys_Call',
+    'Sys',
     'Execute',
     'Fixed',
     'Return',
@@ -114,8 +114,8 @@ t_Discharge = r'Discharge'
 t_Switch = r'Switch'
 t_For = r'For'
 t_In = r'In'
+t_Sys_Call = r'Sys\.Call'
 t_Sys = r'Sys'
-t_Sys_Call = r'Sys_Call'
 t_Execute = r'Execute'
 t_Fixed = r'Fixed'
 t_Return = r'Return'
