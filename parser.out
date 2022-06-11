@@ -3,6 +3,9 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 Unused terminals:
 
     comment
+    error1
+    error2
+    space
 
 Grammar
 
@@ -216,6 +219,8 @@ divide_equal         : 93
 equal                : 27 28 29 31 36 40 83 85 88 97
 equal_equal          : 119
 error                : 
+error1               : 
+error2               : 
 great_than_equal     : 121
 greater_than         : 117
 id                   : 6 12 16 18 26 29 31 33 38 42 51 81 97 101 101 138 149 151 154 156 158
@@ -238,6 +243,7 @@ open_par             : 61 102 112 123 123 124 132 136 149 156
 period               : 70
 plus                 : 63
 plus_equal           : 90
+space                : 
 times                : 65
 times_equal          : 92
 times_times          : 69
