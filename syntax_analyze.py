@@ -39,22 +39,24 @@ class Node:
                 self.value.traverse()
             if not isinstance(self.value, Node):
                 outputs.append(Output(self.value,tab))
-                tab+=1
+                
             if self.children:
                 for tok in self.children:
+                    tab+=1
                     tok.traverse()
                     tab-=1
                     if tab < 0:
                         tab = 1
+                
         return outputs
     
     def clear(self):
         global outputs
         global tab
         global errors
-        outputs = []
+        outputs.clear()
         tab = 0
-        errors = []
+        errors.clear()
         
             
 start = 'program'
@@ -70,15 +72,34 @@ def p_program(p):
     p[0].add_child(p[5])
     p[0].add_child(p[6])
     
-# def p_program(p):
-#     '''program : global_dec error declare_statements statements error functions'''
-#     p[0] = Node("<program>")
-#     p[0].add_child(p[1])
-#     p[0].add_child(p[2])
-#     p[0].add_child(p[3])
-#     p[0].add_child(p[4])
-#     p[0].add_child(p[5])
-#     p[0].add_child(p[6])
+def p_program_error1(p):
+    '''program : global_dec Link_Start declare_statements statements functions'''
+    p[0] = Node("<program>")
+    p[0].add_child(p[1])
+    p[0].add_child(p[2])
+    p[0].add_child(p[3])
+    p[0].add_child(p[4])
+    p[0].add_child(p[5])
+    errors.append(Error("Link_End", 0))
+    
+def p_program_error2(p):
+    '''program : global_dec declare_statements statements Link_End functions'''
+    p[0] = Node("<program>")
+    p[0].add_child(p[1])
+    p[0].add_child(p[2])
+    p[0].add_child(p[3])
+    p[0].add_child(p[4])
+    p[0].add_child(p[5])
+    errors.append(Error("Link_Start", 0))
+    
+def p_program_error3(p):
+    '''program : global_dec declare_statements statements functions'''
+    p[0] = Node("<program>")
+    p[0].add_child(p[1])
+    p[0].add_child(p[2])
+    p[0].add_child(p[3])
+    p[0].add_child(p[4])
+    errors.append(Error("Link_Start & Link_End", 0))
     
         
 def p_global_dec(p):
@@ -829,7 +850,7 @@ def p_more_param(p):
         pass
                     
 def p_functions(p):
-    ''' functions   : Sys id open_par parameters close_par open_bracket declare_statements function_body close_bracket functions
+    ''' functions   : Sys id open_par parameters close_par open_bracket declare_statements statements return_statement close_bracket functions
                     |'''
     if len(p) > 1:
         p[0] = Node("<functions>")
@@ -843,36 +864,32 @@ def p_functions(p):
         p[0].add_child(p[8])
         p[0].add_child(p[9])
         p[0].add_child(p[10])
+        p[0].add_child(p[11])
     else:
         pass
                     
 def p_parameters(p):
-    ''' parameters  : data_type id parameters
-                    |'''
+    ''' parameters  : data_type id parameters'''
+    p[0] = Node("<parameters>")
+    p[0].add_child(p[1])
+    p[0].add_child(p[2])
+    p[0].add_child(p[3])
+    
+def p_parameters_none(p):
+    ''' parameters  :'''
+    pass
+                        
+def p_return_statement(p):
+    ''' return_statement    : Return value statements return_statement
+                            |'''
     if len(p) > 1:
-        p[0] = Node("<parameters>")
+        p[0] = Node("<return_statement>")
         p[0].add_child(p[1])
         p[0].add_child(p[2])
         p[0].add_child(p[3])
+        p[0].add_child(p[4])
     else:
         pass
-                    
-def p_function_body(p):
-    ''' function_body   : statements function_body
-                        | return_statement function_body
-                        |'''
-    if len(p) > 1:
-        p[0] = Node("<function_body>")
-        p[0].add_child(p[1])
-        p[0].add_child(p[2])
-    else:
-        pass
-                        
-def p_return_statement(p):
-    ''' return_statement    : Return value'''
-    p[0] = Node("<return_statement>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
     
 def p_error(p):
     global errors

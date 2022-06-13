@@ -172,7 +172,6 @@ def Run_Syntax():
             y = x.tabs
             z = 0
             while y > z:
-                print("|__", end=" ")
                 OutputTok.insert(END, '|__')
                 z += 1
             OutputTok.insert(END, x.output)
