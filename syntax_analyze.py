@@ -47,6 +47,14 @@ class Node:
                     if tab < 0:
                         tab = 1
         return outputs
+    
+    def clear(self):
+        global outputs
+        global tab
+        global errors
+        outputs = []
+        tab = 0
+        errors = []
         
             
 start = 'program'
@@ -61,6 +69,16 @@ def p_program(p):
     p[0].add_child(p[4])
     p[0].add_child(p[5])
     p[0].add_child(p[6])
+    
+# def p_program(p):
+#     '''program : global_dec error declare_statements statements error functions'''
+#     p[0] = Node("<program>")
+#     p[0].add_child(p[1])
+#     p[0].add_child(p[2])
+#     p[0].add_child(p[3])
+#     p[0].add_child(p[4])
+#     p[0].add_child(p[5])
+#     p[0].add_child(p[6])
     
         
 def p_global_dec(p):

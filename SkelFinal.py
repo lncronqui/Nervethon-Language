@@ -159,7 +159,6 @@ def Run_Syntax():
     lexer_syntax.lineno = 1
     result = parser.parse(INPUT, lexer=lexer_syntax)
     out = result.traverse()
-    print(errors)
     if errors:
         for i in errors:
             Errors.insert(END, ("Syntax error at token '{}' on line {}".format(i.type, i.lineno)))
@@ -178,9 +177,12 @@ def Run_Syntax():
                 z += 1
             OutputTok.insert(END, x.output)
             OutputTok.insert(END, '\n')
+            
+    result.clear()
     Output.configure(state='disabled')
     OutputTok.configure(state='disabled')
     Errors.configure(state='disabled')
+    
 
             
     
