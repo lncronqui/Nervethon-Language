@@ -242,7 +242,7 @@ t_period =  r'\.'
 
 t_id = r'([a-z]\w{0,19})'
 
-t_error1 = r'(e(?i:nd\.switch)|b(?i:reak)|l(?i:ink\.start)|l(?i:ink\.end)|g(?i:enerate)|s(?i:ys\.call)|s(?i:ys)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:void)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse)|i(?i:n))'
+t_error1 = r'(\b(end\.switch)\b|\b(break)\b|\b(link\.start)\b|\b(link\.end)\b|\b(generate)\b|\b(sys\.call)\b|\b(sys)\b|\b(discharge)\b|\b(absorb)\b|\b(if)\b|\b(elif)\b|\b(else)\b|\b(switch)\b|\b(execute)\b|\b(default)\b|\b(for)\b|\b(while)\b|\b(exit)\b|\b(continue)\b|\b(avoid)\b|\b(fixed)\b|\b(struct)\b|\b(void)\b|\b(return)\b|\b(integer)\b|\b(boolean)\b|\b(string)\b|\b(decimal)\b|\b(and)\b|\b(or)\b|\b(not)\b|\b(true)\b|\b(false)\b|\b(in)\b)'
 #t_error2 = r'[\S]+'
 
 
