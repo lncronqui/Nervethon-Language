@@ -6,17 +6,11 @@ from syntax_lexer import tokens
 class Output(NamedTuple):
     output: str
     tabs: int
-    
-class Error(NamedTuple):
-    type: str
-    lineno: int
-    
 
 outputs = []
 errors = []
 tab = 0
-class Node:
-    
+class Node:  
     def __init__(self,value=">"):
         global tab
         self.value = value
@@ -30,7 +24,6 @@ class Node:
                 self.children.append(Node(value))
         else:
             self.value = value
-        
     def traverse(self):
         global outputs
         global tab
@@ -46,10 +39,8 @@ class Node:
                     tok.traverse()
                     tab-=1
                     if tab < 0:
-                        tab = 1
-                
-        return outputs
-    
+                        tab = 1        
+        return outputs 
     def clear(self):
         global outputs
         global tab
@@ -57,10 +48,8 @@ class Node:
         outputs.clear()
         tab = 0
         errors.clear()
-        
-            
+                
 start = 'program'
-
 
 def p_program(p):
     '''program : global_dec Link_Start declare_statements statements Link_End functions'''
@@ -80,7 +69,7 @@ def p_program_error1(p):
     p[0].add_child(p[3])
     p[0].add_child(p[4])
     p[0].add_child(p[5])
-    errors.append(Error("Link_End", 0))
+    errors.append("Expected 'Link.End' for main function")
     
 def p_program_error2(p):
     '''program : global_dec declare_statements statements Link_End functions'''
@@ -90,7 +79,7 @@ def p_program_error2(p):
     p[0].add_child(p[3])
     p[0].add_child(p[4])
     p[0].add_child(p[5])
-    errors.append(Error("Link_Start", 0))
+    errors.append("Expected 'Link.Start' for main function")
     
 def p_program_error3(p):
     '''program : global_dec declare_statements statements functions'''
@@ -99,7 +88,7 @@ def p_program_error3(p):
     p[0].add_child(p[2])
     p[0].add_child(p[3])
     p[0].add_child(p[4])
-    errors.append(Error("Link_Start & Link_End", 0))
+    errors.append("Expected 'Link.Start' and 'Link.End' in program")
     
         
 def p_global_dec(p):
@@ -123,6 +112,22 @@ def p_struct_dec(p):
     p[0].add_child(p[5])
     p[0].add_child(p[6])
     p[0].add_child(p[7])
+    
+def p_struct_dec_error1(p):
+    ''' struct_dec : Struct id open_bracket struct_element1 struct_element2 id_array1
+                    | Struct id struct_element1 struct_element2 id_array1'''
+    p[0] = Node("<struct_dec>")
+    if len(p) >= 6:
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+        p[0].add_child(p[3])
+        p[0].add_child(p[4])
+        p[0].add_child(p[5])
+        errors.append("Expected 'open_bracket' token after 'id' on line")
+    if len(p) >= 7:
+        p[0].add_child(p[6])
+        errors.append("Expected 'close_bracket' token before 'id_array1'")
+    
     
 def p_struct_element1(p):
     ''' struct_element1 : data_type id_array_dec'''
@@ -894,7 +899,7 @@ def p_return_statement(p):
 def p_error(p):
     global errors
     if p is not None:
-        errors.append(Error(p.type, p.lineno))       
+        errors.append("Unexpected token '{}'".format(p.type))       
     parser.errok()
     
 parser = yacc.yacc()

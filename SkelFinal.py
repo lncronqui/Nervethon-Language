@@ -161,7 +161,7 @@ def Run_Syntax():
     out = result.traverse()
     if errors:
         for i in errors:
-            Errors.insert(END, ("Syntax error at token '{}' on line {}".format(i.type, i.lineno)))
+            Errors.insert(END, ("ERROR: {}".format(i)))
             Errors.insert(END, '\n')
     else:
         Errors.insert(END, ("{}".format("No Lexical Error")))
