@@ -164,7 +164,7 @@ def Run_Syntax():
             Errors.insert(END, ("ERROR: {}".format(i)))
             Errors.insert(END, '\n')
     else:
-        Errors.insert(END, ("{}".format("No Lexical Error")))
+        Errors.insert(END, ("{}".format("No Syntax Error")))
         
     if out:
         for x in out:
@@ -241,7 +241,7 @@ Clear=Button(frame_top, width=129, height=32, image=photo_imageClear, border=0, 
 Clear.place(x=760, y =16)
 Run_Lexical=Button(frame_top, width=175, height=35, image=photo_imageLexical, border=0, activebackground='#0F0F0F', background='#0F0F0F', command = lambda:Take_input())
 Run_Lexical.place(x=925, y=15)
-Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', background='#0F0F0F', command = lambda:Run_Syntax())
+Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', state='disabled', background='#0F0F0F', command = lambda:Run_Syntax())
 Run_Semantic.place(x=1139, y =15)
 
 

@@ -52,43 +52,22 @@ class Node:
 start = 'program'
 
 def p_program(p):
-    '''program : global_dec Link_Start declare_statements statements Link_End functions'''
-    p[0] = Node("<program>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
-    p[0].add_child(p[3])
-    p[0].add_child(p[4])
-    p[0].add_child(p[5])
-    p[0].add_child(p[6])
+    '''program : global_dec Link_Start declare_statements statements Link_End functions
+                | global_dec Link_Start declare_statements statements functions
+                | global_dec declare_statements statements Link_End functions
+                | global_dec declare_statements statements functions'''
+    if len(p) == 7:
+        p[0] = Node("<program>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+        p[0].add_child(p[3])
+        p[0].add_child(p[4])
+        p[0].add_child(p[5])
+        p[0].add_child(p[6])
+    else:
+        p[0] = Node("<program>")
+        errors.append("Lacking 'Link_Start' or 'Link_End' token")
     
-def p_program_error1(p):
-    '''program : global_dec Link_Start declare_statements statements functions'''
-    p[0] = Node("<program>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
-    p[0].add_child(p[3])
-    p[0].add_child(p[4])
-    p[0].add_child(p[5])
-    errors.append("Expected 'Link.End' for main function")
-    
-def p_program_error2(p):
-    '''program : global_dec declare_statements statements Link_End functions'''
-    p[0] = Node("<program>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
-    p[0].add_child(p[3])
-    p[0].add_child(p[4])
-    p[0].add_child(p[5])
-    errors.append("Expected 'Link.Start' for main function")
-    
-def p_program_error3(p):
-    '''program : global_dec declare_statements statements functions'''
-    p[0] = Node("<program>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
-    p[0].add_child(p[3])
-    p[0].add_child(p[4])
-    errors.append("Expected 'Link.Start' and 'Link.End' in program")
     
         
 def p_global_dec(p):
@@ -103,30 +82,22 @@ def p_global_dec(p):
         pass
                 
 def p_struct_dec(p):
-    ''' struct_dec : Struct id open_bracket struct_element1 struct_element2 close_bracket id_array1'''
-    p[0] = Node("<struct_dec>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
-    p[0].add_child(p[3])
-    p[0].add_child(p[4])
-    p[0].add_child(p[5])
-    p[0].add_child(p[6])
-    p[0].add_child(p[7])
-    
-def p_struct_dec_error1(p):
-    ''' struct_dec : Struct id open_bracket struct_element1 struct_element2 id_array1
-                    | Struct id struct_element1 struct_element2 id_array1'''
-    p[0] = Node("<struct_dec>")
-    if len(p) >= 6:
+    ''' struct_dec : Struct id open_bracket struct_element1 struct_element2 close_bracket id_array1
+                    | Struct open_bracket struct_element1 struct_element2 close_bracket id_array1
+                    |'''
+    if len(p) == 8:
+        p[0] = Node("<struct_dec>")
         p[0].add_child(p[1])
         p[0].add_child(p[2])
         p[0].add_child(p[3])
         p[0].add_child(p[4])
         p[0].add_child(p[5])
-        errors.append("Expected 'open_bracket' token after 'id' on line")
-    if len(p) >= 7:
         p[0].add_child(p[6])
-        errors.append("Expected 'close_bracket' token before 'id_array1'")
+        p[0].add_child(p[7])
+    else:
+        p[0] = Node("<struct_dec>")
+        errors.append("Incorrect syntax at <struct_dec>")
+
     
     
 def p_struct_element1(p):
@@ -140,16 +111,26 @@ def p_data_type(p):
     ''' data_type : Integer
                 | Decimal
                 | String
-                | Boolean '''
+                | Boolean'''
     p[0] = Node("<data_type>")
     p[0].add_child(p[1])
+    
+def p_data_type_error(p):
+    ''' data_type :'''
+    p[0] = Node("<data_type>")
+    errors.append("Incorrect syntax at '<data_type>'")
 
 
 def p_id_array_dec(p):
-    ''' id_array_dec : id id_array_dec2'''
-    p[0] = Node("<id_array_dec>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
+    ''' id_array_dec : id id_array_dec2
+                    |'''
+    if len(p) > 1:
+        p[0] = Node("<id_array_dec>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+    else:
+        p[0] = Node("<id_array_dec>")
+        errors.append("Incorrect syntax at '<id_array_dec>'")
 
 def p_id_array_dec2(p):
     ''' id_array_dec2 : id_dec1'''
@@ -163,6 +144,7 @@ def p_id_array_dec2_more(p):
     p[0].add_child(p[2])
     p[0].add_child(p[3])
     p[0].add_child(p[4])
+    
         
 def p_id_dec1(p):
     ''' id_dec1 : comma id id_dec1
@@ -223,15 +205,25 @@ def p_const_var_dec_more(p):
     p[0] = Node("<const_var_dec>")
     p[0].add_child(p[1])
     p[0].add_child(p[2])
+    
+def p_const_var_dec_error(p):
+    ''' const_var_dec : '''
+    p[0] = Node("<const_var_dec>")
+    errors.append("Incorrect syntax as '<const_var_dec>'")
                     
 def p_id_array_const(p):
-    ''' id_array_const : id id_array_const2 '''
-    p[0] = Node("<id_array_const>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
+    ''' id_array_const : id id_array_const2
+                        |'''
+    if len(p) > 1:
+        p[0] = Node("<id_array_const>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+    else:
+        p[0] = Node("<id_array_const>")
+        errors.append("Incorrect syntax on '<id_array_const>'")
 
 def p_id_array_const2(p):
-    ''' id_array_const2 : open_brace lit_intposi close_brace equal open_brace value1 close_brace array_const1 '''
+    ''' id_array_const2 : open_brace lit_intposi close_brace equal open_brace value1 close_brace array_const1'''
     p[0] = Node("<id_array_const2>")
     p[0].add_child(p[1])
     p[0].add_child(p[2])
@@ -248,13 +240,17 @@ def p_id_array_const2_more(p):
     p[0].add_child(p[1])
     p[0].add_child(p[2])
     p[0].add_child(p[3])
+        
+def p_id_array_const2_error(p):
+    ''' id_array_const2 :'''
+    p[0] = Node("<id_array_const2>")
+    errors.append("Incorrect syntax on '<id_array_const2>")
                         
 def p_id_const1(p):
     ''' id_const1 : comma id equal value id_const1 
                 |'''
     if len(p) > 1:
         p[0] = Node("<id_const1>")
-        p[0].children = [p[1], p[2], p[3], p[4], p[5]]
         p[0].add_child(p[1])
         p[0].add_child(p[2])
         p[0].add_child(p[3])
@@ -301,6 +297,7 @@ def p_id_array_var2_more(p):
     p[0].add_child(p[3])
     p[0].add_child(p[4])
     p[0].add_child(p[5])
+    
 
 def p_var_init(p):
     ''' var_init : equal value id_var1
@@ -330,7 +327,6 @@ def p_array_init(p):
                 |'''
     if len(p) > 1:
         p[0] = Node("<array_init>")
-        p[0].children = [p[1], p[2], p[3], p[4], p[5]]
         p[0].add_child(p[1])
         p[0].add_child(p[2])
         p[0].add_child(p[3])
@@ -364,6 +360,12 @@ def p_value(p):
             | lit_bool'''
     p[0] = Node("<value>")
     p[0].add_child(p[1])
+    
+def p_value_error(p):
+    ''' value :'''
+    p[0] = Node("<value>")
+    errors.append("Incorrect syntax at '<value>'")
+    
              
 def p_num_value(p):
     ''' num_value : id_array id_struct'''
@@ -378,37 +380,56 @@ def p_num_value_more(p):
                 | func_call'''
     p[0] = Node("<num_value>")
     p[0].add_child(p[1])
+    
+def p_num_value_error(p):
+    ''' num_value :'''
+    p[0] = Node("<num_value>")
+    errors.append("Incorrect syntax at '<num_value>'")
                 
 def p_id_array(p):
-    ''' id_array : id array'''
-    p[0] = Node("<id_array>")
+    ''' id_array : id array
+                |'''
+    if len(p) > 1:
+        p[0] = Node("<id_array>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+    else:
+        p[0] = Node("<id_array>")
+        errors.append("Incorrect syntax at '<id_array>'")
+    
+def p_array(p):
+    ''' array : open_brace num_value close_brace''' 
+    p[0] = Node("<array>")
+    p[0].add_child(p[1])
+    p[0].add_child(p[2])
+    p[0].add_child(p[3])
+    
+def p_array_more(p):
+    ''' array : open_brace close_brace''' 
+    p[0] = Node("<array>")
     p[0].add_child(p[1])
     p[0].add_child(p[2])
     
-def p_array(p):
-    ''' array : open_brace lit_intposi close_brace 
-            |''' 
-    if len(p) > 1:
-        p[0] = Node("<array>")
-        p[0].children = [p[1], p[2], p[3]]
-        p[0].add_child(p[1])
-        p[0].add_child(p[2])
-        p[0].add_child(p[3])
-    else:
-        pass
+def p_array_none(p):
+    ''' array : '''
+    pass
 
 def p_id_array1(p):
-    ''' id_array1 : id_array id_array2'''
-    p[0] = Node("<id_array1>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
+    ''' id_array1 : id_array id_array2
+                |'''
+    if len(p) > 1:
+        p[0] = Node("<id_array1>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+    else:
+        p[0] = Node("<id_array1>")
+        errors.append("Incorrect syntax at '<id_array1>'")
     
 def p_id_array2(p):
     ''' id_array2 : comma id_array1
                 |'''
     if len(p) > 1:
         p[0] = Node("<id_array2>")
-        p[0].children = [p[1], p[2]]
         p[0].add_child(p[1])
         p[0].add_child(p[2])
     else:
@@ -418,9 +439,14 @@ def p_literals(p):
     '''literals : lit_intposi
                 | lit_intnega
                 | lit_decposi
-                | lit_decnega'''
-    p[0] = Node("<literals>")
-    p[0].add_child(p[1])
+                | lit_decnega
+                |'''
+    if len(p) > 1:
+        p[0] = Node("<literals>")
+        p[0].add_child(p[1])
+    else:
+        p[0] = Node("<literals>")
+        errors.append("Incorrect syntax at '<literals>'")
 
 def p_arithmetic_expression_group(p):
     '''arithmetic_expression : open_par arithmetic_expression close_par'''
@@ -477,7 +503,10 @@ def p_value2(p):
 
 def p_statements(p):
     '''statements : assignment_statements statements 
-                | looping_statements statements
+                | for_statements statements
+                | while_statements statements
+                | if_statement statements
+                | switch_statements statements
                 | conditional_statements statements
                 | io_statements statements
                 | func_call statements
@@ -490,10 +519,15 @@ def p_statements(p):
         pass
 
 def p_assignment_statements(p):
-    '''assignment_statements : id assignment_statements2'''
-    p[0] = Node("<assignment_statements>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
+    '''assignment_statements : id assignment_statements2
+                            |'''
+    if len(p) > 1:                        
+        p[0] = Node("<assignment_statements>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+    else:
+        p[0] = Node("<assignment_statements>")
+        errors.append("Incorrect syntax at '<assignment_statements>'")
 
 def p_assignment_statements2(p):
     '''assignment_statements2 : array id_struct assignment_exp'''
@@ -525,6 +559,11 @@ def p_assignment_exp_more(p):
     p[0] = Node("<assignment_exp>")
     p[0].add_child(p[1])
     p[0].add_child(p[2])
+    
+def p_assignment_exp_error(p):
+    '''assignment_exp :'''
+    p[0] = Node("<assignment_exp>")
+    errors.append("Incorrect syntax at '<assignment_exp>'")
 
 def p_assign_value(p):
     '''assign_value : num_value'''
@@ -574,41 +613,51 @@ def p_more_array(p):
     else:
         pass
 
-def p_looping_statements(p):
-    '''looping_statements : for_statements
-                        | while_statements'''
-    p[0] = Node("<looping_statements>")
-    p[0].add_child(p[1])
+# def p_looping_statements(p):
+#     '''looping_statements : for_statements
+#                         | while_statements'''
+#     p[0] = Node("<looping_statements>")
+#     p[0].add_child(p[1])
 
 def p_for_statements(p):
-    '''for_statements : For id In id open_brace close_brace colon open_bracket inside_statements close_bracket'''
-    p[0] = Node("<for_statements>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
-    p[0].add_child(p[3])
-    p[0].add_child(p[4])
-    p[0].add_child(p[5])
-    p[0].add_child(p[6])
-    p[0].add_child(p[7])
-    p[0].add_child(p[8])
-    p[0].add_child(p[9])
-    p[0].add_child(p[10])
+    '''for_statements : For id In id open_brace close_brace colon open_bracket inside_statements close_bracket
+                        |'''
+    if len(p) == 11:
+        p[0] = Node("<for_statements>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+        p[0].add_child(p[3])
+        p[0].add_child(p[4])
+        p[0].add_child(p[5])
+        p[0].add_child(p[6])
+        p[0].add_child(p[7])
+        p[0].add_child(p[8])
+        p[0].add_child(p[9])
+        p[0].add_child(p[10])
+    else:
+        p[0] = Node("<for_statements>")
+        errors.append("Incorrect syntax at '<for_statements>'")
 
 def p_while_statements(p):
-    '''while_statements : While open_par condition close_par colon open_bracket inside_statements close_bracket'''
-    p[0] = Node("<while_statements>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
-    p[0].add_child(p[3])
-    p[0].add_child(p[4])
-    p[0].add_child(p[5])
-    p[0].add_child(p[6])
-    p[0].add_child(p[7])
-    p[0].add_child(p[8])
+    '''while_statements : While open_par condition close_par colon open_bracket inside_statements close_bracket
+                        |'''
+    if len(p) > 1:
+        p[0] = Node("<while_statements>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+        p[0].add_child(p[3])
+        p[0].add_child(p[4])
+        p[0].add_child(p[5])
+        p[0].add_child(p[6])
+        p[0].add_child(p[7])
+        p[0].add_child(p[8])
+    else:
+        p[0] = Node("<while_statements>")
+        errors.append("Incorrect syntax at '<while_statements>'")
 
 def p_inside_statements(p):
-    '''inside_statements : statements inside_statements
-                        | control_statements inside_statements
+    '''inside_statements : statements control_statements
+                        | control_statements statements
                         |'''
     if len(p) > 1:
         p[0] = Node("<inside_statements>")
@@ -620,9 +669,13 @@ def p_inside_statements(p):
 def p_control_statements(p):
     '''control_statements : Break
                         | Continue
-                        | Avoid'''
-    p[0] = Node("<control_statements>")
-    p[0].add_child(p[1])
+                        | Avoid
+                        |'''
+    if len(p) > 1:
+        p[0] = Node("<control_statements>")
+        p[0].add_child(p[1])
+    else:
+        pass
                             
 def p_condition(p):
     ''' condition   : relational_expression
@@ -638,6 +691,10 @@ def p_condition_more(p):
     p[0].add_child(p[3])
     p[0].add_child(p[4])
                     
+def p_condition_none(p):
+    p[0] = Node("<condition>")
+    errors.append("Incorrect syntax at '<condition>'")
+
 def p_condition_more1(p):
     ''' condition   : lit_bool'''
     p[0] = Node("<condition>")
@@ -714,16 +771,21 @@ def p_conditional_statements(p):
     p[0].add_child(p[1])
                                 
 def p_if_statement(p):
-    ''' if_statement    : If open_par condition close_par colon open_bracket inside_statements close_bracket condition_else'''
-    p[0] = Node("<if_statement>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
-    p[0].add_child(p[3])
-    p[0].add_child(p[4])
-    p[0].add_child(p[5])
-    p[0].add_child(p[6])
-    p[0].add_child(p[7])
-    p[0].add_child(p[8])
+    ''' if_statement    : If open_par condition close_par colon open_bracket inside_statements close_bracket condition_else
+                        |'''
+    if len(p) > 0:
+        p[0] = Node("<if_statement>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+        p[0].add_child(p[3])
+        p[0].add_child(p[4])
+        p[0].add_child(p[5])
+        p[0].add_child(p[6])
+        p[0].add_child(p[7])
+        p[0].add_child(p[8])
+    else:
+        p[0] = Node("<if_statement>")
+        errors.append("Incorrect syntax at '<if_statement>'")
     
 def p_condition_else(p):
     ''' condition_else  : elif_statement
@@ -817,6 +879,7 @@ def p_output_statement(p):
     p[0].add_child(p[1])
     p[0].add_child(p[2])
     
+    
 def p_func_call(p):
     ''' func_call   : Sys_Call id open_par function_param close_par'''
     p[0] = Node("<func_call>")
@@ -874,7 +937,7 @@ def p_functions(p):
         pass
                     
 def p_parameters(p):
-    ''' parameters  : data_type id parameters'''
+    ''' parameters  : data_type id more_parameters'''
     p[0] = Node("<parameters>")
     p[0].add_child(p[1])
     p[0].add_child(p[2])
@@ -883,6 +946,18 @@ def p_parameters(p):
 def p_parameters_none(p):
     ''' parameters  :'''
     pass
+
+def p_more_parameters(p):
+    ''' more_parameters : comma data_type id more_parameters
+                        |'''
+    if len(p) > 1:
+        p[0] = Node("<more_parameters>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+        p[0].add_child(p[3])
+        p[0].add_child(p[4])
+    else:
+        pass
                         
 def p_return_statement(p):
     ''' return_statement    : Return value statements return_statement
@@ -899,7 +974,7 @@ def p_return_statement(p):
 def p_error(p):
     global errors
     if p is not None:
-        errors.append("Unexpected token '{}'".format(p.type))       
+        errors.append("Unexpected token '{}' at line {}".format(p.type, p.lineno))       
     parser.errok()
     
 parser = yacc.yacc()

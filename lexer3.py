@@ -104,51 +104,102 @@ tokens = [
     
     #errors
     'error1', #non-keyword
-    #'error2' #incomplete word
+    'error2' #incomplete word
 ]
 
 def t_ignore_comment(t):
     r'(\/\*)[\s\S]*?(\*\/)'
 
-t_Integer = r'Integer'
-t_Decimal = r'Decimal'
-t_String = r'String'
-t_Boolean = r'Boolean'
-t_Struct = r'Struct'
-t_Generate = r'Generate'
-t_Absorb = r'Absorb'
-t_Discharge = r'Discharge'
-t_Switch = r'Switch'
-t_For = r'For'
-t_In = r'In'
-t_Sys_Call = r'Sys\.Call'
-t_Sys = r'Sys'
-t_Execute = r'Execute'
-t_Fixed = r'Fixed'
-t_Return = r'Return'
-
-
-t_Default = r'Default'
-t_Else = r'Else'
-
-
-t_If = r'If'
-t_Elif = r'Elif'
-t_And = r'And'
-t_Or = r'Or'
-t_Not = r'Not'
-t_While = r'While'
-
-
-t_Link_End = r'Link\.End'
-
-
-t_Link_Start = r'Link\.Start'
-t_End_Switch = r'End\.Switch'
-t_Break = r'Break'
-t_Continue = r'Continue'
-t_Avoid = r'Avoid'
-
+def t_Integer(t):
+    r'Integer'
+    return t
+def t_Decimal(t):
+    r'Decimal'
+    return t
+def t_String(t):
+    r'String'
+    return t
+def t_Boolean(t):
+    r'Boolean'
+    return t
+def t_Struct(t):
+    r'Struct'
+    return t
+def t_Generate(t):
+    r'Generate'
+    return t
+def t_Absorb(t):
+    r'Absorb'
+    return t
+def t_Discharge(t):
+    r'Discharge'
+    return t
+def t_Switch(t):
+    r'Switch'
+    return t
+def t_For(t):
+    r'For'
+    return t
+def t_In(t):
+    r'In'
+    return t
+def t_Sys_Call(t):
+    r'Sys\.Call'
+    return t
+def t_Sys(t):
+    r'Sys'
+    return t
+def t_Execute(t):
+    r'Execute'
+    return t
+def t_Fixed(t):
+    r'Fixed'
+    return t
+def t_Return(t):
+    r'Return'
+    return t
+def t_Default(t):
+    r'Default'
+    return t
+def t_Else(t):
+    r'Else'
+    return t
+def t_If(t):
+    r'If'
+    return t
+def t_Elif(t):
+    r'Elif'
+    return t
+def t_And(t):
+    r'And'
+    return t
+def t_Or(t):
+    r'Or'
+    return t
+def t_Not(t):
+    r'Not'
+    return t
+def t_While(t):
+    r'While'
+    return t
+def t_Link_End(t):
+    r'Link\.End'
+    return t
+def t_Link_Start(t):
+    r'Link\.Start'
+    return t
+def t_End_Switch(t):
+    r'End\.Switch'
+    return t
+def t_Break(t):
+    r'Break'
+    return t
+def t_Continue(t):
+    r'Continue'
+    return t
+def t_Avoid(t):
+    r'Avoid'
+    return t
 
 def t_lit_decposi(t):
     r'(([0-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4}))'
@@ -168,8 +219,6 @@ def t_lit_intnega(t):
     return t
 t_lit_str = r'[\"\“]{1}(([^\"^\n^\“^\”])*)?[\"\”]{1}'
 t_lit_bool = r'(True|False)'
-
-
 
 #relational
 t_less_than_equal = r'\<\='
@@ -227,7 +276,6 @@ def t_modulo(t):
     r'\%'
     return t
 
-
 t_open_par = r'\('
 t_close_par = r'\)'
 t_open_brace = r'\{'
@@ -235,16 +283,15 @@ t_close_brace = r'\}'
 t_open_bracket = r'\['
 t_close_bracket =  r'\]'
 
-
 t_comma = r'\,'
 t_colon = r'\:'
 t_period =  r'\.'
 
 t_id = r'([a-z]\w{0,19})'
 
-t_error1 = r'(\b(end\.switch)\b|\b(break)\b|\b(link\.start)\b|\b(link\.end)\b|\b(generate)\b|\b(sys\.call)\b|\b(sys)\b|\b(discharge)\b|\b(absorb)\b|\b(if)\b|\b(elif)\b|\b(else)\b|\b(switch)\b|\b(execute)\b|\b(default)\b|\b(for)\b|\b(while)\b|\b(exit)\b|\b(continue)\b|\b(avoid)\b|\b(fixed)\b|\b(struct)\b|\b(void)\b|\b(return)\b|\b(integer)\b|\b(boolean)\b|\b(string)\b|\b(decimal)\b|\b(and)\b|\b(or)\b|\b(not)\b|\b(true)\b|\b(false)\b|\b(in)\b)'
-#t_error2 = r'[\S]+'
+t_error1 = r'((e(?i:nd\.switch)|b(?i:reak)|l(?i:ink\.start)|l(?i:ink\.end)|g(?i:enerate)|s(?i:ys\.call)|s(?i:ys)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:void)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse)|i(?i:n))(?=[\s]|$))|(E(?i:nd\.switch)|B(?i:reak)|L(?i:ink\.start)|L(?i:ink\.end)|G(?i:enerate)|S(?i:ys\.call)|S(?i:ys)|D(?i:ischarge)|A(?i:bsorb)|I(?i:f)|E(?i:lif)|E(?i:lse)|S(?i:witch)|E(?i:xecute)|D(?i:efault)|F(?i:or)|W(?i:hile)|E(?i:xit)|C(?i:ontinue)|A(?i:void)|F(?i:ixed)|S(?i:truct)|V(?i:oid)|R(?i:eturn)|I(?i:nteger)|B(?i:oolean)|S(?i:tring)|D(?i:ecimal)|A(?i:nd)|O(?i:r)|N(?i:ot)|T(?i:rue)|F(?i:alse)|I(?i:n))'
 
+t_error2 = r'^[\s][\S]+'
 
 def t_space(t):
     r'[ \t]'
@@ -255,7 +302,6 @@ def t_newline(t):
     r'\n'
     t.lexer.lineno += len(t.value)
     return t
-
 
 def t_error(t):
      t.lexer.skip(1)
@@ -333,19 +379,19 @@ delimDict = {
     'times_times' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
     'divide_divide' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
     'modulo' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
-    'open_par' : ['lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', 'And', 'Or', 'Not', '(', ')', 'space', 'id'],
+    'open_par' : ['lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', 'And', 'Or', 'Not', '(', ')', 'space', 'id', 'Integer', 'String', 'Decimal', 'Boolean'],
     'close_par' : ['space', '[', '+', '-', '*', '/', '%', '**', '//', '>', '<', '==', '!=', '>=', '<=', 'And', 'Or', 'Not', ':', ')', 'newline'],
     'open_brace' : ['id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', 'lit_str', '}', 'space', 'newline'],
-    'close_brace' : ['id', 'reserved_word', ')', '+', '-', '//', '**', '*', '/', '%', '=', '-=', '+=', '*=', '/=', '**=', '%=', '//=', '<=', '>=', '!=', '>', '<', '==', 'And', 'Or', 'Not', 'space', 'newline'],
+    'close_brace' : ['id', 'reserved_word', ')', '+', '-', '//', '**', '*', '/', '%', '=', '-=', '+=', '*=', '/=', '**=', '%=', '//=', '<=', '>=', '!=', '>', '<', '==', 'And', 'Or', 'Not', 'space', 'newline', ':'],
     'open_bracket' : ['id', 'newline', 'reserved_word', 'id', '\"', '\“', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
     'close_bracket' : ['space', 'newline', ''],
     'comma' : ['space', 'id', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
-    'colon' : ['id', 'reserved_word', '['], 
+    'colon' : ['id', 'reserved_word', '[', 'newline'], 
     'period' : ['id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
     'id' : ['space', 'newline', '.', ',', '(', ')', '[', ']', 
             '+', '-', '//', '**', '*', '/', '%', '=', 
             '-=', '+=', '*=', '/=', '**=', 
             '%=', '//=', '>=', '<=', '!=', 
-            '>', '<', '==', ':', '{']
+            '>', '<', '==', ':', '{', '}']
     
 }
