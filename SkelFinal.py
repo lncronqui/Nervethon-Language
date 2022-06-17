@@ -181,6 +181,7 @@ def Run_Syntax():
     Output.configure(state='disabled')
     OutputTok.configure(state='disabled')
     Errors.configure(state='disabled')
+    Run_Semantic.configure(state = 'disabled')
     
 
             

@@ -82,10 +82,15 @@ def p_global_dec(p):
         pass
                 
 def p_struct_dec(p):
-    ''' struct_dec : Struct id open_bracket struct_element1 struct_element2 close_bracket id_array1
-                    | Struct open_bracket struct_element1 struct_element2 close_bracket id_array1
+    ''' struct_dec : Struct id open_bracket struct_element1 close_bracket id_array1
+                    | Struct id struct_element1 id_array1
+                    | Struct open_bracket struct_element1 id_array1
+                    | Struct struct_element1 close_bracket id_array1
+                    | Struct id open_bracket struct_element1 id_array1
+                    | Struct id struct_element1 close_bracket id_array1
+                    | Struct open_bracket struct_element1 close_bracket id_array1
                     |'''
-    if len(p) == 8:
+    if len(p) == 7:
         p[0] = Node("<struct_dec>")
         p[0].add_child(p[1])
         p[0].add_child(p[2])
@@ -93,7 +98,6 @@ def p_struct_dec(p):
         p[0].add_child(p[4])
         p[0].add_child(p[5])
         p[0].add_child(p[6])
-        p[0].add_child(p[7])
     else:
         p[0] = Node("<struct_dec>")
         errors.append("Incorrect syntax at <struct_dec>")
@@ -101,10 +105,20 @@ def p_struct_dec(p):
     
     
 def p_struct_element1(p):
-    ''' struct_element1 : data_type id_array_dec'''
+    ''' struct_element1 : data_type id_array_dec struct_element2'''
     p[0] = Node("<struct_element1>")
     p[0].add_child(p[1])
     p[0].add_child(p[2])
+    p[0].add_child(p[3])
+    
+def p_struct_element2(p):
+    ''' struct_element2 : struct_element1
+                        |'''
+    if len(p) > 1:
+        p[0] = Node("<struct_element2>")
+        p[0].add_child(p[1])
+    else:
+        pass
 
     
 def p_data_type(p):
@@ -171,16 +185,15 @@ def p_array_dec1(p):
     else:
         pass
     
-def p_struct_element2(p):
-    ''' struct_element2 : comma struct_element1 struct_element2
-                        |'''
-    if len(p) > 1:
-        p[0] = Node("<struct_element2>")
-        p[0].add_child(p[1])
-        p[0].add_child(p[2])
-        p[0].add_child(p[3])
-    else:
-        pass
+# def p_struct_element2(p):
+#     ''' struct_element2 : struct_element1 struct_element2
+#                         |'''
+#     if len(p) > 1:
+#         p[0] = Node("<struct_element2>")
+#         p[0].add_child(p[1])
+#         p[0].add_child(p[2])
+#     else:
+#         pass
                         
 def p_declare_statements(p):
     ''' declare_statements : Generate const_var_dec declare_statements
@@ -350,22 +363,24 @@ def p_array_var1(p):
     else:
         pass
     
-def p_value_num_value(p):
-    ''' value : num_value'''
-    p[0] = Node("<value>")
-    p[0].add_child(p[1])
-
 def p_value(p):
-    ''' value : lit_str
+    ''' value : num_value
+            | lit_str
+            | lit_bool
+            |'''
+    if len(p) > 1:
+        p[0] = Node("<value>")
+        p[0].add_child(p[1])
+    else:
+        p[0] = Node("<value>")
+        errors.append("Incorrect syntax at '<value>'")
+        
+def p_value_opt(p):
+    ''' value_opt : num_value_opt
+            | lit_str
             | lit_bool'''
     p[0] = Node("<value>")
     p[0].add_child(p[1])
-    
-def p_value_error(p):
-    ''' value :'''
-    p[0] = Node("<value>")
-    errors.append("Incorrect syntax at '<value>'")
-    
              
 def p_num_value(p):
     ''' num_value : id_array id_struct'''
@@ -385,6 +400,22 @@ def p_num_value_error(p):
     ''' num_value :'''
     p[0] = Node("<num_value>")
     errors.append("Incorrect syntax at '<num_value>'")
+    
+def p_num_value_opt(p):
+    ''' num_value_opt : id_array_opt id_struct'''
+    p[0] = Node("<num_value>")
+    p[0].add_child(p[1])
+    p[0].add_child(p[2])
+        
+        
+def p_num_value_opt_more(p):
+    ''' num_value_opt : literals_opt
+                | arithmetic_expression
+                | func_call'''
+    p[0] = Node("<num_value>")
+    p[0].add_child(p[1])
+    
+    
                 
 def p_id_array(p):
     ''' id_array : id array
@@ -396,6 +427,12 @@ def p_id_array(p):
     else:
         p[0] = Node("<id_array>")
         errors.append("Incorrect syntax at '<id_array>'")
+        
+def p_id_array_opt(p):
+    ''' id_array_opt : id array'''
+    p[0] = Node("<id_array>")
+    p[0].add_child(p[1])
+    p[0].add_child(p[2])
     
 def p_array(p):
     ''' array : open_brace num_value close_brace''' 
@@ -447,6 +484,14 @@ def p_literals(p):
     else:
         p[0] = Node("<literals>")
         errors.append("Incorrect syntax at '<literals>'")
+        
+def p_literals_opt(p):
+    '''literals_opt : lit_intposi
+                | lit_intnega
+                | lit_decposi
+                | lit_decnega'''
+    p[0] = Node("<literals>")
+    p[0].add_child(p[1])
 
 def p_arithmetic_expression_group(p):
     '''arithmetic_expression : open_par arithmetic_expression close_par'''
@@ -493,6 +538,23 @@ def p_value1(p):
 
 def p_value2(p):
     '''value2 : comma value1 
+            |'''
+    if len(p) > 1:
+        p[0] = Node("<value2>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+    else:
+        pass
+    
+
+def p_value1_opt(p):
+    '''value1_opt : value_opt value2_opt'''
+    p[0] = Node("<value1>")
+    p[0].add_child(p[1])
+    p[0].add_child(p[2])
+
+def p_value2_opt(p):
+    '''value2_opt : comma value1_opt 
             |'''
     if len(p) > 1:
         p[0] = Node("<value2>")
@@ -811,13 +873,18 @@ def p_elif_statement(p):
     
     
 def p_else_statement(p):
-    ''' else_statement  : Else colon open_bracket inside_statements close_bracket'''
-    p[0] = Node("<else_statement>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
-    p[0].add_child(p[3])
-    p[0].add_child(p[4])
-    p[0].add_child(p[5])
+    ''' else_statement  : Else colon open_bracket inside_statements close_bracket
+                        |'''
+    if len(p) > 1:
+        p[0] = Node("<else_statement>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+        p[0].add_child(p[3])
+        p[0].add_child(p[4])
+        p[0].add_child(p[5])
+    else:
+        p[0] = Node("<else_statement>")
+        errors.append("Incorrect syntax at '<else_statement>'")
     
 def p_switch_statements(p):
     ''' switch_statements   : Switch id colon open_bracket execute Default colon inside_statements close_bracket End_Switch'''
@@ -890,22 +957,22 @@ def p_func_call(p):
     p[0].add_child(p[5])
     
 def p_function_param(p):
-    ''' function_param  : id open_brace close_brace more_param
-                        |'''
-    if len(p) > 1:
-        p[0] = Node("<function_param>")
-        p[0].add_child(p[1])
-        p[0].add_child(p[2])
-        p[0].add_child(p[3])
-        p[0].add_child(p[4])
-    else:
-        pass
-    
-def p_function_param_more(p):
-    ''' function_param  : value1 more_param'''
+    ''' function_param  : id open_brace close_brace more_param'''
     p[0] = Node("<function_param>")
     p[0].add_child(p[1])
     p[0].add_child(p[2])
+    p[0].add_child(p[3])
+    p[0].add_child(p[4])
+    
+def p_function_param_more(p):
+    ''' function_param  : value1_opt more_param'''
+    p[0] = Node("<function_param>")
+    p[0].add_child(p[1])
+    p[0].add_child(p[2])
+    
+def p_function_param_none(p):
+    ''' function_param :'''
+    pass
                         
 def p_more_param(p):
     ''' more_param  : comma function_param
@@ -919,20 +986,54 @@ def p_more_param(p):
                     
 def p_functions(p):
     ''' functions   : Sys id open_par parameters close_par open_bracket declare_statements statements return_statement close_bracket functions
+                    | Sys id parameters declare_statements statements return_statement functions
+                    | Sys open_par parameters declare_statements statements return_statement functions
+                    | Sys parameters close_par declare_statements statements return_statement functions
+                    | Sys parameters open_bracket declare_statements statements return_statement functions
+                    | Sys parameters declare_statements statements return_statement close_bracket functions
+                    | Sys id open_par parameters declare_statements statements return_statement functions
+                    | Sys id parameters close_par declare_statements statements return_statement functions
+                    | Sys id parameters open_bracket declare_statements statements return_statement functions
+                    | Sys id parameters declare_statements statements return_statement close_bracket functions
+                    | Sys open_par parameters close_par declare_statements statements return_statement functions
+                    | Sys open_par parameters open_bracket declare_statements statements return_statement functions
+                    | Sys open_par parameters declare_statements statements return_statement close_bracket functions
+                    | Sys parameters close_par open_bracket declare_statements statements return_statement functions
+                    | Sys parameters close_par declare_statements statements return_statement close_bracket functions
+                    | Sys parameters open_bracket declare_statements statements return_statement close_bracket functions
+                    | Sys id open_par parameters close_par declare_statements statements return_statement functions
+                    | Sys id open_par parameters open_bracket declare_statements statements return_statement functions
+                    | Sys id open_par parameters declare_statements statements return_statement close_bracket functions
+                    | Sys id parameters close_par open_bracket declare_statements statements return_statement functions
+                    | Sys id parameters close_par declare_statements statements return_statement close_bracket functions
+                    | Sys id parameters open_bracket declare_statements statements return_statement close_bracket functions
+                    | Sys open_par parameters close_par open_bracket declare_statements statements return_statement functions
+                    | Sys open_par parameters close_par declare_statements statements return_statement close_bracket functions
+                    | Sys open_par parameters open_bracket declare_statements statements return_statement close_bracket functions
+                    | Sys parameters close_par open_bracket declare_statements statements return_statement close_bracket functions
+                    | Sys id open_par parameters close_par open_bracket declare_statements statements return_statement functions
+                    | Sys id open_par parameters close_par declare_statements statements return_statement close_bracket functions
+                    | Sys id open_par parameters open_bracket declare_statements statements return_statement close_bracket functions
+                    | Sys id parameters close_par open_bracket declare_statements statements return_statement close_bracket functions
+                    | Sys open_par parameters close_par open_bracket declare_statements statements return_statement close_bracket functions
                     |'''
     if len(p) > 1:
-        p[0] = Node("<functions>")
-        p[0].add_child(p[1])
-        p[0].add_child(p[2])
-        p[0].add_child(p[3])
-        p[0].add_child(p[4])
-        p[0].add_child(p[5])
-        p[0].add_child(p[6])
-        p[0].add_child(p[7])
-        p[0].add_child(p[8])
-        p[0].add_child(p[9])
-        p[0].add_child(p[10])
-        p[0].add_child(p[11])
+        if len(p) == 12:
+            p[0] = Node("<functions>")
+            p[0].add_child(p[1])
+            p[0].add_child(p[2])
+            p[0].add_child(p[3])
+            p[0].add_child(p[4])
+            p[0].add_child(p[5])
+            p[0].add_child(p[6])
+            p[0].add_child(p[7])
+            p[0].add_child(p[8])
+            p[0].add_child(p[9])
+            p[0].add_child(p[10])
+            p[0].add_child(p[11])
+        else:
+            p[0] = Node("<functions>")
+            errors.append("Incorrect syntax at '<functions>'")
     else:
         pass
                     
