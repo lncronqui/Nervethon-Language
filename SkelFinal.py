@@ -106,6 +106,9 @@ def Take_input():
             if tok.type == 'error2':
                 lexerrors.append("ERROR: Invalid lexeme '{}' at line {}".format(tok.value,tok.lineno))
                 continue
+            if tok.type == 'error3':
+                lexerrors.append("error3")
+                continue
             tokens.append(tok)
         except:
             prevToken = tok.type
@@ -118,6 +121,9 @@ def Take_input():
                 continue
             if tok.type == 'error2':
                 lexerrors.append("ERROR: Invalid lexeme '{}' at line {}".format(tok.value,tok.lineno))
+                continue
+            if tok.type == 'error3':
+                lexerrors.append("error3")
                 continue
             if tok.type == 'space' or tok.type == 'newline':
                 continue

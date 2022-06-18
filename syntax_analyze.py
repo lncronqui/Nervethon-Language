@@ -834,17 +834,51 @@ def p_conditional_statements(p):
                                 
 def p_if_statement(p):
     ''' if_statement    : If open_par condition close_par colon open_bracket inside_statements close_bracket condition_else
-                        |'''
+                        | If open_par condition inside_statements condition_else
+                        | If condition close_par inside_statements condition_else
+                        | If condition colon inside_statements condition_else
+                        | If condition open_bracket inside_statements condition_else
+                        | If condition inside_statements close_bracket condition_else
+                        | If open_par condition close_par inside_statements condition_else
+                        | If open_par condition colon inside_statements condition_else
+                        | If open_par condition open_bracket inside_statements condition_else
+                        | If open_par condition inside_statements close_bracket condition_else
+                        | If condition close_par colon inside_statements condition_else
+                        | If condition close_par open_bracket inside_statements condition_else
+                        | If condition close_par inside_statements close_bracket condition_else
+                        | If condition colon open_bracket inside_statements condition_else
+                        | If condition colon inside_statements close_bracket condition_else
+                        | If condition open_bracket inside_statements close_bracket condition_else
+                        | If open_par condition close_par colon inside_statements condition_else
+                        | If open_par condition close_par open_bracket inside_statements condition_else
+                        | If open_par condition close_par inside_statements close_bracket condition_else
+                        | If open_par condition colon open_bracket inside_statements condition_else
+                        | If open_par condition colon inside_statements close_bracket condition_else
+                        | If open_par condition open_bracket inside_statements close_bracket condition_else
+                        | If condition close_par colon open_bracket inside_statements condition_else
+                        | If condition close_par colon inside_statements close_bracket condition_else
+                        | If condition close_par open_bracket inside_statements close_bracket condition_else
+                        | If condition colon open_bracket inside_statements close_bracket condition_else
+                        | If open_par condition close_par colon open_bracket inside_statements condition_else
+                        | If open_par condition close_par colon inside_statements close_bracket condition_else
+                        | If open_par condition close_par open_bracket inside_statements close_bracket condition_else
+                        | If open_par condition colon open_bracket inside_statements close_bracket condition_else
+                        | If condition close_par colon open_bracket inside_statements close_bracket condition_else'''
     if len(p) > 0:
-        p[0] = Node("<if_statement>")
-        p[0].add_child(p[1])
-        p[0].add_child(p[2])
-        p[0].add_child(p[3])
-        p[0].add_child(p[4])
-        p[0].add_child(p[5])
-        p[0].add_child(p[6])
-        p[0].add_child(p[7])
-        p[0].add_child(p[8])
+        if len(p) == 10:
+            p[0] = Node("<if_statement>")
+            p[0].add_child(p[1])
+            p[0].add_child(p[2])
+            p[0].add_child(p[3])    
+            p[0].add_child(p[4])
+            p[0].add_child(p[5])
+            p[0].add_child(p[6])
+            p[0].add_child(p[7])
+            p[0].add_child(p[8])
+            p[0].add_child(p[9])
+        else:
+            p[0] = Node("<if_statement>")
+            errors.append("Incorrect syntax at '<if_statement>'")
     else:
         p[0] = Node("<if_statement>")
         errors.append("Incorrect syntax at '<if_statement>'")

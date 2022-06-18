@@ -104,7 +104,8 @@ tokens = [
     
     #errors
     'error1', #non-keyword
-    'error2' #incomplete word
+    'error2', #incomplete word
+    'error3'
 ]
 
 def t_ignore_comment(t):
@@ -221,12 +222,24 @@ t_lit_str = r'[\"\“]{1}(([^\"^\n^\“^\”])*)?[\"\”]{1}'
 t_lit_bool = r'(True|False)'
 
 #relational
-t_less_than_equal = r'\<\='
-t_great_than_equal = r'\>\='
-t_not_equal = r'\!\='
-t_less_than = r'\<'
-t_greater_than = r'\>'
-t_equal_equal = r'\=\='
+def t_less_than_equal(t):
+    r'\<\='
+    return t
+def t_great_than_equal(t):
+    r'\>\='
+    return t
+def t_not_equal(t):
+    r'\!\='
+    return t
+def t_less_than(t):
+    r'\<'
+    return t
+def t_greater_than(t):
+    r'\>'
+    return t
+def t_equal_equal(t):
+    r'\=\='
+    return t
 
 
 #assignment
@@ -251,7 +264,9 @@ def t_modulo_equal(t):
 def t_divide_divide_equal(t):
     r'\/\/\='
     return t
-t_equal = r'[=]'
+def t_equal(t):
+    r'[=]'
+    return t
 
 #arithmetic
 def t_plus(t):
@@ -276,22 +291,44 @@ def t_modulo(t):
     r'\%'
     return t
 
-t_open_par = r'\('
-t_close_par = r'\)'
-t_open_brace = r'\{'
-t_close_brace = r'\}'
-t_open_bracket = r'\['
-t_close_bracket =  r'\]'
+def t_open_par(t):
+    r'\('
+    return t
+def t_close_par(t):
+    r'\)'
+    return t
+def t_open_brace(t):
+    r'\{'
+    return t
+def t_close_brace(t):
+    r'\}'
+    return t
+def t_open_bracket(t):
+    r'\['
+    return t
+def t_close_bracket(t):
+    r'\]'
+    return t
 
-t_comma = r'\,'
-t_colon = r'\:'
-t_period =  r'\.'
+def t_comma(t):
+    r'\,'
+    return t
+def t_colon(t):
+    r'\:'
+    return t
+def t_period(t):
+    r'\.'
+    return t
 
-t_id = r'([a-z]\w{0,19})'
+def t_id(t):
+    r'([a-z]\w{0,19})'
+    return t
 
 t_error1 = r'((e(?i:nd\.switch)|b(?i:reak)|l(?i:ink\.start)|l(?i:ink\.end)|g(?i:enerate)|s(?i:ys\.call)|s(?i:ys)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:void)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse)|i(?i:n))(?=[\s]|$))|(E(?i:nd\.switch)|B(?i:reak)|L(?i:ink\.start)|L(?i:ink\.end)|G(?i:enerate)|S(?i:ys\.call)|S(?i:ys)|D(?i:ischarge)|A(?i:bsorb)|I(?i:f)|E(?i:lif)|E(?i:lse)|S(?i:witch)|E(?i:xecute)|D(?i:efault)|F(?i:or)|W(?i:hile)|E(?i:xit)|C(?i:ontinue)|A(?i:void)|F(?i:ixed)|S(?i:truct)|V(?i:oid)|R(?i:eturn)|I(?i:nteger)|B(?i:oolean)|S(?i:tring)|D(?i:ecimal)|A(?i:nd)|O(?i:r)|N(?i:ot)|T(?i:rue)|F(?i:alse)|I(?i:n))'
+t_error3 = r'[A-Z][\w](?=\s)'
+t_error2 = r'^\s+|\S+'
 
-t_error2 = r'^[\s][\S]+'
+
 
 def t_space(t):
     r'[ \t]'
