@@ -680,16 +680,133 @@ def p_more_array(p):
     else:
         pass
 
-# def p_looping_statements(p):
-#     '''looping_statements : for_statements
-#                         | while_statements'''
-#     p[0] = Node("<looping_statements>")
-#     p[0].add_child(p[1])
+def p_block(p):
+    '''block : open_bracket inside_statements close_bracket
+            | inside_statements close_bracket
+            | open_bracket inside_statements
+            | inside_statements'''
+    if len(p) == 4:
+        p[0] = Node("<block>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+        p[0].add_child(p[3])
+        p[0].add_child(p[4])
+    else:
+        p[0] = Node("<block>")
+        errors.append("Syntax error at '<block>'")
 
 def p_for_statements(p):
-    '''for_statements : For id In id open_brace close_brace colon open_bracket inside_statements close_bracket
-                        |'''
-    if len(p) == 11:
+    '''for_statements : For id In id open_brace close_brace colon block
+                        | For id In id open_brace close_brace colon
+                        | For id In id open_brace close_brace block
+                        | For id In id open_brace colon block
+                        | For id In id close_brace colon block
+                        | For id In open_brace close_brace colon block
+                        | For id id open_brace close_brace colon block
+                        | For In id open_brace close_brace colon block
+                        | For id In id open_brace close_brace
+                        | For id In id open_brace colon
+                        | For id In id open_brace block
+                        | For id In id close_brace colon
+                        | For id In id close_brace block
+                        | For id In id colon block
+                        | For id In open_brace close_brace colon
+                        | For id In open_brace close_brace block
+                        | For id In open_brace colon block
+                        | For id In close_brace colon block
+                        | For id id open_brace close_brace colon
+                        | For id id open_brace close_brace block
+                        | For id id open_brace colon block
+                        | For id id close_brace colon block
+                        | For id open_brace close_brace colon block
+                        | For In id open_brace close_brace colon
+                        | For In id open_brace close_brace block
+                        | For In id open_brace colon block
+                        | For In id close_brace colon block
+                        | For In open_brace close_brace colon block
+                        | For id In id open_brace
+                        | For id In id close_brace
+                        | For id In id colon
+                        | For id In id block
+                        | For id In open_brace close_brace
+                        | For id In open_brace colon
+                        | For id In open_brace block
+                        | For id In close_brace colon
+                        | For id In close_brace block
+                        | For id In colon block
+                        | For id id open_brace close_brace
+                        | For id id open_brace colon
+                        | For id id open_brace block
+                        | For id id close_brace colon
+                        | For id id close_brace block
+                        | For id id colon block
+                        | For id open_brace close_brace colon
+                        | For id open_brace close_brace block
+                        | For id open_brace colon block
+                        | For id close_brace colon block
+                        | For In id open_brace close_brace
+                        | For In id open_brace colon
+                        | For In id open_brace block
+                        | For In id close_brace colon
+                        | For In id close_brace block
+                        | For In id colon block
+                        | For In open_brace close_brace colon
+                        | For In open_brace close_brace block
+                        | For In open_brace colon block
+                        | For open_brace close_brace colon block
+                        | For id In id
+                        | For id In open_brace
+                        | For id In close_brace
+                        | For id In colon
+                        | For id In block
+                        | For id id open_brace
+                        | For id id close_brace
+                        | For id id colon
+                        | For id id block
+                        | For id open_brace close_brace
+                        | For id open_brace colon
+                        | For id open_brace block
+                        | For id close_brace colon
+                        | For id close_brace block
+                        | For id colon block
+                        | For In id open_brace
+                        | For In id close_brace
+                        | For In id colon
+                        | For In id block
+                        | For In open_brace close_brace
+                        | For In open_brace colon
+                        | For In open_brace block
+                        | For In close_brace colon
+                        | For In close_brace block
+                        | For In colon block
+                        | For open_brace close_brace colon
+                        | For open_brace close_brace block
+                        | For open_brace colon block
+                        | For close_brace colon block
+                        | For id In
+                        | For id id
+                        | For id open_brace
+                        | For id close_brace
+                        | For id colon
+                        | For id block
+                        | For In id
+                        | For In open_brace
+                        | For In close_brace
+                        | For In colon
+                        | For In block
+                        | For open_brace close_brace
+                        | For open_brace colon
+                        | For open_brace block
+                        | For close_brace colon
+                        | For close_brace block
+                        | For colon block
+                        | For id
+                        | For In
+                        | For open_brace
+                        | For close_brace
+                        | For colon
+                        | For block'''
+    if len(p) == 9:
         p[0] = Node("<for_statements>")
         p[0].add_child(p[1])
         p[0].add_child(p[2])
@@ -699,15 +816,18 @@ def p_for_statements(p):
         p[0].add_child(p[6])
         p[0].add_child(p[7])
         p[0].add_child(p[8])
-        p[0].add_child(p[9])
-        p[0].add_child(p[10])
     else:
         p[0] = Node("<for_statements>")
         errors.append("Incorrect syntax at '<for_statements>'")
 
 def p_while_statements(p):
-    '''while_statements : While open_par condition close_par colon open_bracket inside_statements close_bracket
-                        |'''
+    '''while_statements : While open_par condition close_par colon block
+                        | While open_par condition close_par block
+                        | While open_par condition colon block
+                        | While condition close_par colon block
+                        | While open_par condition block
+                        | While condition close_par block
+                        | While condition colon block'''
     if len(p) > 1:
         p[0] = Node("<while_statements>")
         p[0].add_child(p[1])
@@ -746,7 +866,8 @@ def p_control_statements(p):
                             
 def p_condition(p):
     ''' condition   : relational_expression
-                    | logical_expression'''
+                    | logical_expression
+                    | lit_bool'''
     p[0] = Node("<condition>")
     p[0].add_child(p[1])
         
@@ -761,11 +882,6 @@ def p_condition_more(p):
 def p_condition_none(p):
     p[0] = Node("<condition>")
     errors.append("Incorrect syntax at '<condition>'")
-
-def p_condition_more1(p):
-    ''' condition   : lit_bool'''
-    p[0] = Node("<condition>")
-    p[0].add_child(p[1])
                     
 def p_condition_not(p):
     ''' condition_not   : relational_expression
@@ -838,37 +954,7 @@ def p_conditional_statements(p):
     p[0].add_child(p[1])
                                 
 def p_if_statement(p):
-    ''' if_statement    : If open_par condition close_par colon open_bracket inside_statements close_bracket condition_else
-                        | If open_par condition inside_statements condition_else
-                        | If condition close_par inside_statements condition_else
-                        | If condition colon inside_statements condition_else
-                        | If condition open_bracket inside_statements condition_else
-                        | If condition inside_statements close_bracket condition_else
-                        | If open_par condition close_par inside_statements condition_else
-                        | If open_par condition colon inside_statements condition_else
-                        | If open_par condition open_bracket inside_statements condition_else
-                        | If open_par condition inside_statements close_bracket condition_else
-                        | If condition close_par colon inside_statements condition_else
-                        | If condition close_par open_bracket inside_statements condition_else
-                        | If condition close_par inside_statements close_bracket condition_else
-                        | If condition colon open_bracket inside_statements condition_else
-                        | If condition colon inside_statements close_bracket condition_else
-                        | If condition open_bracket inside_statements close_bracket condition_else
-                        | If open_par condition close_par colon inside_statements condition_else
-                        | If open_par condition close_par open_bracket inside_statements condition_else
-                        | If open_par condition close_par inside_statements close_bracket condition_else
-                        | If open_par condition colon open_bracket inside_statements condition_else
-                        | If open_par condition colon inside_statements close_bracket condition_else
-                        | If open_par condition open_bracket inside_statements close_bracket condition_else
-                        | If condition close_par colon open_bracket inside_statements condition_else
-                        | If condition close_par colon inside_statements close_bracket condition_else
-                        | If condition close_par open_bracket inside_statements close_bracket condition_else
-                        | If condition colon open_bracket inside_statements close_bracket condition_else
-                        | If open_par condition close_par colon open_bracket inside_statements condition_else
-                        | If open_par condition close_par colon inside_statements close_bracket condition_else
-                        | If open_par condition close_par open_bracket inside_statements close_bracket condition_else
-                        | If open_par condition colon open_bracket inside_statements close_bracket condition_else
-                        | If condition close_par colon open_bracket inside_statements close_bracket condition_else'''
+    ''' if_statement    : If open_par condition close_par colon block condition_else'''
     if len(p) > 0:
         if len(p) == 10:
             p[0] = Node("<if_statement>")
@@ -899,7 +985,7 @@ def p_condition_else_empty(p):
     pass
                         
 def p_elif_statement(p):
-    ''' elif_statement  : Elif open_par condition close_par colon open_bracket inside_statements close_bracket condition_else'''
+    ''' elif_statement  : Elif open_par condition close_par colon block condition_else'''
     p[0] = Node("<elif_statement>")
     p[0].add_child(p[1])
     p[0].add_child(p[2])
@@ -912,7 +998,7 @@ def p_elif_statement(p):
     
     
 def p_else_statement(p):
-    ''' else_statement  : Else colon open_bracket inside_statements close_bracket
+    ''' else_statement  : Else colon block
                         |'''
     if len(p) > 1:
         p[0] = Node("<else_statement>")
