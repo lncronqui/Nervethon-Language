@@ -218,8 +218,13 @@ def t_lit_intnega(t):
     r'(\-[1-9]\d{0,8})'
     t.value = int(t.value)
     return t
-t_lit_str = r'[\"\“]{1}(([^\"^\n^\“^\”])*)?[\"\”]{1}'
-t_lit_bool = r'(True|False)'
+def t_lit_str(t):
+    r'[\"\“]{1}(([^\"^\n^\“^\”])*)?[\"\”]{1}'
+    return t
+
+def t_lit_bool(t): 
+    r'(True|False)'
+    return t
 
 #relational
 def t_less_than_equal(t):
@@ -319,16 +324,11 @@ def t_colon(t):
 def t_period(t):
     r'\.'
     return t
-
-def t_id(t):
-    r'([a-z]\w{0,19})'
-    return t
-
+    
+t_id = r'([a-z]\w{0,19})'
 t_error1 = r'((e(?i:nd\.switch)|b(?i:reak)|l(?i:ink\.start)|l(?i:ink\.end)|g(?i:enerate)|s(?i:ys\.call)|s(?i:ys)|d(?i:ischarge)|a(?i:bsorb)|i(?i:f)|e(?i:lif)|e(?i:lse)|s(?i:witch)|e(?i:xecute)|d(?i:efault)|f(?i:or)|w(?i:hile)|e(?i:xit)|c(?i:ontinue)|a(?i:void)|f(?i:ixed)|s(?i:truct)|v(?i:oid)|r(?i:eturn)|i(?i:nteger)|b(?i:oolean)|s(?i:tring)|d(?i:ecimal)|a(?i:nd)|o(?i:r)|n(?i:ot)|t(?i:rue)|f(?i:alse)|i(?i:n))(?=[\s]|$))|(E(?i:nd\.switch)|B(?i:reak)|L(?i:ink\.start)|L(?i:ink\.end)|G(?i:enerate)|S(?i:ys\.call)|S(?i:ys)|D(?i:ischarge)|A(?i:bsorb)|I(?i:f)|E(?i:lif)|E(?i:lse)|S(?i:witch)|E(?i:xecute)|D(?i:efault)|F(?i:or)|W(?i:hile)|E(?i:xit)|C(?i:ontinue)|A(?i:void)|F(?i:ixed)|S(?i:truct)|V(?i:oid)|R(?i:eturn)|I(?i:nteger)|B(?i:oolean)|S(?i:tring)|D(?i:ecimal)|A(?i:nd)|O(?i:r)|N(?i:ot)|T(?i:rue)|F(?i:alse)|I(?i:n))'
 t_error3 = r'[A-Z][\w](?=\s)'
 t_error2 = r'^\s+|\S+'
-
-
 
 def t_space(t):
     r'[ \t]'
