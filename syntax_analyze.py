@@ -220,7 +220,7 @@ def p_const_var_dec_more(p):
     p[0].add_child(p[2])
     
 def p_const_var_dec_error(p):
-    ''' const_var_dec : '''
+    ''' const_var_dec :'''
     p[0] = Node("<const_var_dec>")
     errors.append("Incorrect syntax as '<const_var_dec>'")
                     
@@ -291,10 +291,15 @@ def p_array_const1(p):
         pass
                     
 def p_id_array_var(p):
-    ''' id_array_var : id id_array_var2 '''
-    p[0] = Node("<id_array_var>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
+    ''' id_array_var : id id_array_var2
+                    |'''
+    if len(p) > 1:
+        p[0] = Node("<id_array_var>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+    else:
+        p[0] = Node("<id_array_var>")
+        errors.append("Syntax error at '<id_array_var>'")
     
 def p_id_array_var2(p):
     ''' id_array_var2 : var_init id_var1'''
