@@ -690,7 +690,6 @@ def p_block(p):
         p[0].add_child(p[1])
         p[0].add_child(p[2])
         p[0].add_child(p[3])
-        p[0].add_child(p[4])
     else:
         p[0] = Node("<block>")
         errors.append("Syntax error at '<block>'")
@@ -828,7 +827,7 @@ def p_while_statements(p):
                         | While open_par condition block
                         | While condition close_par block
                         | While condition colon block'''
-    if len(p) > 1:
+    if len(p) == 7:
         p[0] = Node("<while_statements>")
         p[0].add_child(p[1])
         p[0].add_child(p[2])
@@ -836,8 +835,6 @@ def p_while_statements(p):
         p[0].add_child(p[4])
         p[0].add_child(p[5])
         p[0].add_child(p[6])
-        p[0].add_child(p[7])
-        p[0].add_child(p[8])
     else:
         p[0] = Node("<while_statements>")
         errors.append("Incorrect syntax at '<while_statements>'")
@@ -955,21 +952,15 @@ def p_conditional_statements(p):
                                 
 def p_if_statement(p):
     ''' if_statement    : If open_par condition close_par colon block condition_else'''
-    if len(p) > 0:
-        if len(p) == 10:
-            p[0] = Node("<if_statement>")
-            p[0].add_child(p[1])
-            p[0].add_child(p[2])
-            p[0].add_child(p[3])    
-            p[0].add_child(p[4])
-            p[0].add_child(p[5])
-            p[0].add_child(p[6])
-            p[0].add_child(p[7])
-            p[0].add_child(p[8])
-            p[0].add_child(p[9])
-        else:
-            p[0] = Node("<if_statement>")
-            errors.append("Incorrect syntax at '<if_statement>'")
+    if len(p) == 8:
+        p[0] = Node("<if_statement>")
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+        p[0].add_child(p[3])    
+        p[0].add_child(p[4])
+        p[0].add_child(p[5])
+        p[0].add_child(p[6])
+        p[0].add_child(p[7])
     else:
         p[0] = Node("<if_statement>")
         errors.append("Incorrect syntax at '<if_statement>'")

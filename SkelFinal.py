@@ -88,13 +88,12 @@ def Take_input():
                 break
         try:
             listVal = delimDict[prevToken]
-            if not(tok.type == 'space'):
-                if (tok.value not in listVal and tok.type not in listVal):
-                    if(tok.value == '\n'):
-                        lexerrors.append("ERROR: '{}' not a delimiter for '{}' at line {}".format('\\n', prevValue, tok.lineno))
-                    else:
-                        lexerrors.append("ERROR: '{}' not a delimiter for '{}' at line {}".format(tok.value, prevValue, tok.lineno))
-                    tokens = tokens[:-1]
+            if (tok.value not in listVal and tok.type not in listVal):
+                if(tok.value == '\n'):
+                    lexerrors.append("ERROR: '{}' not a delimiter for '{}' at line {}".format('\\n', prevValue, tok.lineno))
+                else:
+                    lexerrors.append("ERROR: '{}' not a delimiter for '{}' at line {}".format(tok.value, prevValue, tok.lineno))
+                tokens = tokens[:-1]
             prevToken = tok.type
             prevValue = tok.value
             if tok.type == 'error':
@@ -108,6 +107,8 @@ def Take_input():
                 continue
             if tok.type == 'error3':
                 lexerrors.append("error3")
+                continue
+            if tok.type == 'space' or tok.type == 'newline':
                 continue
             tokens.append(tok)
         except:
