@@ -466,6 +466,11 @@ def p_id_array1(p):
     else:
         p[0] = Node("<id_array1>")
         errors.append("Incorrect syntax at '<id_array1>'")
+        
+def p_id_array1_error(p):
+    ''' id_array1 : id_array id_array'''
+    p[0] = Node("<id_array1>")
+    errors.append("Syntax error at '<id_array1>'")
     
 def p_id_array2(p):
     ''' id_array2 : comma id_array1
@@ -614,6 +619,11 @@ def p_assignment_statements2_more(p):
     p[0].add_child(p[6])
     p[0].add_child(p[7])
     p[0].add_child(p[8])
+    
+def p_assignment_statements2_error(p):
+    '''assignment_statements2 :'''
+    p[0] = Node("<assignment_statements2>")
+    errors.append("Syntax error at '<assignment_statements2>'")
 
 def p_assignment_exp(p):
     '''assignment_exp : assignment_operators num_value'''

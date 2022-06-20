@@ -419,7 +419,7 @@ delimDict = {
     'open_par' : ['lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', 'And', 'Or', 'Not', '(', ')', 'space', 'id', 'Integer', 'String', 'Decimal', 'Boolean'],
     'close_par' : ['space', '[', '+', '-', '*', '/', '%', '**', '//', '>', '<', '==', '!=', '>=', '<=', 'And', 'Or', 'Not', ':', ')', 'newline'],
     'open_brace' : ['id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', 'lit_str', '}', 'space', 'newline'],
-    'close_brace' : ['id', 'reserved_word', ')', '+', '-', '//', '**', '*', '/', '%', '=', '-=', '+=', '*=', '/=', '**=', '%=', '//=', '<=', '>=', '!=', '>', '<', '==', 'And', 'Or', 'Not', 'space', 'newline', ':'],
+    'close_brace' : ['id', 'reserved_word', ')', '+', '-', '//', '**', '*', '/', '%', '=', '-=', '+=', '*=', '/=', '**=', '%=', '//=', '<=', '>=', '!=', '>', '<', '==', 'And', 'Or', 'Not', 'space', 'newline', ':', '.'],
     'open_bracket' : ['id', 'newline', 'reserved_word', 'id', '\"', '\“', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
     'close_bracket' : ['space', 'newline', ''],
     'comma' : ['space', 'id', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega'],
