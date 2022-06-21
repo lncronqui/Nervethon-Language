@@ -299,7 +299,7 @@ def p_id_array_var(p):
         p[0].add_child(p[2])
     else:
         p[0] = Node("<id_array_var>")
-        errors.append("Syntax error at '<id_array_var>'")
+        errors.append("Incorrect syntax at '<id_array_var>'")
     
 def p_id_array_var2(p):
     ''' id_array_var2 : var_init id_var1'''
@@ -470,7 +470,7 @@ def p_id_array1(p):
 def p_id_array1_error(p):
     ''' id_array1 : id_array id_array'''
     p[0] = Node("<id_array1>")
-    errors.append("Syntax error at '<id_array1>'")
+    errors.append("Incorrect syntax at '<id_array1>'")
     
 def p_id_array2(p):
     ''' id_array2 : comma id_array1
@@ -623,7 +623,7 @@ def p_assignment_statements2_more(p):
 def p_assignment_statements2_error(p):
     '''assignment_statements2 :'''
     p[0] = Node("<assignment_statements2>")
-    errors.append("Syntax error at '<assignment_statements2>'")
+    errors.append("Incorrect Syntax at '<assignment_statements2>'")
 
 def p_assignment_exp(p):
     '''assignment_exp : assignment_operators num_value'''
@@ -702,7 +702,7 @@ def p_block(p):
         p[0].add_child(p[3])
     else:
         p[0] = Node("<block>")
-        errors.append("Syntax error at '<block>'")
+        errors.append("Incorrect syntax at '<block>'")
 
 def p_for_statements(p):
     '''for_statements : For id In id open_brace close_brace colon block
@@ -919,15 +919,27 @@ def p_relational_operators(p):
     p[0].add_child(p[1])
                                 
 def p_logical_expression(p):
-    ''' logical_expression  : open_par logical_operand close_par logical_operators open_par logical_operand close_par'''
+    ''' logical_expression  : open_par logical_operand close_par logical_operators open_par logical_operand close_par
+                            | open_par logical_operand close_par logical_operators open_par logical_operand
+                            | open_par logical_operand close_par logical_operators logical_operand close_par
+                            | open_par logical_operand logical_operators open_par logical_operand close_par
+                            | logical_operand close_par logical_operators open_par logical_operand close_par
+                            | open_par logical_operand close_par logical_operators logical_operand
+                            | open_par logical_operand logical_operators open_par logical_operand
+                            | open_par logical_operand logical_operators logical_operand close_par
+                            | logical_operand close_par logical_operators open_par logical_operand
+                            | logical_operand logical_operators open_par logical_operand close_par'''
     p[0] = Node("<logical_expression>")
-    p[0].add_child(p[1])
-    p[0].add_child(p[2])
-    p[0].add_child(p[3])
-    p[0].add_child(p[4])
-    p[0].add_child(p[5])
-    p[0].add_child(p[6])
-    p[0].add_child(p[7])
+    if len(p) == 8:
+        p[0].add_child(p[1])
+        p[0].add_child(p[2])
+        p[0].add_child(p[3])
+        p[0].add_child(p[4])
+        p[0].add_child(p[5])
+        p[0].add_child(p[6])
+        p[0].add_child(p[7])
+    else:
+        errors.append("Incorrect syntax at '<logical_expression>'")
     
 def p_logical_operand(p):
     ''' logical_operand : Not open_par logical_operand close_par'''
@@ -961,7 +973,13 @@ def p_conditional_statements(p):
     p[0].add_child(p[1])
                                 
 def p_if_statement(p):
-    ''' if_statement    : If open_par condition close_par colon block condition_else'''
+    ''' if_statement    : If open_par condition close_par colon block condition_else
+                        | If open_par condition close_par block condition_else
+                        | If open_par condition colon block condition_else
+                        | If condition close_par colon block condition_else
+                        | If open_par condition block condition_else
+                        | If condition close_par block condition_else
+                        | If condition colon block condition_else'''
     if len(p) == 8:
         p[0] = Node("<if_statement>")
         p[0].add_child(p[1])
