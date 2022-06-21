@@ -280,17 +280,17 @@ def t_plus(t):
 def t_minus(t):
     r'\-'
     return t
-def t_times(t):
-    r'\*' 
-    return t
 def t_times_times(t):
     r'\*\*'
     return t
-def t_divide(t):
-    r'\/'
+def t_times(t):
+    r'\*' 
     return t
 def t_divide_divide(t):
     r'\/\/'
+    return t
+def t_divide(t):
+    r'\/'
     return t
 def t_modulo(t):
     r'\%'

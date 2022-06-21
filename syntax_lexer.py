@@ -5,8 +5,6 @@ from ply.lex import TOKEN
 # list of tokens
 tokens = [
     'comment',
-    'space',
-    
     #(?= )
     'Integer',
     'Decimal',
@@ -103,45 +101,96 @@ tokens = [
 def t_ignore_comment(t):
     r'(\/\*)[\s\S]*?(\*\/)'
 
-t_Integer = r'Integer'
-t_Decimal = r'Decimal'
-t_String = r'String'
-t_Boolean = r'Boolean'
-t_Struct = r'Struct'
-t_Generate = r'Generate'
-t_Absorb = r'Absorb'
-t_Discharge = r'Discharge'
-t_Switch = r'Switch'
-t_For = r'For'
-t_In = r'In'
-t_Sys_Call = r'Sys\.Call'
-t_Sys = r'Sys'
-t_Execute = r'Execute'
-t_Fixed = r'Fixed'
-t_Return = r'Return'
-
-
-t_Default = r'Default'
-t_Else = r'Else'
-
-
-t_If = r'If'
-t_Elif = r'Elif'
-t_And = r'And'
-t_Or = r'Or'
-t_Not = r'Not'
-t_While = r'While'
-
-
-t_Link_End = r'Link\.End'
-
-
-t_Link_Start = r'Link\.Start'
-t_End_Switch = r'End\.Switch'
-t_Break = r'Break'
-t_Continue = r'Continue'
-t_Avoid = r'Avoid'
-
+def t_Integer(t):
+    r'Integer'
+    return t
+def t_Decimal(t):
+    r'Decimal'
+    return t
+def t_String(t):
+    r'String'
+    return t
+def t_Boolean(t):
+    r'Boolean'
+    return t
+def t_Struct(t):
+    r'Struct'
+    return t
+def t_Generate(t):
+    r'Generate'
+    return t
+def t_Absorb(t):
+    r'Absorb'
+    return t
+def t_Discharge(t):
+    r'Discharge'
+    return t
+def t_Switch(t):
+    r'Switch'
+    return t
+def t_For(t):
+    r'For'
+    return t
+def t_In(t):
+    r'In'
+    return t
+def t_Sys_Call(t):
+    r'Sys\.Call'
+    return t
+def t_Sys(t):
+    r'Sys'
+    return t
+def t_Execute(t):
+    r'Execute'
+    return t
+def t_Fixed(t):
+    r'Fixed'
+    return t
+def t_Return(t):
+    r'Return'
+    return t
+def t_Default(t):
+    r'Default'
+    return t
+def t_Else(t):
+    r'Else'
+    return t
+def t_If(t):
+    r'If'
+    return t
+def t_Elif(t):
+    r'Elif'
+    return t
+def t_And(t):
+    r'And'
+    return t
+def t_Or(t):
+    r'Or'
+    return t
+def t_Not(t):
+    r'Not'
+    return t
+def t_While(t):
+    r'While'
+    return t
+def t_Link_End(t):
+    r'Link\.End'
+    return t
+def t_Link_Start(t):
+    r'Link\.Start'
+    return t
+def t_End_Switch(t):
+    r'End\.Switch'
+    return t
+def t_Break(t):
+    r'Break'
+    return t
+def t_Continue(t):
+    r'Continue'
+    return t
+def t_Avoid(t):
+    r'Avoid'
+    return t
 
 def t_lit_decposi(t):
     r'(([0-9]\d{0,8}\.\d{0,5})|(\d{0,9}\.\d{1}\d{0,4}))'
@@ -159,18 +208,33 @@ def t_lit_intnega(t):
     r'(\-[1-9]\d{0,8})'
     t.value = int(t.value)
     return t
-t_lit_str = r'[\"\“]{1}(([^\"^\n^\“^\”])*)?[\"\”]{1}'
-t_lit_bool = r'(True|False)'
+def t_lit_str(t):
+    r'[\"\“]{1}(([^\"^\n^\“^\”])*)?[\"\”]{1}'
+    return t
 
-
+def t_lit_bool(t): 
+    r'(True|False)'
+    return t
 
 #relational
-t_less_than_equal = r'\<\='
-t_great_than_equal = r'\>\='
-t_not_equal = r'\!\='
-t_less_than = r'\<'
-t_greater_than = r'\>'
-t_equal_equal = r'\=\='
+def t_less_than_equal(t):
+    r'\<\='
+    return t
+def t_great_than_equal(t):
+    r'\>\='
+    return t
+def t_not_equal(t):
+    r'\!\='
+    return t
+def t_less_than(t):
+    r'\<'
+    return t
+def t_greater_than(t):
+    r'\>'
+    return t
+def t_equal_equal(t):
+    r'\=\='
+    return t
 
 
 #assignment
@@ -195,7 +259,9 @@ def t_modulo_equal(t):
 def t_divide_divide_equal(t):
     r'\/\/\='
     return t
-t_equal = r'\='
+def t_equal(t):
+    r'[=]'
+    return t
 
 #arithmetic
 def t_plus(t):
@@ -204,40 +270,54 @@ def t_plus(t):
 def t_minus(t):
     r'\-'
     return t
-def t_times(t):
-    r'\*' 
-    return t
 def t_times_times(t):
     r'\*\*'
     return t
-def t_divide(t):
-    r'\/'
+def t_times(t):
+    r'\*' 
     return t
 def t_divide_divide(t):
     r'\/\/'
+    return t
+def t_divide(t):
+    r'\/'
     return t
 def t_modulo(t):
     r'\%'
     return t
 
+def t_open_par(t):
+    r'\('
+    return t
+def t_close_par(t):
+    r'\)'
+    return t
+def t_open_brace(t):
+    r'\{'
+    return t
+def t_close_brace(t):
+    r'\}'
+    return t
+def t_open_bracket(t):
+    r'\['
+    return t
+def t_close_bracket(t):
+    r'\]'
+    return t
 
-t_open_par = r'\('
-t_close_par = r'\)'
-t_open_brace = r'\{'
-t_close_brace = r'\}'
-t_open_bracket = r'\['
-t_close_bracket =  r'\]'
-
-
-t_comma = r'\,'
-t_colon = r'\:'
-t_period =  r'\.'
-
+def t_comma(t):
+    r'\,'
+    return t
+def t_colon(t):
+    r'\:'
+    return t
+def t_period(t):
+    r'\.'
+    return t
+    
 t_id = r'([a-z]\w{0,19})'
 
-
-
-def t_ignore_space(t):
+def t_space(t):
     r'[ \t]'
 
 # Define a rule so we can track line numbers
@@ -245,9 +325,7 @@ def t_newline(t):
     r'\n'
     t.lexer.lineno += len(t.value)
 
-
 def t_error(t):
      t.lexer.skip(1)
-     return t
 
 lexer_syntax = lex.lex()
