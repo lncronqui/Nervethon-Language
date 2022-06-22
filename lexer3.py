@@ -394,7 +394,7 @@ delimDict = {
                      '+', '-', '//', '**', '*', '/', 
                      '%', ')', ']', '}', ':'],
     'lit_str' : ['id', 'reserved_word', ',', '(', ')', '[', ']', '{', '}', ':' , 'space' , 'newline'], 
-    'lit_bool' : ['id', 'reserved_word', ',', '(', ')', '[', ']', '{', '}'],
+    'lit_bool' : ['space', 'newline', 'id', 'reserved_word', ',', '(', ')', '[', ']', '{', '}'],
     'less_than_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
     'great_than_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
     'not_equal' : ['space', 'id', 'lit_decposi', 'lit_decnega', 'lit_intposi', 'lit_intnega', '(', '-'],
