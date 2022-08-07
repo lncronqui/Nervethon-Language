@@ -6,24 +6,26 @@ from tkinter import *
 from xmlrpc.client import boolean
 
 from lexer3 import *
+from syntax_lexer import *
+from syntax_analyze import *
 
 from typing import NamedTuple
 
 
 #creating the window
 root= tk.Tk()
-root.geometry('1366x768')
+root.geometry('1440x768')
 root.resizable(FALSE, FALSE)
 root.configure(bg='#171717')
 root.title('Nervethon')
 
 #Frame Top
-frame_top=Frame(root,width=1366,height=70, background='#0F0F0F')
+frame_top=Frame(root,width=1440,height=70, background='#0F0F0F')
 frame_top.grid(row=0, column=0, columnspan=2)
 
 #Photos
 photo_imageClear=PhotoImage(file='Clear.png')
-photo_imageSemantic=PhotoImage(file='Semantic.png')
+photo_imageSemantic=PhotoImage(file='Syntax.png')
 photo_imageLexical=PhotoImage(file='Lexical.png')
 photo_imageNervethon=PhotoImage(file='Nervy.png')
 
@@ -86,13 +88,12 @@ def Take_input():
                 break
         try:
             listVal = delimDict[prevToken]
-            if not(tok.type == 'space'):
-                if (tok.value not in listVal and tok.type not in listVal):
-                    if(tok.value == '\n'):
-                        lexerrors.append("ERROR: '{}' not a delimiter for '{}' at line {}".format('\\n', prevValue, tok.lineno))
-                    else:
-                        lexerrors.append("ERROR: '{}' not a delimiter for '{}' at line {}".format(tok.value, prevValue, tok.lineno))
-                    tokens = tokens[:-1]
+            if (tok.value not in listVal and tok.type not in listVal):
+                if(tok.value == '\n'):
+                    lexerrors.append("ERROR: '{}' not a delimiter for '{}' at line {}".format('\\n', prevValue, tok.lineno))
+                else:
+                    lexerrors.append("ERROR: '{}' not a delimiter for '{}' at line {}".format(tok.value, prevValue, tok.lineno))
+                tokens = tokens[:-1]
             prevToken = tok.type
             prevValue = tok.value
             if tok.type == 'error':
@@ -103,6 +104,11 @@ def Take_input():
                 continue
             if tok.type == 'error2':
                 lexerrors.append("ERROR: Invalid lexeme '{}' at line {}".format(tok.value,tok.lineno))
+                continue
+            if tok.type == 'error3':
+                lexerrors.append("error3")
+                continue
+            if tok.type == 'space' or tok.type == 'newline':
                 continue
             tokens.append(tok)
         except:
@@ -117,12 +123,13 @@ def Take_input():
             if tok.type == 'error2':
                 lexerrors.append("ERROR: Invalid lexeme '{}' at line {}".format(tok.value,tok.lineno))
                 continue
+            if tok.type == 'error3':
+                lexerrors.append("error3")
+                continue
             if tok.type == 'space' or tok.type == 'newline':
                 continue
             tokens.append(tok)
             
-    
-    lexer.lineno = 1
     
     if(lexerrors):
         Run_Semantic.configure(state = 'disabled')
@@ -145,6 +152,44 @@ def Take_input():
     Errors.configure(state='disabled')
         
     
+    
+def Run_Syntax():
+    Output.configure(state='normal')
+    Errors.configure(state='normal')
+    OutputTok.configure(state='normal')
+    Output.delete(1.0,END)#How to reset text area
+    Errors.delete(1.0,END)#How to reset text area
+    OutputTok.delete(1.0,END)
+    lexer_syntax.lineno = 1
+    INPUT = text_area.get("1.0", "end-1c")
+    lexer_syntax.input(INPUT)
+    lexer_syntax.lineno = 1
+    result = parser.parse(INPUT, lexer=lexer_syntax)
+    out = result.traverse()
+    if errors:
+        for i in errors:
+            Errors.insert(END, ("ERROR: {}".format(i)))
+            Errors.insert(END, '\n')
+    else:
+        Errors.insert(END, ("{}".format("No Syntax Error")))
+        
+    if out:
+        for x in out:
+            # print(x)
+            y = x.tabs
+            z = 0
+            while y > z:
+                OutputTok.insert(END, '|__')
+                z += 1
+            OutputTok.insert(END, x.output)
+            OutputTok.insert(END, '\n')
+            
+    result.clear()
+    Output.configure(state='disabled')
+    OutputTok.configure(state='disabled')
+    Errors.configure(state='disabled')
+    Run_Semantic.configure(state = 'disabled')
+    
 
             
     
@@ -152,11 +197,11 @@ def Take_input():
 frame3=Frame(root, width=400, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
 frame3.place(x=625, y=130)
 #Frame 4 - Output Token
-frame4=Frame(root, width=400, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
+frame4=Frame(root, width=850, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
 frame4.place(x=870, y=130)
 #Frame 5 - Semantic
-frame5=Frame(root, width=400, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
-frame5.place(x=1115, y=130)
+#frame5=Frame(root, width=400, height=660, highlightbackground='gray', bg='#121212', highlightcolor='gray', highlightthickness=1)
+#frame5.place(x=1115, y=130)
 
 #OUTPUT Lex TEXT AREA
 scrollbar3=ttk.Scrollbar(frame3, orient='vertical')
@@ -167,24 +212,22 @@ Output.pack(side="left")
 
 #OUTPUT Token TEXT AREA
 scrollbar4=ttk.Scrollbar(frame4, orient='vertical')
-OutputTok = Text(frame4, width = 18, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar4.set)
+OutputTok = Text(frame4, width = 44, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar4.set)
 scrollbar4.config(command=OutputTok.yview)
 scrollbar4.pack(side=RIGHT, fill=Y)
 OutputTok.pack(side="left")
 
 #OUTPUT Semantic TEXT AREA
-scrollbar5=ttk.Scrollbar(frame5, orient='vertical')
-OutputSem = Text(frame5, width = 18, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar5.set)
-scrollbar5.config(command=OutputSem.yview)
-scrollbar5.pack(side=RIGHT, fill=Y)
-OutputSem.pack(side="left")
+#scrollbar5=ttk.Scrollbar(frame5, orient='vertical')
+#OutputSem = Text(frame5, width = 18, height =28, font = ("Courier",15), bg = "#121212", fg="White", highlightthickness=0, borderwidth=0, state='disabled',  yscrollcommand=scrollbar5.set)
+#scrollbar5.config(command=OutputSem.yview)
+#scrollbar5.pack(side=RIGHT, fill=Y)
+#OutputSem.pack(side="left")
 
 lblLex=Label(root,text="Lexeme", font = ("Nunito",14), fg='white',bg='#171717')
 lblLex.place(x=630,y=98)
-lblTok=Label(root,text="Token" , font = ("Nunito",14), fg='white',bg='#171717')
+lblTok=Label(root,text="Tokens / Syntax" , font = ("Nunito",14), fg='white',bg='#171717')
 lblTok.place(x=880,y=98) 
-lblSem=Label(root,text="Semantic" , font = ("Nunito",14), fg='white',bg='#171717')
-lblSem.place(x=1130,y=98) 
 lblErr=Label(root,text="Errors", font = ("Nunito",14), fg='white',bg='#171717')
 lblErr.place(x=25,y=580)
 
@@ -206,7 +249,7 @@ Clear=Button(frame_top, width=129, height=32, image=photo_imageClear, border=0, 
 Clear.place(x=760, y =16)
 Run_Lexical=Button(frame_top, width=175, height=35, image=photo_imageLexical, border=0, activebackground='#0F0F0F', background='#0F0F0F', command = lambda:Take_input())
 Run_Lexical.place(x=925, y=15)
-Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', background='#0F0F0F')
+Run_Semantic=Button(frame_top, width=175, height=35, image=photo_imageSemantic, border=0, activebackground='#0F0F0F', state='disabled', background='#0F0F0F', command = lambda:Run_Syntax())
 Run_Semantic.place(x=1139, y =15)
 
 
